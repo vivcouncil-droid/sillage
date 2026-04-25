@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SILLAGE — AI Perfume Expert</title>
+<meta name="description" content="Your scent, decoded. AI-crafted fragrance profile tailored to your emotions.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--gold:#C9A96E;--gold2:#E8D5B0;--charcoal:#2C2C2C;--dark:#16100A;--white:#FEFAF6;--muted:#9B8E82;--border:#E2CEB4;--card:rgba(254,250,246,0.82);--glass:rgba(255,251,247,0.55)}
+body{min-height:100%;background:linear-gradient(160deg,#F5E6DA 0%,#EDD9C4 55%,#E4CBB0 100%);background-attachment:fixed;font-family:'Inter',sans-serif;color:var(--charcoal);transition:background 1.2s ease}
+body.scent-marine{background:linear-gradient(160deg,#e8f0f5 0%,#d5e6ef 50%,#c8dce9 100%)}
+body.scent-floral{background:linear-gradient(160deg,#f7e8ee 0%,#f0d4de 50%,#e8c5cc 100%)}
+body.scent-woody{background:linear-gradient(160deg,#ede0d0 0%,#e0ccb8 50%,#d4bba0 100%)}
+body.scent-warm{background:linear-gradient(160deg,#f5e0c8 0%,#eecfaa 50%,#e5bf90 100%)}
+.serif{font-family:'Playfair Display',Georgia,serif}
+#app{max-width:480px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column}
+
+/* LANDING */
+.landing{position:relative;min-height:100vh;display:flex;flex-direction:column;overflow:hidden}
+.land-bg{position:absolute;inset:0;background-image:url('./landing-bg.jpg');background-size:cover;background-position:center top;z-index:0}
+.land-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(245,224,208,0.05) 25%,rgba(237,213,192,0.85) 62%,rgba(232,206,180,0.97) 100%);z-index:1}
+.land-particles{position:absolute;inset:0;z-index:2;pointer-events:none;overflow:hidden}
+.particle{position:absolute;border-radius:50%;background:rgba(201,169,110,0.15);animation:floatUp linear infinite}
+@keyframes floatUp{0%{transform:translateY(100vh) scale(0);opacity:0}10%{opacity:.8}90%{opacity:.3}100%{transform:translateY(-40px) scale(1.2);opacity:0}}
+.land-top{position:absolute;top:48px;left:0;right:0;text-align:center;z-index:3}
+.land-logo{font-family:'Playfair Display',serif;font-size:40px;font-weight:400;letter-spacing:10px;color:var(--charcoal)}
+.land-sub-lbl{font-size:10px;letter-spacing:5px;color:#B8866A;text-transform:uppercase;margin-top:8px}
+.land-bottom{position:relative;z-index:3;margin-top:auto;padding:0 28px 52px;text-align:center}
+.land-headline{font-family:'Playfair Display',serif;font-size:30px;font-weight:400;line-height:1.3;color:var(--charcoal);margin-bottom:12px}
+.land-headline em{font-style:italic;color:#8B6650}
+.land-divider{width:32px;height:1px;background:var(--gold);margin:0 auto 16px;opacity:.7}
+.land-desc{font-size:14px;color:#7A6E66;line-height:1.7;margin-bottom:36px;max-width:280px;margin-left:auto;margin-right:auto}
+.btn-hero{display:inline-flex;align-items:center;gap:10px;background:rgba(28,20,14,0.85);color:var(--white);border:none;padding:18px 44px;font-family:'Playfair Display',serif;font-size:15px;letter-spacing:2px;cursor:pointer;border-radius:50px;position:relative;overflow:hidden;transition:all .4s;backdrop-filter:blur(12px);box-shadow:0 0 0 1px rgba(201,169,110,.3),0 8px 32px rgba(20,12,6,.25);-webkit-tap-highlight-color:transparent}
+.btn-hero::before{content:'';position:absolute;top:-50%;left:-60%;width:40%;height:200%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent);transform:skewX(-20deg);animation:shimmer 3s infinite}
+@keyframes shimmer{0%{left:-60%}100%{left:120%}}
+.btn-hero:hover{transform:translateY(-2px);box-shadow:0 0 0 1px rgba(201,169,110,.5),0 12px 40px rgba(20,12,6,.35),0 0 60px rgba(201,169,110,.12)}
+.btn-spark{font-size:14px;animation:sparkPulse 2s ease-in-out infinite}
+@keyframes sparkPulse{0%,100%{opacity:.6;transform:scale(1)}50%{opacity:1;transform:scale(1.3)}}
+.land-langs{font-size:11px;color:rgba(100,88,78,.55);margin-top:20px;letter-spacing:3px}
+
+/* HEADER */
+.header{padding:20px 24px 0;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:rgba(245,230,218,.9);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);z-index:20}
+.header-logo{font-family:'Playfair Display',serif;font-size:17px;letter-spacing:4px;color:var(--charcoal)}
+.back-btn{background:none;border:none;color:var(--muted);cursor:pointer;font-size:13px;display:flex;align-items:center;gap:6px;padding:4px;font-family:'Inter',sans-serif;-webkit-tap-highlight-color:transparent}
+.back-btn:hover{color:var(--charcoal)}
+
+/* PROGRESS */
+.progress-wrap{padding:16px 24px 0}
+.progress-label{font-size:11px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px}
+.progress-bar{height:1.5px;background:var(--border);overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--gold),#E8C87A);transition:width .5s ease}
+.progress-dots{display:flex;gap:6px;margin-top:10px}
+.pdot{width:5px;height:5px;border-radius:50%;background:var(--border);transition:all .3s}
+.pdot.active{background:var(--gold);transform:scale(1.3)}
+.pdot.done{background:var(--gold2)}
+
+/* QUIZ */
+.quiz-body{padding:28px 24px 0}
+.quiz-step-lbl{font-size:10px;color:var(--gold);letter-spacing:4px;text-transform:uppercase;margin-bottom:18px}
+.quiz-q{font-family:'Playfair Display',serif;font-size:24px;font-weight:400;line-height:1.35;color:var(--charcoal);margin-bottom:8px}
+.quiz-sub{font-size:13px;color:var(--muted);margin-bottom:28px;line-height:1.5}
+.options-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:28px}
+.option-card{background:var(--card);border:1.5px solid var(--border);border-radius:14px;padding:20px 14px;cursor:pointer;transition:all .25s;text-align:left;display:flex;flex-direction:column;gap:7px;backdrop-filter:blur(8px);-webkit-tap-highlight-color:transparent}
+.option-card:hover{border-color:var(--gold);transform:translateY(-2px);box-shadow:0 4px 20px rgba(201,169,110,.1)}
+.option-card.selected{border-color:var(--gold);background:rgba(201,169,110,.1);box-shadow:0 0 0 1px var(--gold)}
+.option-icon{font-size:22px}
+.option-label{font-family:'Playfair Display',serif;font-size:15px;color:var(--charcoal)}
+.option-desc{font-size:11px;color:var(--muted);line-height:1.4}
+.btn-next{width:100%;background:var(--charcoal);color:var(--white);border:none;padding:16px;font-family:'Playfair Display',serif;font-size:15px;letter-spacing:2px;cursor:pointer;border-radius:4px;transition:all .3s;-webkit-tap-highlight-color:transparent}
+.btn-next:hover:not(:disabled){background:var(--dark)}
+.btn-next:disabled{opacity:.3;cursor:not-allowed}
+
+/* VIBE */
+.vibe-body{padding:28px 24px}
+.section-lbl{font-size:10px;color:var(--gold);letter-spacing:4px;text-transform:uppercase;margin-bottom:14px}
+.section-title{font-family:'Playfair Display',serif;font-size:24px;font-weight:400;line-height:1.35;margin-bottom:8px}
+.section-desc{font-size:13px;color:var(--muted);margin-bottom:24px;line-height:1.65}
+.vibe-textarea{width:100%;min-height:140px;background:var(--card);border:1.5px solid var(--border);border-radius:14px;padding:16px;font-family:'Inter',sans-serif;font-size:14px;color:var(--charcoal);resize:none;line-height:1.7;-webkit-appearance:none;outline:none;transition:border .2s}
+.vibe-textarea:focus{border-color:var(--gold)}
+.vibe-textarea::placeholder{color:var(--muted);font-style:italic}
+.vibe-counter{text-align:right;font-size:11px;color:var(--muted);margin-top:6px;margin-bottom:20px}
+.hints-lbl{font-size:11px;color:var(--muted);margin-bottom:10px;letter-spacing:1px;text-transform:uppercase}
+.vibe-hints{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.hint-chip{background:rgba(201,169,110,.1);border:1px solid var(--gold2);border-radius:20px;padding:6px 14px;font-size:12px;color:var(--charcoal);cursor:pointer;transition:all .2s;-webkit-tap-highlight-color:transparent}
+.hint-chip:hover{background:rgba(201,169,110,.25)}
+
+/* NOTES */
+.notes-body{padding:28px 24px}
+.notes-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+.note-chip{background:var(--card);border:1.5px solid var(--border);border-radius:12px;padding:14px 8px;cursor:pointer;transition:all .2s;text-align:center;backdrop-filter:blur(8px);-webkit-tap-highlight-color:transparent}
+.note-chip:hover{border-color:var(--gold);transform:translateY(-1px)}
+.note-chip.selected{border-color:var(--gold);background:rgba(201,169,110,.12)}
+.note-chip.hidden{display:none}
+.note-chip-icon{font-size:20px;margin-bottom:6px}
+.note-chip-label{font-size:11px;color:var(--charcoal)}
+.show-more-btn{width:100%;background:transparent;border:1px solid var(--border);color:var(--muted);padding:12px;font-size:12px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:8px;margin-bottom:18px;transition:all .2s;font-family:'Inter',sans-serif}
+.show-more-btn:hover{border-color:var(--gold);color:var(--charcoal)}
+.btn-skip{width:100%;margin-top:10px;background:transparent;border:1px solid var(--border);color:var(--muted);padding:13px;font-size:12px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:8px;font-family:'Inter',sans-serif;transition:all .2s}
+.btn-skip:hover{border-color:var(--gold);color:var(--charcoal)}
+
+/* COLLECTION */
+.coll-body{padding:28px 24px}
+.coll-input-wrap{display:flex;gap:10px;margin-bottom:16px}
+.coll-input{flex:1;background:var(--card);border:1.5px solid var(--border);border-radius:10px;padding:12px 16px;font-family:'Inter',sans-serif;font-size:14px;color:var(--charcoal);-webkit-appearance:none;outline:none;transition:border .2s}
+.coll-input:focus{border-color:var(--gold)}
+.coll-add{background:var(--charcoal);color:var(--white);border:none;padding:12px 18px;border-radius:10px;cursor:pointer;font-size:20px;-webkit-tap-highlight-color:transparent}
+.coll-list{display:flex;flex-direction:column;gap:8px;margin-bottom:24px;min-height:48px}
+.coll-item{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;font-size:13px}
+.coll-remove{background:none;border:none;color:var(--muted);cursor:pointer;font-size:15px;padding:4px 6px;-webkit-tap-highlight-color:transparent}
+.coll-remove:hover{color:#c0392b}
+.coll-empty{font-size:13px;color:var(--muted);font-style:italic;padding:10px 0}
+
+/* LOADING */
+.loading-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:40px 24px;text-align:center}
+.loading-logo{font-family:'Playfair Display',serif;font-size:28px;letter-spacing:7px;color:var(--charcoal);margin-bottom:6px}
+.loading-tagline{font-size:10px;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:60px}
+.loading-anim{position:relative;width:80px;height:80px;margin-bottom:40px}
+.ring{position:absolute;inset:0;border-radius:50%;border:1px solid transparent;animation:spin 2s linear infinite}
+.ring1{border-top-color:var(--gold)}
+.ring2{border-right-color:var(--gold2);animation-duration:3s;inset:8px}
+.ring3{border-bottom-color:rgba(201,169,110,.3);animation-duration:4.5s;inset:16px}
+.ring-dot{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:7px;height:7px;border-radius:50%;background:var(--gold)}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-msg{font-family:'Playfair Display',serif;font-size:17px;font-style:italic;color:var(--charcoal);opacity:.75;min-height:26px}
+
+/* RESULTS */
+.results-body{padding:0 0 80px}
+.results-hero{padding:44px 28px 36px;text-align:center;position:relative;overflow:hidden}
+.results-hero::before{content:'';position:absolute;top:-60px;left:50%;transform:translateX(-50%);width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(201,169,110,.1) 0%,transparent 70%);pointer-events:none}
+.results-logo-sm{font-family:'Playfair Display',serif;font-size:13px;letter-spacing:5px;color:var(--muted);margin-bottom:24px;text-transform:uppercase}
+.confidence-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(201,169,110,.1);border:1px solid rgba(201,169,110,.3);border-radius:20px;padding:6px 16px;margin-bottom:20px}
+.confidence-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:sparkPulse 2s ease infinite}
+.confidence-text{font-size:11px;color:var(--gold);letter-spacing:2px;text-transform:uppercase}
+.ai-insight-card{background:var(--glass);border:1px solid rgba(201,169,110,.2);border-radius:20px;padding:24px 22px;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 4px 32px rgba(201,169,110,.07),inset 0 1px 0 rgba(255,255,255,.6)}
+.ai-profile-text{font-family:'Playfair Display',serif;font-size:16px;font-style:italic;line-height:1.8;color:var(--charcoal);margin-bottom:18px}
+.scent-pills{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.scent-pill{background:rgba(201,169,110,.12);border:1px solid rgba(201,169,110,.35);border-radius:20px;padding:5px 14px;font-size:11px;color:var(--charcoal);letter-spacing:1px;animation:pillIn .5s ease forwards;opacity:0;transform:translateY(5px)}
+@keyframes pillIn{to{opacity:1;transform:translateY(0)}}
+.result-section{padding:28px 24px 0}
+.result-section-lbl{font-size:10px;color:var(--gold);letter-spacing:4px;text-transform:uppercase;margin-bottom:6px}
+.result-section-title{font-family:'Playfair Display',serif;font-size:22px;font-weight:400;color:var(--charcoal);margin-bottom:20px}
+
+/* match cards */
+.match-card{background:var(--card);border:1.5px solid var(--border);border-radius:18px;overflow:hidden;margin-bottom:16px;backdrop-filter:blur(8px);transition:transform .3s,box-shadow .3s}
+.match-card:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(44,28,12,.08)}
+.match-card.top{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold),0 6px 40px rgba(201,169,110,.12)}
+.match-header{padding:12px 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
+.match-header.dark{background:var(--charcoal);border-bottom-color:rgba(255,255,255,.08)}
+.match-badge-lbl{font-size:10px;letter-spacing:2px;text-transform:uppercase}
+.match-badge-lbl.light{color:var(--gold2)}
+.match-badge-lbl.muted{color:var(--muted)}
+.match-price{font-size:12px;color:var(--gold);letter-spacing:2px}
+.match-body{padding:22px 20px}
+.match-brand{font-size:11px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:4px}
+.match-name{font-family:'Playfair Display',serif;font-size:26px;font-weight:400;color:var(--charcoal);margin-bottom:4px;line-height:1.2}
+.match-family{font-size:12px;color:var(--gold);margin-bottom:18px}
+.match-why{font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:18px;padding-bottom:18px;border-bottom:1px solid var(--border)}
+.match-notes{display:flex;gap:7px;flex-wrap:wrap}
+.note-tag{background:rgba(201,169,110,.1);border:1px solid var(--gold2);border-radius:20px;padding:4px 12px;font-size:11px;color:var(--charcoal)}
+
+/* layering */
+.layer-card{background:var(--card);border:1.5px solid var(--border);border-radius:18px;padding:22px 20px;margin-bottom:14px;backdrop-filter:blur(8px)}
+.layer-type-lbl{font-size:10px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:16px}
+.layer-bottles{display:flex;align-items:center;gap:8px;margin-bottom:20px}
+.layer-bottle{flex:1;background:linear-gradient(135deg,rgba(201,169,110,.07),rgba(232,213,176,.12));border:1px solid var(--gold2);border-radius:12px;padding:14px 8px;text-align:center;font-size:12px;color:var(--charcoal);line-height:1.5}
+.layer-bottle-icon{font-size:22px;display:block;margin-bottom:6px}
+.layer-blend{display:flex;flex-direction:column;align-items:center;gap:3px;flex-shrink:0;padding:0 4px}
+.layer-plus{font-size:18px;color:var(--gold);line-height:1}
+.layer-glow-line{width:1.5px;height:18px;background:linear-gradient(to bottom,var(--gold),transparent);border-radius:1px;opacity:.5}
+.layer-result-lbl{font-size:10px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:6px}
+.layer-result-text{font-family:'Playfair Display',serif;font-size:14px;font-style:italic;color:var(--charcoal);line-height:1.75;margin-bottom:12px}
+.layer-instructions{font-size:12px;color:var(--muted);line-height:1.65;padding:10px 14px;background:rgba(201,169,110,.05);border-radius:8px;border-left:2px solid var(--gold2)}
+
+/* guidance */
+.guidance-card{background:var(--card);border:1.5px solid var(--border);border-radius:18px;padding:22px 20px;margin-bottom:14px}
+.guidance-direction{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.guidance-icon{width:36px;height:36px;border-radius:50%;background:rgba(201,169,110,.1);border:1px solid var(--gold2);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.guidance-family{font-family:'Playfair Display',serif;font-size:20px;color:var(--charcoal)}
+.guidance-advice{font-size:13px;color:var(--muted);line-height:1.7}
+
+/* recipe */
+.recipe-card{background:var(--charcoal);border-radius:20px;padding:28px 24px;margin:28px 24px 0;position:relative;overflow:hidden}
+.recipe-card::before{content:'';position:absolute;top:-60px;right:-60px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(201,169,110,.1) 0%,transparent 70%);pointer-events:none}
+.recipe-title{font-family:'Playfair Display',serif;font-size:14px;font-weight:400;color:var(--gold2);margin-bottom:22px;text-align:center;letter-spacing:4px;text-transform:uppercase}
+.recipe-row{display:flex;align-items:flex-start;gap:16px;margin-bottom:18px;padding-bottom:18px;border-bottom:1px solid rgba(255,255,255,.07)}
+.recipe-row:last-of-type{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.recipe-icon{width:34px;height:34px;border-radius:50%;background:rgba(201,169,110,.1);border:1px solid rgba(201,169,110,.22);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.recipe-lbl{font-size:9px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:5px}
+.recipe-val{font-family:'Playfair Display',serif;font-size:15px;color:rgba(255,255,255,.88);line-height:1.5;font-style:italic}
+.recipe-actions{display:flex;gap:10px;margin-top:22px}
+.recipe-btn{flex:1;padding:13px;border-radius:8px;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all .25s;font-family:'Inter',sans-serif;-webkit-tap-highlight-color:transparent}
+.recipe-btn-save{background:rgba(201,169,110,.18);border:1px solid rgba(201,169,110,.4);color:var(--gold2)}
+.recipe-btn-save:hover{background:rgba(201,169,110,.3)}
+.recipe-btn-refine{background:transparent;border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.5)}
+.recipe-btn-refine:hover{border-color:rgba(255,255,255,.3);color:rgba(255,255,255,.75)}
+
+/* bottom CTAs */
+.bottom-ctas{padding:24px 24px 0;display:flex;flex-direction:column;gap:10px}
+.btn-explore{background:var(--charcoal);color:var(--white);border:none;padding:16px;font-family:'Playfair Display',serif;font-size:14px;letter-spacing:2px;cursor:pointer;border-radius:4px;transition:all .3s;-webkit-tap-highlight-color:transparent}
+.btn-explore:hover{background:var(--dark)}
+.btn-restart{background:transparent;border:1px solid var(--border);color:var(--muted);padding:13px;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:4px;transition:all .3s;font-family:'Inter',sans-serif;-webkit-tap-highlight-color:transparent}
+.btn-restart:hover{border-color:var(--gold);color:var(--charcoal)}
+.divider-line{height:1px;background:var(--border);margin:28px 24px 0}
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+const NOTES_ALL=[
+  {id:'oud',label:'Oud',icon:'🪵'},{id:'amber',label:'Amber',icon:'🟡'},
+  {id:'bergamot',label:'Bergamot',icon:'🍋'},{id:'jasmine',label:'Jasmin',icon:'🌸'},
+  {id:'vanilla',label:'Vanilija',icon:'🤍'},{id:'patchouli',label:'Pačuli',icon:'🌿'},
+  {id:'rose',label:'Ruža',icon:'🌹'},{id:'vetiver',label:'Vetiver',icon:'🌾'},
+  {id:'sandalwood',label:'Sandalovina',icon:'🪨'},{id:'cedar',label:'Cedar',icon:'🌲'},
+  {id:'musk',label:'Mošus',icon:'🫧'},{id:'tobacco',label:'Duhan',icon:'🍂'},
+  {id:'iris',label:'Iris',icon:'💜'},{id:'pepper',label:'Papar',icon:'🖤'},
+  {id:'neroli',label:'Neroli',icon:'🌼'},{id:'leather',label:'Koža',icon:'🤎'},
+  {id:'incense',label:'Tamjan',icon:'🕯️'},{id:'coconut',label:'Kokos',icon:'🥥'}
+];
+const QUIZ=[
+  {id:'family',q:'Koji mirisi ti se najviše odgovaraju?',sub:'Odaberi jedan smjer',type:'single',opts:[
+    {v:'sweet',l:'Slatko',i:'🍯',d:'Vanilija, karamel, mošus'},
+    {v:'fresh',l:'Svježe',i:'🌿',d:'Citrus, aqua, zeleno'},
+    {v:'woody',l:'Drvenasto',i:'🪵',d:'Sandalovina, cedar, pačuli'},
+    {v:'spicy',l:'Začinjeno',i:'🌶️',d:'Oud, crni papar, kardamom'},
+  ]},
+  {id:'season',q:'Koje godišnje doba opisuje tvoj idealni miris?',sub:'Svako doba nosi svoju energiju',type:'single',opts:[
+    {v:'spring',l:'Proljeće',i:'🌸',d:'Cvjetno, svježe, nježno'},
+    {v:'summer',l:'Ljeto',i:'☀️',d:'Morsko, lagano, citrus'},
+    {v:'autumn',l:'Jesen',i:'🍂',d:'Toplo, začinjeno, amber'},
+    {v:'winter',l:'Zima',i:'❄️',d:'Duboko, kožno, dimno'},
+  ]},
+  {id:'occasion',q:'Kada ga nosiš?',sub:'Možeš odabrati više',type:'multi',opts:[
+    {v:'daily',l:'Svakodnevno',i:'☕',d:'Casual, lagan, svjež'},
+    {v:'evening',l:'Večernji',i:'🌙',d:'Taman, bogat, intrigantan'},
+    {v:'work',l:'Posao',i:'💼',d:'Profesionalan, nenametljiv'},
+    {v:'special',l:'Posebne prilike',i:'✨',d:'Upečatljiv, nezaboravan'},
+  ]},
+  {id:'intensity',q:'Koji intenzitet preferiraš?',sub:'Koliko daleko ide tvoj sillage?',type:'single',opts:[
+    {v:'light',l:'Nježan',i:'🪷',d:'Blizak, intiman'},
+    {v:'medium',l:'Umjeren',i:'🌺',d:'Prisutan, ugodan'},
+    {v:'strong',l:'Jak',i:'💥',d:'Upečatljiv, dalekosežan'},
+    {v:'varies',l:'Ovisi',i:'🎭',d:'Prilagodljiv, kontekstualan'},
+  ]},
+];
+const HINTS=["Kiša na toplom asfaltu","Stara biblioteka i koža","Jutarnja kava i drvo","Ljetna noć na moru","Cvijeće nakon grmljavine"];
+
+let state={screen:'landing',quizStep:0,answers:{},vibe:'',notes:[],notesExpanded:false,collection:[],collInput:'',results:null,loadMsg:'',_iv:null};
+function setState(p){Object.assign(state,p);render()}
+
+function applyBg(keywords){
+  const k=(keywords||[]).join(' ').toLowerCase();
+  document.body.classList.remove('scent-marine','scent-floral','scent-woody','scent-warm');
+  if(/marine|ocean|sea|aqua|citrus|fresh|bergamot/.test(k))document.body.classList.add('scent-marine');
+  else if(/floral|rose|jasmine|flower|lily|neroli|iris/.test(k))document.body.classList.add('scent-floral');
+  else if(/woody|wood|oud|cedar|sandalwood|patchouli|vetiver|tobacco|leather|incense/.test(k))document.body.classList.add('scent-woody');
+  else if(/vanilla|sweet|warm|amber|caramel|honey|spice/.test(k))document.body.classList.add('scent-warm');
+}
+
+function render(){
+  const app=document.getElementById('app');if(!app)return;
+  app.innerHTML='';
+  const fn={landing,quiz,vibe,notesScreen,collection,loadingScreen,resultsScreen}[state.screen];
+  if(fn)app.appendChild(fn());
+}
+
+function landing(){
+  const d=document.createElement('div');d.className='landing';
+  d.innerHTML=`
+    <div class="land-bg"></div>
+    <div class="land-overlay"></div>
+    <div class="land-particles" id="particles"></div>
+    <div class="land-top">
+      <div class="land-logo serif">SILLAGE</div>
+      <div class="land-sub-lbl">AI Perfume Expert</div>
+    </div>
+    <div class="land-bottom">
+      <h1 class="land-headline serif">Your scent,<br><em>decoded.</em></h1>
+      <div class="land-divider"></div>
+      <p class="land-desc">AI-crafted fragrance profile tailored to your emotions, memories and desires.</p>
+      <button class="btn-hero" id="startBtn">Saznaj svoj recept <span class="btn-spark">✦</span></button>
+      <div class="land-langs">HR | EN</div>
+    </div>
+  `;
+  d.querySelector('#startBtn').onclick=()=>setState({screen:'quiz',quizStep:0,answers:{}});
+  setTimeout(()=>{
+    const p=d.querySelector('#particles');if(!p)return;
+    for(let i=0;i<8;i++){
+      const el=document.createElement('div');el.className='particle';
+      const s=Math.random()*36+8;
+      el.style.cssText=`width:${s}px;height:${s}px;left:${Math.random()*100}%;animation-duration:${Math.random()*12+8}s;animation-delay:${Math.random()*10}s`;
+      p.appendChild(el);
+    }
+  },50);
+  return d;
+}
+
+function quiz(){
+  const step=QUIZ[state.quizStep],ans=state.answers[step.id],isMulti=step.type==='multi';
+  const canNext=isMulti?(ans&&ans.length>0):!!ans;
+  const d=document.createElement('div');
+  d.innerHTML=`
+    <div class="header"><button class="back-btn" id="backBtn">← Natrag</button><div class="header-logo serif">SILLAGE</div></div>
+    <div class="progress-wrap">
+      <div class="progress-label">Korak ${state.quizStep+1} od ${QUIZ.length}</div>
+      <div class="progress-bar"><div class="progress-fill" style="width:${((state.quizStep+1)/QUIZ.length)*100}%"></div></div>
+      <div class="progress-dots">${QUIZ.map((_,i)=>`<div class="pdot${i<state.quizStep?' done':i===state.quizStep?' active':''}"></div>`).join('')}</div>
+    </div>
+    <div class="quiz-body">
+      <div class="quiz-step-lbl">Korak ${state.quizStep+1}</div>
+      <div class="quiz-q serif">${step.q}</div>
+      <div class="quiz-sub">${step.sub}</div>
+      <div class="options-grid">${step.opts.map(o=>{const sel=isMulti?(ans&&ans.includes(o.v)):(ans===o.v);return`<div class="option-card${sel?' selected':''}" data-val="${o.v}"><div class="option-icon">${o.i}</div><div class="option-label serif">${o.l}</div><div class="option-desc">${o.d}</div></div>`;}).join('')}</div>
+      <button class="btn-next" id="nextBtn" ${canNext?'':'disabled'}>Dalje →</button>
+    </div>
+  `;
+  d.querySelectorAll('.option-card').forEach(c=>{c.onclick=()=>{const val=c.dataset.val;if(isMulti){const cur=state.answers[step.id]||[];setState({answers:{...state.answers,[step.id]:cur.includes(val)?cur.filter(v=>v!==val):[...cur,val]}})}else setState({answers:{...state.answers,[step.id]:val}})}});
+  d.querySelector('#backBtn').onclick=()=>state.quizStep>0?setState({quizStep:state.quizStep-1}):setState({screen:'landing'});
+  d.querySelector('#nextBtn').onclick=()=>state.quizStep<QUIZ.length-1?setState({quizStep:state.quizStep+1}):setState({screen:'vibe'});
+  return d;
+}
+
+function vibe(){
+  const d=document.createElement('div');
+  d.innerHTML=`
+    <div class="header"><button class="back-btn" id="backBtn">← Natrag</button><div class="header-logo serif">SILLAGE</div></div>
+    <div class="vibe-body">
+      <div class="section-lbl">The Vibe Box</div>
+      <div class="section-title serif">Opiši svoj vibe</div>
+      <div class="section-desc">Napiši što želiš da tvoj idealni miris opisuje, osjeća se, podsjeća na... Slobodan tekst, bez pravila.</div>
+      <textarea class="vibe-textarea" id="vibeInput" maxlength="300" placeholder='"Tražim nešto što miriše na staru knjižnicu i kišu, ali da ima malo citrusa."'>${state.vibe}</textarea>
+      <div class="vibe-counter" id="vibeCount">${state.vibe.length}/300</div>
+      <div class="hints-lbl">Inspiracija</div>
+      <div class="vibe-hints">${HINTS.map(h=>`<div class="hint-chip" data-hint="${h}">${h}</div>`).join('')}</div>
+      <button class="btn-next" id="nextBtn">Dalje →</button>
+    </div>
+  `;
+  const ta=d.querySelector('#vibeInput'),ctr=d.querySelector('#vibeCount');
+  ta.oninput=()=>{state.vibe=ta.value;ctr.textContent=`${ta.value.length}/300`};
+  d.querySelectorAll('.hint-chip').forEach(c=>{c.onclick=()=>{ta.value=c.dataset.hint;state.vibe=c.dataset.hint;ctr.textContent=`${c.dataset.hint.length}/300`}});
+  d.querySelector('#backBtn').onclick=()=>setState({screen:'quiz',quizStep:QUIZ.length-1});
+  d.querySelector('#nextBtn').onclick=()=>setState({screen:'notesScreen'});
+  return d;
+}
+
+function notesScreen(){
+  const sel=state.notes,showAll=state.notesExpanded;
+  const d=document.createElement('div');
+  d.innerHTML=`
+    <div class="header"><button class="back-btn" id="backBtn">← Natrag</button><div class="header-logo serif">SILLAGE</div></div>
+    <div class="notes-body">
+      <div class="section-lbl">Note Picker</div>
+      <div class="section-title serif">Odaberi note koje te privlače</div>
+      <div class="section-desc">Možeš odabrati više — ili preskočiti.</div>
+      <div class="notes-grid">${NOTES_ALL.map((n,i)=>`<div class="note-chip${sel.includes(n.id)?' selected':''}${(!showAll&&i>=12)?' hidden':''}" data-id="${n.id}"><div class="note-chip-icon">${n.icon}</div><div class="note-chip-label">${n.label}</div></div>`).join('')}</div>
+      ${!showAll?`<button class="show-more-btn" id="showMoreBtn">+ Prikaži sve note (${NOTES_ALL.length-12} više)</button>`:''}
+      <button class="btn-next" id="nextBtn">Dalje →</button>
+      <button class="btn-skip" id="skipBtn">Preskoči</button>
+    </div>
+  `;
+  d.querySelectorAll('.note-chip').forEach(c=>{c.onclick=()=>{const id=c.dataset.id;setState({notes:sel.includes(id)?sel.filter(n=>n!==id):[...sel,id]})}});
+  d.querySelector('#backBtn').onclick=()=>setState({screen:'vibe'});
+  d.querySelector('#nextBtn').onclick=()=>setState({screen:'collection'});
+  d.querySelector('#skipBtn').onclick=()=>setState({screen:'collection'});
+  const smb=d.querySelector('#showMoreBtn');if(smb)smb.onclick=()=>setState({notesExpanded:true});
+  return d;
+}
+
+function collection(){
+  const d=document.createElement('div');
+  d.innerHTML=`
+    <div class="header"><button class="back-btn" id="backBtn">← Natrag</button><div class="header-logo serif">SILLAGE</div></div>
+    <div class="coll-body">
+      <div class="section-lbl">Digitalna Polica</div>
+      <div class="section-title serif">Što već imaš?</div>
+      <div class="section-desc">Dodaj parfeme koje posjeduješ — AI će maksimizirati tvoju kolekciju kroz layering.</div>
+      <div class="coll-input-wrap">
+        <input class="coll-input" id="collInput" placeholder='npr. "Dior Sauvage EDT"' value="${state.collInput||''}">
+        <button class="coll-add" id="addBtn">+</button>
+      </div>
+      <div class="coll-list">${state.collection.length===0?'<div class="coll-empty">Još nisi dodao/la ništa.</div>':state.collection.map((item,i)=>`<div class="coll-item"><span>🫙 ${item}</span><button class="coll-remove" data-i="${i}">✕</button></div>`).join('')}</div>
+      <button class="btn-next" id="analyzeBtn">Analiziraj moj profil ✦</button>
+      <button class="btn-skip" id="skipBtn">Preskoči i analiziraj</button>
+    </div>
+  `;
+  const inp=d.querySelector('#collInput');
+  inp.oninput=()=>{state.collInput=inp.value};
+  inp.onkeydown=e=>{if(e.key==='Enter')addItem()};
+  function addItem(){const v=(state.collInput||'').trim();if(v)setState({collection:[...state.collection,v],collInput:''})}
+  d.querySelector('#addBtn').onclick=addItem;
+  d.querySelectorAll('.coll-remove').forEach(b=>{b.onclick=()=>setState({collection:state.collection.filter((_,i)=>i!==parseInt(b.dataset.i))})});
+  d.querySelector('#backBtn').onclick=()=>setState({screen:'notesScreen'});
+  d.querySelector('#analyzeBtn').onclick=analyze;
+  d.querySelector('#skipBtn').onclick=analyze;
+  return d;
+}
+
+function loadingScreen(){
+  const d=document.createElement('div');d.className='loading-screen';
+  d.innerHTML=`<div class="loading-logo serif">SILLAGE</div><div class="loading-tagline">Crafting your scent profile</div><div class="loading-anim"><div class="ring ring1"></div><div class="ring ring2"></div><div class="ring ring3"></div><div class="ring-dot"></div></div><div class="loading-msg serif" id="loadMsg">${state.loadMsg||'Analiziram tvoj mirisni profil...'}</div>`;
+  return d;
+}
+
+async function analyze(){
+  const msgs=['Analiziram tvoj mirisni profil...','Pronalazim savršene kombinacije...','Gradim tvoj Scent Recipe...','Još trenutak...'];
+  let mi=0;
+  setState({screen:'loadingScreen',loadMsg:msgs[0]});
+  if(state._iv)clearInterval(state._iv);
+  state._iv=setInterval(()=>{mi=(mi+1)%msgs.length;const el=document.getElementById('loadMsg');if(el)el.textContent=msgs[mi]},2200);
+
+  const sessionData={preferences:{scent_family:state.answers.family,season:state.answers.season,occasions:state.answers.occasion,intensity:state.answers.intensity,vibe_text:state.vibe||'not provided',selected_notes:state.notes},current_collection:state.collection};
+  const hasTwo=state.collection.length>=2;
+  const sys=`You are SILLAGE, a world-class AI perfume expert. Write like a luxury perfumer, not a database. Return ONLY valid JSON, no markdown, no backticks:
+{"profile_summary":"2-3 poetic editorial sentences about their scent personality","confidence_score":92,"scent_keywords":["k1","k2","k3","k4"],"recommendations":{"top_match":{"brand":"","name":"","concentration":"","scent_family":"","price_range":"$/$$/$$$/$$$$","reasoning":"Evocative 1-2 sentences like a perfumer would write","key_notes":["n1","n2","n3","n4"]},"second_match":{"brand":"","name":"","concentration":"","scent_family":"","price_range":"","reasoning":"","key_notes":["n1","n2","n3"]},"strategic_guidance":{"family":"","advice":"Evocative next direction"}},"layering_lab":{"internal_combination":${hasTwo?`{"perfume_a":"${state.collection[0]}","perfume_b":"${state.collection[1]}","result_vibe":"poetic description of the blend","instructions":"practical layering instructions"}`:'null'},"upsell_layering":{"existing":"${state.collection[0]||'their preferred style'}","recommended_add":"Brand Name","effect":"poetic description of the blend effect"}},"final_recipe":{"nosi":"","slozi":"","istrazi":""}}`;
+
+  try{
+    const resp=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1200,system:sys,messages:[{role:'user',content:JSON.stringify(sessionData)}]})});
+    const data=await resp.json();
+    const txt=data.content[0].text.replace(/```json|```/g,'').trim();
+    clearInterval(state._iv);
+    const parsed=JSON.parse(txt);
+    applyBg(parsed.scent_keywords);
+    setState({results:parsed,screen:'resultsScreen'});
+  }catch(e){
+    clearInterval(state._iv);
+    const fb={profile_summary:"You seek warmth without weight — a fragrance that feels like a second skin. Your instinct leans toward the intimate, the evocative, the kind of scent that lingers long after you've left the room.",confidence_score:88,scent_keywords:["Toplo","Drvenasto","Senzualno","Intimno"],recommendations:{top_match:{brand:"Maison Margiela",name:"Jazz Club",concentration:"EDT",scent_family:"Oriental Woody",price_range:"$$$",reasoning:"Opens with a swirl of rum and tobacco, as if stepping into a candlelit jazz bar. The vanilla base wraps everything in warmth — present but never loud.",key_notes:["Duhan","Vanilija","Rum","Drvo"]},second_match:{brand:"Tom Ford",name:"Oud Wood",concentration:"EDP",scent_family:"Woody Oriental",price_range:"$$$$",reasoning:"Quietly commanding. Oud and sandalwood create a presence that doesn't announce itself — it's simply there, unforgettable.",key_notes:["Oud","Sandalovina","Vetiver"]},strategic_guidance:{family:"Oriental Woody",advice:"Follow the thread of warm wood and resin — the Chypre family awaits with its sophisticated mossy depth."}},layering_lab:{internal_combination:hasTwo?{perfume_a:state.collection[0],perfume_b:state.collection[1],result_vibe:"Opens with citrus clarity, then deepens into a warm amber drydown that carries well past midnight.",instructions:"2 spreja prvog parfema kao baza, pričekaj minutu, zatim 1 sprej drugog na pulsnim točkama."}:null,upsell_layering:{existing:state.collection[0]||"Tvoj omiljeni miris",recommended_add:"By the Fireplace — Maison Margiela",effect:"Opens with smoky sweetness, settles into a warm accord that makes everything around you feel like a winter evening."}},final_recipe:{nosi:"Maison Margiela Jazz Club",slozi:"Jazz Club + "+(state.collection[0]||"Versace Eros"),istrazi:"Oriental Woody — Chypre obitelj"}};
+    applyBg(fb.scent_keywords);
+    setState({results:fb,screen:'resultsScreen'});
+  }
+}
+
+function resultsScreen(){
+  const r=state.results;if(!r)return document.createElement('div');
+  const d=document.createElement('div');d.className='results-body';
+  const ic=r.layering_lab&&r.layering_lab.internal_combination;
+  const up=r.layering_lab&&r.layering_lab.upsell_layering;
+
+  d.innerHTML=`
+    <div class="results-hero">
+      <div class="results-logo-sm">SILLAGE</div>
+      <div class="confidence-badge"><div class="confidence-dot"></div><div class="confidence-text">${r.confidence_score||89}% Match · AI Profil</div></div>
+      <div class="ai-insight-card">
+        <p class="ai-profile-text serif">"${r.profile_summary}"</p>
+        <div class="scent-pills">${(r.scent_keywords||[]).map((k,i)=>`<span class="scent-pill" style="animation-delay:${i*.12}s">${k}</span>`).join('')}</div>
+      </div>
+    </div>
+
+    <div class="result-section">
+      <div class="result-section-lbl">The Matches</div>
+      <div class="result-section-title serif">Specifične preporuke</div>
+      <div class="match-card top">
+        <div class="match-header dark"><span class="match-badge-lbl light">✦ Best match for your profile</span><span class="match-price">${r.recommendations.top_match.price_range}</span></div>
+        <div class="match-body">
+          <div class="match-brand">${r.recommendations.top_match.brand}</div>
+          <div class="match-name serif">${r.recommendations.top_match.name}</div>
+          <div class="match-family">${r.recommendations.top_match.scent_family} · ${r.recommendations.top_match.concentration}</div>
+          <div class="match-why">${r.recommendations.top_match.reasoning}</div>
+          <div class="match-notes">${(r.recommendations.top_match.key_notes||[]).map(n=>`<span class="note-tag">${n}</span>`).join('')}</div>
+        </div>
+      </div>
+      <div class="match-card">
+        <div class="match-header"><span class="match-badge-lbl muted">Alternativa</span><span class="match-price">${r.recommendations.second_match.price_range}</span></div>
+        <div class="match-body">
+          <div class="match-brand">${r.recommendations.second_match.brand}</div>
+          <div class="match-name serif">${r.recommendations.second_match.name}</div>
+          <div class="match-family">${r.recommendations.second_match.scent_family} · ${r.recommendations.second_match.concentration}</div>
+          <div class="match-why">${r.recommendations.second_match.reasoning}</div>
+          <div class="match-notes">${(r.recommendations.second_match.key_notes||[]).map(n=>`<span class="note-tag">${n}</span>`).join('')}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider-line"></div>
+
+    <div class="result-section">
+      <div class="result-section-lbl">Layering Lab</div>
+      <div class="result-section-title serif">Umjetnost slojevitosti</div>
+      ${ic?`<div class="layer-card">
+        <div class="layer-type-lbl">Internal · Iz tvoje kolekcije</div>
+        <div class="layer-bottles">
+          <div class="layer-bottle"><span class="layer-bottle-icon">🫙</span>${ic.perfume_a}</div>
+          <div class="layer-blend"><div class="layer-glow-line"></div><div class="layer-plus">+</div><div class="layer-glow-line"></div></div>
+          <div class="layer-bottle"><span class="layer-bottle-icon">🫙</span>${ic.perfume_b}</div>
+        </div>
+        <div class="layer-result-lbl">Dobivaš</div>
+        <div class="layer-result-text">"${ic.result_vibe}"</div>
+        <div class="layer-instructions">${ic.instructions}</div>
+      </div>`:''}
+      ${up?`<div class="layer-card">
+        <div class="layer-type-lbl">Upsell · Nadogradnja kolekcije</div>
+        <div class="layer-bottles">
+          <div class="layer-bottle"><span class="layer-bottle-icon">🫙</span>${up.existing}</div>
+          <div class="layer-blend"><div class="layer-glow-line"></div><div class="layer-plus">+</div><div class="layer-glow-line"></div></div>
+          <div class="layer-bottle"><span class="layer-bottle-icon">✨</span>${up.recommended_add}</div>
+        </div>
+        <div class="layer-result-lbl">Efekt</div>
+        <div class="layer-result-text">"${up.effect}"</div>
+      </div>`:''}
+      ${r.recommendations.strategic_guidance?`<div class="guidance-card">
+        <div class="layer-type-lbl">Strategic Guidance · Tvoj sljedeći smjer</div>
+        <div class="guidance-direction">
+          <div class="guidance-icon">🧭</div>
+          <div class="guidance-family serif">${r.recommendations.strategic_guidance.family}</div>
+        </div>
+        <div class="guidance-advice">${r.recommendations.strategic_guidance.advice}</div>
+      </div>`:''}
+    </div>
+
+    <div class="recipe-card">
+      <div class="recipe-title">✦ Tvoj Scent Recipe</div>
+      <div class="recipe-row"><div class="recipe-icon">👃</div><div><div class="recipe-lbl">NOSI</div><div class="recipe-val">${r.final_recipe.nosi}</div></div></div>
+      <div class="recipe-row"><div class="recipe-icon">🫙</div><div><div class="recipe-lbl">SLOŽI</div><div class="recipe-val">${r.final_recipe.slozi}</div></div></div>
+      <div class="recipe-row"><div class="recipe-icon">🧭</div><div><div class="recipe-lbl">ISTRAŽI</div><div class="recipe-val">${r.final_recipe.istrazi}</div></div></div>
+      <div class="recipe-actions">
+        <button class="recipe-btn recipe-btn-save" id="shareBtn">✦ Spremi profil</button>
+        <button class="recipe-btn recipe-btn-refine" id="refineBtn">Refine →</button>
+      </div>
+    </div>
+
+    <div class="bottom-ctas">
+      <button class="btn-explore" id="exploreBtn">Istraži drugi vibe →</button>
+      <button class="btn-restart" id="restartBtn">↺ Počni iznova</button>
+    </div>
+  `;
+
+  d.querySelector('#restartBtn').onclick=()=>{document.body.classList.remove('scent-marine','scent-floral','scent-woody','scent-warm');setState({screen:'landing',quizStep:0,answers:{},vibe:'',notes:[],notesExpanded:false,collection:[],collInput:'',results:null})};
+  d.querySelector('#refineBtn').onclick=()=>setState({screen:'vibe'});
+  d.querySelector('#exploreBtn').onclick=()=>setState({screen:'vibe'});
+  d.querySelector('#shareBtn').onclick=()=>{if(navigator.share)navigator.share({title:'Moj SILLAGE Scent Recipe',text:`${r.final_recipe.nosi}`,url:window.location.href});else{navigator.clipboard&&navigator.clipboard.writeText(window.location.href);alert('Link kopiran!')}};
+  return d;
+}
+
+render();
+</script>
+</body>
+</html>
