@@ -1330,8 +1330,8 @@ function renderResults() {
   el.querySelector('#explore-btn').onclick = () => setState({ page: 'quiz', quizStep: 0, answers: {} });
   const layerBtn = el.querySelector('#layer-tips-btn');
   if (layerBtn) layerBtn.onclick = () => openLayeringModal(
-    r.layering?.a || '', r.layering?.a_sub || '',
-    r.layering?.b || '', r.layering?.b_sub || ''
+    r.top?.name || r.layering?.b || '',
+    r.top?.brand || ''
   );
   return el;
 }
@@ -1354,26 +1354,21 @@ function render() {
 }
 
 /* ─────────────── LAYERING MODAL ─────────────── */
-async function openLayeringModal(a, aSub, b, bSub) {
+async function openLayeringModal(mainPerfume, mainBrand) {
   const overlay = document.createElement('div');
   overlay.className = 'modal-overlay';
   overlay.innerHTML = `
     <div class="modal">
       <div class="modal-handle"></div>
       <div class="modal-header">
-        <div class="modal-title s">Layering upute ✦</div>
+        <div class="modal-title s">Layering Lab ✦</div>
         <button class="modal-close" id="modal-close">✕</button>
       </div>
-      <div class="modal-subtitle">Korak-po-korak: kako miješati ove mirise</div>
+      <div class="modal-subtitle">Miješa s <strong>${mainPerfume}</strong> za različite ugođaje</div>
       <div class="modal-body">
-        <div class="modal-combo">
-          <div style="flex:1"><div class="modal-combo-name">🫙 ${a}</div><div class="modal-combo-sub">${aSub||''}</div></div>
-          <div class="modal-combo-op">+</div>
-          <div style="flex:1"><div class="modal-combo-name">✨ ${b}</div><div class="modal-combo-sub">${bSub||''}</div></div>
-        </div>
         <div class="modal-loading">
           <div class="modal-loading-ring"></div>
-          <div class="modal-loading-text s">Generiram personalizirane savjete...</div>
+          <div class="modal-loading-text s">Tražim savršene kombinacije...</div>
         </div>
       </div>
     </div>`;
@@ -1381,44 +1376,64 @@ async function openLayeringModal(a, aSub, b, bSub) {
   overlay.querySelector('#modal-close').onclick = () => overlay.remove();
   overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
 
-  const sys = `Ti si SILLAGE ekspert za parfemski layering. Daj 4 precizna, praktična i poetska savjeta za miješanje ovih mirisa NA HRVATSKOM. Vrati SAMO JSON:
-{"steps":[{"title":"","desc":"","note":""},{"title":"","desc":"","note":""},{"title":"","desc":"","note":""},{"title":"","desc":"","note":""}]}`;
+  const sys = `Ti si SILLAGE ekspert za parfemski layering. Na temelju zadanog parfema, predloži 3 KONKRETNA prava parfema koja se mogu slojeviti s njim za RAZLIČITE ugođaje. Budi specifičan - predloži stvarne brendove i parfeme koji postoje. Vrati SAMO validan JSON na HRVATSKOM:
+{
+  "pairings": [
+    {
+      "mood": "naziv ugođaja (npr. Svježe & Ljetno)",
+      "mood_emoji": "🌊",
+      "brand": "Naziv brenda",
+      "name": "Naziv parfema",
+      "price": "$/$$/$$$/$$$$",
+      "effect": "Što nastaje kombinacijom - kratki poetski opis (1 rečenica)",
+      "how": "Kratki praktični savjet kako ih nanijeti (1 rečenica)",
+      "notes": ["nota1","nota2","nota3"]
+    }
+  ]
+}`;
 
   try {
     const res = await fetch('/api/chat', {
       method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:800,system:sys,
-        messages:[{role:'user',content:`Kombiniram: "${a}" + "${b}"`}]})
+      body: JSON.stringify({model:'claude-sonnet-4-20250514', max_tokens:1000, system:sys,
+        messages:[{role:'user', content:`Glavni parfem za layering: ${mainBrand} ${mainPerfume}. Predloži 3 konkretna prava parfema koji se dobro slažu s njim, svaki za drugačiji ugođaj.`}]})
     });
     const data = await res.json();
-    const tips = JSON.parse(data.content[0].text.replace(/```json|```/g,'').trim());
-    renderTips(overlay, a, aSub, b, bSub, tips.steps);
+    const result = JSON.parse(data.content[0].text.replace(/```json|```/g,'').trim());
+    renderPairings(overlay, mainPerfume, result.pairings);
   } catch(e) {
-    renderTips(overlay, a, aSub, b, bSub, [
-      {title:'Priprema kože',desc:'Nanesite neomirisani losion 10-15 minuta prije parfema. Hidratizirana koža zadržava miris do 2× dulje.',note:'Idealno: neomirisani shea butter'},
-      {title:'Redoslijed nanošenja',desc:`Kreni s ${b} kao bazom — nanesite prvo na prsa, pričekaj 60 sekundi. Zatim ${a} na zapešća i vrat.`,note:'Teže note uvijek idu ispod'},
-      {title:'Mjesta nanošenja',desc:'Pulšne točke: zapešća, unutrašnjost lakta, vrat, iza ušiju. Ne trljaj zapešća — to lomi mirisne molekule.',note:'Za trajnost: i u kosu'},
-      {title:'Omjer i intenzitet',desc:`Počni s 2 prska ${b} i 1 prsk ${a}. Eksperimentiraj s omjerom dok ne pronađeš savršen balans za svoju kožu.`,note:'Svaka koža reagira drugačije'}
+    renderPairings(overlay, mainPerfume, [
+      {mood:'Svježe & Morsko', mood_emoji:'🌊', brand:'Acqua di Parma', name:'Blu Mediterraneo Arancia di Capri', price:'$$$', effect:'Vanilijska slatkoća susreće mediteranski citrus — ljeto u bočici.', how:'2 prska Acqua di Parma na prsa, 1 prsk glavnog na vrat.', notes:['naranča','bergamot','morska sol']},
+      {mood:'Duboko & Tajnovito', mood_emoji:'🌑', brand:'Maison Margiela', name:'Replica Jazz Club', price:'$$$', effect:'Toplina vanilije dobiva dimnu, jazzističku dušu — savršeno za večer.', how:'Glavni parfem prvo, Jazz Club kao završni sloj na zapešća.', notes:['duhan','rum','vanilija']},
+      {mood:'Romantično & Cvjetno', mood_emoji:'🌸', brand:'Jo Malone', name:'Peony & Blush Suede', price:'$$$$', effect:'Slatkoća se transformira u mekani cvjetni šapat — nježna, sofisticirana romanika.', how:'Jo Malone na kosu i dekolte, glavni na pulse točke.', notes:['božur','jabuka','suede']}
     ]);
   }
 }
 
-function renderTips(overlay, a, aSub, b, bSub, steps) {
+function renderPairings(overlay, mainPerfume, pairings) {
   overlay.querySelector('.modal-body').innerHTML = `
-    <div class="modal-combo">
-      <div style="flex:1"><div class="modal-combo-name">🫙 ${a}</div><div class="modal-combo-sub">${aSub||''}</div></div>
-      <div class="modal-combo-op">+</div>
-      <div style="flex:1"><div class="modal-combo-name">✨ ${b}</div><div class="modal-combo-sub">${bSub||''}</div></div>
-    </div>
-    ${steps.map((s,i)=>`
-      <div class="tip-step">
-        <div class="tip-num">${i+1}</div>
-        <div class="tip-content">
-          <div class="tip-title">${s.title}</div>
-          <div class="tip-desc">${s.desc}</div>
-          ${s.note?`<div class="tip-note">✦ ${s.note}</div>`:''}
+    <p style="font-size:12px;color:#9C8F86;margin-bottom:18px;line-height:1.6">
+      Odaberi ugođaj koji želiš postići miješanjem s <strong style="color:#2B2928">${mainPerfume}</strong>:
+    </p>
+    ${pairings.map(p => `
+      <div style="background:rgba(255,255,255,.8);border:1.5px solid #E3C9A9;border-radius:16px;padding:18px;margin-bottom:12px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="font-size:20px">${p.mood_emoji}</span>
+            <span style="font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:#C9A15E;font-weight:500">${p.mood}</span>
+          </div>
+          <span style="font-size:10px;color:#C9A15E;letter-spacing:.1em">${p.price}</span>
         </div>
-      </div>`).join('')}`;
+        <div style="font-size:10px;color:#9C8F86;letter-spacing:.15em;text-transform:uppercase;margin-bottom:2px">${p.brand}</div>
+        <div style="font-family:'Playfair Display',serif;font-size:18px;color:#2B2928;margin-bottom:8px">${p.name}</div>
+        <div style="font-size:13px;color:#6B5E54;font-style:italic;line-height:1.6;margin-bottom:10px">"${p.effect}"</div>
+        <div style="font-size:11px;color:#9C8F86;margin-bottom:10px">→ ${p.how}</div>
+        <div style="display:flex;gap:5px;flex-wrap:wrap">
+          ${(p.notes||[]).map(n=>`<span style="border:1px solid rgba(201,161,94,.3);border-radius:20px;padding:3px 10px;font-size:10px;color:#2B2928">${n}</span>`).join('')}
+        </div>
+      </div>
+    `).join('')}
+  `;
 }
 
 render();
