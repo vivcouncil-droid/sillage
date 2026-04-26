@@ -2,108 +2,103 @@
 <html lang="hr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>SILLAGE — AI Perfume Expert</title>
-<meta name="description" content="Your scent, decoded. AI-crafted fragrance profile tailored to your emotions.">
+<meta name="description" content="Your scent, decoded. AI-crafted fragrance profile.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --gold:#C9A96E;--gold2:#E8D5B0;--gold3:#F5ECD8;
+  --nude:#F5E6DA;--gold:#D4AF37;--gold-lt:#E8D5B0;--gold-pale:#F5ECD8;
   --charcoal:#2C2C2C;--dark:#16100A;--white:#FEFAF6;
-  --muted:#9B8E82;--border:#E2CEB4;
-  --card:rgba(254,250,246,0.85);--glass:rgba(255,251,247,0.6);
-  --bg1:#F5E6DA;--bg2:#EDD9C4;--bg3:#E4CBB0;
+  --muted:#9B8E82;--border:#E2CEB4;--border-gold:rgba(212,175,55,0.35);
+  --card:rgba(255,255,255,0.55);--glass:rgba(255,251,247,0.65);
+  --bg:#F5E6DA;
 }
 html,body{min-height:100%;font-family:'Inter',sans-serif;color:var(--charcoal)}
-body{background:linear-gradient(160deg,var(--bg1) 0%,var(--bg2) 55%,var(--bg3) 100%);background-attachment:fixed;transition:--bg1 1.5s,--bg2 1.5s,--bg3 1.5s}
-body.marine{--bg1:#e2ecf2;--bg2:#cfe0eb;--bg3:#bdd4e3}
-body.floral{--bg1:#f5e4ec;--bg2:#ecd0db;--bg3:#e2bfcc}
-body.woody{--bg1:#ede0d0;--bg2:#deccb5;--bg3:#cfba9c}
-body.warm{--bg1:#f5e0c4;--bg2:#eccba0;--bg3:#e2b87e}
+body{background:var(--bg);transition:background 1.5s ease}
+body.scent-marine{--bg:#e4edf3}
+body.scent-floral{--bg:#f5e6ee}
+body.scent-woody{--bg:#ede0d0}
+body.scent-warm{--bg:#f5e2c8}
 .serif{font-family:'Playfair Display',Georgia,serif}
 #app{max-width:430px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;padding-bottom:60px}
 
-/* ═══ LANDING ═══ */
-.landing{position:relative;min-height:100vh;display:flex;flex-direction:column;overflow:hidden;background:#EDD9C4}
-/* Image shown only in the middle - bottle zone */
-.land-bg{position:absolute;left:0;right:0;top:0;bottom:0;background:url('./landing-bg.jpg') center 30%/cover no-repeat;z-index:0}
-/* Top block covers baked-in SILLAGE text from image */
-.land-top-cover{position:absolute;top:0;left:0;right:0;height:28%;background:linear-gradient(to bottom,#EDD9C4 70%,rgba(237,213,192,0) 100%);z-index:2}
-/* Bottom fade covers baked-in tagline text from image */
-.land-bot-cover{position:absolute;bottom:0;left:0;right:0;height:55%;background:linear-gradient(to top,#E8D5B7 55%,rgba(237,213,192,0) 100%);z-index:2}
-/* Our top logo */
-.land-logo-wrap{position:absolute;top:0;left:0;right:0;z-index:3;padding:48px 24px 0;text-align:center}
-.land-logo{font-family:'Playfair Display',serif;font-size:38px;font-weight:400;letter-spacing:10px;color:var(--charcoal);display:block;margin-bottom:8px}
-.land-logo-sub{font-size:10px;letter-spacing:5px;color:#B8866A;text-transform:uppercase}
-/* Our bottom content */
-.land-content{position:relative;z-index:3;margin-top:auto;padding:0 32px 52px;text-align:center}
-.land-headline{font-family:'Playfair Display',serif;font-size:34px;font-weight:400;line-height:1.2;color:var(--charcoal);margin-bottom:14px}
-.land-headline em{font-style:italic;color:#7A5840}
-.land-rule{width:28px;height:1px;background:var(--gold);margin:0 auto 16px;opacity:.8}
-.land-sub{font-size:14px;color:#6B5E54;line-height:1.7;margin-bottom:36px;max-width:260px;margin-left:auto;margin-right:auto}
-.btn-cta{display:inline-flex;align-items:center;gap:12px;background:rgba(22,16,10,0.88);color:var(--white);border:none;padding:19px 48px;font-family:'Playfair Display',serif;font-size:15px;letter-spacing:2.5px;cursor:pointer;border-radius:60px;position:relative;overflow:hidden;transition:all .4s;backdrop-filter:blur(16px);box-shadow:0 0 0 1px rgba(201,169,110,.35),0 8px 40px rgba(16,10,4,.3);-webkit-tap-highlight-color:transparent}
+/* ── LANDING ── */
+.landing{position:relative;min-height:100vh;display:flex;flex-direction:column;overflow:hidden}
+.land-img{position:absolute;inset:0;background:url('./landing-bg.jpg') center 30%/cover no-repeat;z-index:0}
+.land-top-mask{position:absolute;top:0;left:0;right:0;height:26%;background:linear-gradient(to bottom,#F5E6DA 65%,rgba(245,230,218,0) 100%);z-index:1}
+.land-bot-mask{position:absolute;bottom:0;left:0;right:0;height:52%;background:linear-gradient(to top,#F0DCC8 55%,rgba(240,220,200,0) 100%);z-index:1}
+.land-hdr{position:absolute;top:0;left:0;right:0;z-index:2;padding:40px 28px 0;display:flex;align-items:flex-start;justify-content:space-between}
+.land-logo-block{}
+.land-logo-txt{font-family:'Playfair Display',serif;font-size:22px;font-weight:400;letter-spacing:8px;color:var(--charcoal);display:block}
+.land-logo-tag{font-size:9px;letter-spacing:4px;color:#B8866A;text-transform:uppercase;margin-top:3px;display:block}
+.land-body{position:relative;z-index:2;margin-top:auto;padding:0 28px 52px}
+.land-headline{font-family:'Playfair Display',serif;font-size:36px;font-weight:400;line-height:1.2;color:var(--charcoal);margin-bottom:10px}
+.land-headline em{font-style:italic;color:#8B5E3C;display:block}
+.land-rule{width:24px;height:1px;background:var(--gold);margin:14px 0;opacity:.9}
+.land-sub{font-size:13px;color:#6B5E54;line-height:1.7;margin-bottom:32px;max-width:240px}
+.btn-cta{display:inline-flex;align-items:center;gap:10px;background:rgba(22,16,10,0.9);color:var(--white);border:none;padding:17px 40px;font-family:'Playfair Display',serif;font-size:14px;letter-spacing:2px;cursor:pointer;border-radius:60px;position:relative;overflow:hidden;transition:all .4s;box-shadow:0 0 0 1px rgba(212,175,55,.4),0 8px 32px rgba(16,10,4,.28);-webkit-tap-highlight-color:transparent}
 .btn-cta::after{content:'';position:absolute;top:-50%;left:-70%;width:35%;height:200%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.1),transparent);transform:skewX(-20deg);animation:shine 3.5s infinite}
 @keyframes shine{0%{left:-70%}100%{left:130%}}
-.btn-cta:hover{transform:translateY(-3px);box-shadow:0 0 0 1px rgba(201,169,110,.6),0 16px 48px rgba(16,10,4,.4),0 0 80px rgba(201,169,110,.12)}
-.btn-cta-spark{animation:glow 2s ease-in-out infinite}
-@keyframes glow{0%,100%{opacity:.5;transform:scale(1)}50%{opacity:1;transform:scale(1.3)}}
-.land-lang{font-size:10px;color:rgba(80,65,55,.5);margin-top:20px;letter-spacing:4px}
+.btn-cta:active{transform:scale(.98)}
+.btn-spark{animation:sparkle 2s ease-in-out infinite;font-size:13px}
+@keyframes sparkle{0%,100%{opacity:.4;transform:scale(1)}50%{opacity:1;transform:scale(1.3)}}
+.land-lang{font-size:10px;color:rgba(80,65,55,.5);margin-top:18px;letter-spacing:4px}
 
-/* ═══ HEADER ═══ */
-.hdr{padding:18px 24px 0;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:rgba(245,230,218,.92);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);z-index:30}
-.hdr-logo{font-family:'Playfair Display',serif;font-size:16px;letter-spacing:5px;color:var(--charcoal)}
-.hdr-back{background:none;border:none;color:var(--muted);cursor:pointer;font-size:12px;display:flex;align-items:center;gap:5px;padding:4px;font-family:'Inter',sans-serif;letter-spacing:.5px;-webkit-tap-highlight-color:transparent}
-.hdr-back:hover{color:var(--charcoal)}
+/* ── HEADER ── */
+.hdr{padding:18px 24px 0;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:rgba(245,230,218,.93);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);z-index:30}
+.hdr-logo{font-family:'Playfair Display',serif;font-size:15px;letter-spacing:5px;color:var(--charcoal)}
+.hdr-back{background:none;border:none;color:var(--muted);cursor:pointer;font-size:12px;display:flex;align-items:center;gap:5px;padding:4px;font-family:'Inter',sans-serif;-webkit-tap-highlight-color:transparent}
 
-/* ═══ PROGRESS ═══ */
+/* ── PROGRESS ── */
 .prog{padding:14px 24px 0}
 .prog-lbl{font-size:10px;color:var(--muted);letter-spacing:2.5px;text-transform:uppercase;margin-bottom:9px}
-.prog-track{height:1px;background:var(--border);overflow:hidden}
+.prog-bar{height:1px;background:var(--border);overflow:hidden}
 .prog-fill{height:100%;background:linear-gradient(90deg,var(--gold),#E8C87A);transition:width .6s ease}
 .prog-dots{display:flex;gap:7px;margin-top:9px}
-.pdot{width:5px;height:5px;border-radius:50%;background:var(--border);transition:all .3s}
-.pdot.on{background:var(--gold);transform:scale(1.4)}
-.pdot.done{background:var(--gold2)}
+.dot{width:5px;height:5px;border-radius:50%;background:var(--border);transition:all .3s}
+.dot.on{background:var(--gold);transform:scale(1.4)}
+.dot.done{background:var(--gold-lt)}
 
-/* ═══ QUIZ ═══ */
+/* ── QUIZ ── */
 .qbody{padding:28px 24px 0}
-.qlbl{font-size:10px;color:var(--gold);letter-spacing:4px;text-transform:uppercase;margin-bottom:18px}
-.qq{font-family:'Playfair Display',serif;font-size:23px;font-weight:400;line-height:1.35;margin-bottom:7px}
-.qsub{font-size:13px;color:var(--muted);margin-bottom:28px;line-height:1.5}
-.ogrid{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:28px}
-.ocard{background:var(--card);border:1.5px solid var(--border);border-radius:14px;padding:20px 14px;cursor:pointer;transition:all .22s;text-align:left;display:flex;flex-direction:column;gap:8px;backdrop-filter:blur(8px);-webkit-tap-highlight-color:transparent}
-.ocard:hover{border-color:var(--gold);transform:translateY(-2px);box-shadow:0 6px 24px rgba(201,169,110,.1)}
-.ocard.sel{border-color:var(--gold);background:rgba(201,169,110,.1);box-shadow:0 0 0 1px var(--gold)}
-.ocard-ico{font-size:22px}
-.ocard-lbl{font-family:'Playfair Display',serif;font-size:15px;color:var(--charcoal)}
-.ocard-desc{font-size:11px;color:var(--muted);line-height:1.4}
-.btn-next{width:100%;background:var(--charcoal);color:var(--white);border:none;padding:17px;font-family:'Playfair Display',serif;font-size:14px;letter-spacing:2px;cursor:pointer;border-radius:4px;transition:all .3s;-webkit-tap-highlight-color:transparent}
-.btn-next:hover:not(:disabled){background:var(--dark)}
-.btn-next:disabled{opacity:.28;cursor:not-allowed}
+.qlbl{font-size:10px;color:var(--gold);letter-spacing:4px;text-transform:uppercase;margin-bottom:16px}
+.qq{font-family:'Playfair Display',serif;font-size:24px;font-weight:400;line-height:1.3;margin-bottom:7px}
+.qsub{font-size:13px;color:var(--muted);margin-bottom:28px}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:28px}
+.opt{background:rgba(255,255,255,.6);border:1.5px solid var(--border);border-radius:14px;padding:18px 14px;cursor:pointer;transition:all .22s;display:flex;flex-direction:column;gap:7px;backdrop-filter:blur(8px);-webkit-tap-highlight-color:transparent}
+.opt:hover{border-color:var(--gold);transform:translateY(-2px)}
+.opt.sel{border-color:var(--gold);background:rgba(212,175,55,.1);box-shadow:0 0 0 1px var(--gold)}
+.opt-ico{font-size:22px}
+.opt-lbl{font-family:'Playfair Display',serif;font-size:15px;color:var(--charcoal)}
+.opt-dsc{font-size:11px;color:var(--muted);line-height:1.4}
+.btn-nxt{width:100%;background:var(--charcoal);color:var(--white);border:none;padding:16px;font-family:'Playfair Display',serif;font-size:14px;letter-spacing:2px;cursor:pointer;border-radius:4px;transition:all .3s;-webkit-tap-highlight-color:transparent}
+.btn-nxt:hover:not(:disabled){background:var(--dark)}
+.btn-nxt:disabled{opacity:.28;cursor:not-allowed}
 
-/* ═══ VIBE ═══ */
+/* ── VIBE ── */
 .vbody{padding:28px 24px}
 .slbl{font-size:10px;color:var(--gold);letter-spacing:4px;text-transform:uppercase;margin-bottom:14px}
-.stitle{font-family:'Playfair Display',serif;font-size:23px;font-weight:400;line-height:1.35;margin-bottom:8px}
-.sdesc{font-size:13px;color:var(--muted);margin-bottom:24px;line-height:1.65}
-.vtxt{width:100%;min-height:140px;background:var(--card);border:1.5px solid var(--border);border-radius:14px;padding:16px;font-family:'Inter',sans-serif;font-size:14px;color:var(--charcoal);resize:none;line-height:1.75;outline:none;transition:border .2s;-webkit-appearance:none}
+.stitle{font-family:'Playfair Display',serif;font-size:24px;font-weight:400;line-height:1.3;margin-bottom:8px}
+.sdesc{font-size:13px;color:var(--muted);margin-bottom:22px;line-height:1.6}
+.vtxt{width:100%;min-height:136px;background:rgba(255,255,255,.7);border:1.5px solid var(--border);border-radius:14px;padding:16px;font-family:'Inter',sans-serif;font-size:14px;color:var(--charcoal);resize:none;line-height:1.75;outline:none;transition:border .2s;-webkit-appearance:none}
 .vtxt:focus{border-color:var(--gold)}
 .vtxt::placeholder{color:var(--muted);font-style:italic}
 .vctr{text-align:right;font-size:11px;color:var(--muted);margin-top:6px;margin-bottom:20px}
 .hlbl{font-size:10px;color:var(--muted);margin-bottom:10px;letter-spacing:2px;text-transform:uppercase}
 .hints{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
-.hchip{background:rgba(201,169,110,.1);border:1px solid var(--gold2);border-radius:20px;padding:6px 14px;font-size:12px;color:var(--charcoal);cursor:pointer;transition:all .2s;-webkit-tap-highlight-color:transparent}
-.hchip:hover{background:rgba(201,169,110,.25)}
+.hchip{background:rgba(212,175,55,.1);border:1px solid var(--gold-lt);border-radius:20px;padding:6px 14px;font-size:12px;color:var(--charcoal);cursor:pointer;transition:all .2s;-webkit-tap-highlight-color:transparent}
+.hchip:hover{background:rgba(212,175,55,.22)}
 
-/* ═══ NOTES ═══ */
+/* ── NOTES ── */
 .nbody{padding:28px 24px}
 .ngrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
-.nchip{background:var(--card);border:1.5px solid var(--border);border-radius:12px;padding:14px 8px;cursor:pointer;transition:all .2s;text-align:center;backdrop-filter:blur(8px);-webkit-tap-highlight-color:transparent}
+.nchip{background:rgba(255,255,255,.6);border:1.5px solid var(--border);border-radius:12px;padding:14px 8px;cursor:pointer;transition:all .2s;text-align:center;backdrop-filter:blur(6px);-webkit-tap-highlight-color:transparent}
 .nchip:hover{border-color:var(--gold);transform:translateY(-1px)}
-.nchip.sel{border-color:var(--gold);background:rgba(201,169,110,.12)}
+.nchip.sel{border-color:var(--gold);background:rgba(212,175,55,.12)}
 .nchip.hide{display:none}
 .nchip-ico{font-size:20px;margin-bottom:6px}
 .nchip-lbl{font-size:11px;color:var(--charcoal)}
@@ -112,114 +107,134 @@ body.warm{--bg1:#f5e0c4;--bg2:#eccba0;--bg3:#e2b87e}
 .btn-skip{width:100%;margin-top:10px;background:transparent;border:1px solid var(--border);color:var(--muted);padding:13px;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:8px;font-family:'Inter',sans-serif;transition:all .2s}
 .btn-skip:hover{border-color:var(--gold);color:var(--charcoal)}
 
-/* ═══ COLLECTION ═══ */
+/* ── COLLECTION ── */
 .cbody{padding:28px 24px}
-.cinwrap{display:flex;gap:10px;margin-bottom:16px}
-.cin{flex:1;background:var(--card);border:1.5px solid var(--border);border-radius:10px;padding:13px 16px;font-family:'Inter',sans-serif;font-size:14px;color:var(--charcoal);outline:none;transition:border .2s;-webkit-appearance:none}
+.cwrap{display:flex;gap:16px;align-items:flex-start}
+.cleft{flex:1}
+.cright{width:80px;flex-shrink:0;display:flex;align-items:center;justify-content:center;padding-top:8px}
+.cbottle{width:70px;height:90px;opacity:.25}
+.cinrow{display:flex;gap:10px;margin-bottom:16px}
+.cin{flex:1;background:rgba(255,255,255,.7);border:1.5px solid var(--border);border-radius:10px;padding:13px 16px;font-family:'Inter',sans-serif;font-size:14px;color:var(--charcoal);outline:none;transition:border .2s;-webkit-appearance:none}
 .cin:focus{border-color:var(--gold)}
-.cadd{background:var(--charcoal);color:var(--white);border:none;padding:12px 18px;border-radius:10px;cursor:pointer;font-size:20px;-webkit-tap-highlight-color:transparent}
-.clist{display:flex;flex-direction:column;gap:8px;margin-bottom:24px;min-height:48px}
-.citem{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;font-size:13px}
-.crem{background:none;border:none;color:var(--muted);cursor:pointer;font-size:15px;padding:4px 6px;-webkit-tap-highlight-color:transparent}
-.crem:hover{color:#c0392b}
-.cempty{font-size:13px;color:var(--muted);font-style:italic;padding:10px 0}
+.cadd{background:var(--charcoal);color:var(--white);border:none;padding:0 18px;border-radius:10px;cursor:pointer;font-size:22px;height:48px;-webkit-tap-highlight-color:transparent}
+.clist{display:flex;flex-direction:column;gap:8px;margin-bottom:24px;min-height:44px}
+.citem{background:rgba(255,255,255,.6);border:1px solid var(--border);border-radius:8px;padding:11px 14px;display:flex;align-items:center;justify-content:space-between;font-size:13px}
+.crem{background:none;border:none;color:var(--muted);cursor:pointer;font-size:15px;padding:4px;-webkit-tap-highlight-color:transparent}
+.cempty{font-size:13px;color:var(--muted);font-style:italic;padding:8px 0}
 
-/* ═══ LOADING ═══ */
-.lscreen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:40px 24px;text-align:center}
-.llogo{font-family:'Playfair Display',serif;font-size:26px;letter-spacing:8px;color:var(--charcoal);margin-bottom:6px}
-.lsub{font-size:10px;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:60px}
+/* ── LOADING ── */
+.lscreen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:40px 24px;text-align:center;background:var(--bg)}
+.llogo{font-family:'Playfair Display',serif;font-size:28px;letter-spacing:8px;color:var(--charcoal);margin-bottom:6px}
+.lsub{font-size:10px;letter-spacing:5px;color:var(--gold);text-transform:uppercase;margin-bottom:60px}
 .lanim{position:relative;width:72px;height:72px;margin-bottom:40px}
 .ring{position:absolute;inset:0;border-radius:50%;border:1px solid transparent;animation:spin 2s linear infinite}
 .r1{border-top-color:var(--gold)}
-.r2{border-right-color:var(--gold2);animation-duration:3s;inset:8px}
-.r3{border-bottom-color:rgba(201,169,110,.3);animation-duration:4.5s;inset:16px}
+.r2{border-right-color:var(--gold-lt);animation-duration:3s;inset:8px}
+.r3{border-bottom-color:rgba(212,175,55,.3);animation-duration:4.5s;inset:16px}
 .rdot{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:6px;height:6px;border-radius:50%;background:var(--gold)}
 @keyframes spin{to{transform:rotate(360deg)}}
 .lmsg{font-family:'Playfair Display',serif;font-size:17px;font-style:italic;color:var(--charcoal);opacity:.7;min-height:26px}
 
-/* ═══ RESULTS ═══ */
+/* ── RESULTS ── */
 .rpage{padding-bottom:80px}
 
-/* profile hero */
-.rhero{padding:44px 28px 36px;text-align:center;position:relative;overflow:hidden}
-.rhero::before{content:'';position:absolute;top:-80px;left:50%;transform:translateX(-50%);width:320px;height:320px;border-radius:50%;background:radial-gradient(circle,rgba(201,169,110,.1) 0%,transparent 70%);pointer-events:none}
-.rlogo{font-family:'Playfair Display',serif;font-size:12px;letter-spacing:6px;color:var(--muted);margin-bottom:22px;text-transform:uppercase}
-.rbadge{display:inline-flex;align-items:center;gap:8px;background:rgba(201,169,110,.1);border:1px solid rgba(201,169,110,.3);border-radius:20px;padding:6px 18px;margin-bottom:20px}
-.rbdot{width:5px;height:5px;border-radius:50%;background:var(--gold);animation:glow 2s ease infinite}
-.rbtxt{font-size:10px;color:var(--gold);letter-spacing:2.5px;text-transform:uppercase}
-.glass-card{background:var(--glass);border:1px solid rgba(201,169,110,.2);border-radius:22px;padding:26px 24px;backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);box-shadow:0 4px 40px rgba(201,169,110,.07),inset 0 1px 0 rgba(255,255,255,.7)}
-.profile-txt{font-family:'Playfair Display',serif;font-size:16px;font-style:italic;line-height:1.85;color:var(--charcoal);margin-bottom:20px}
-.pills{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
-.pill{background:rgba(201,169,110,.12);border:1px solid rgba(201,169,110,.35);border-radius:20px;padding:5px 14px;font-size:11px;color:var(--charcoal);letter-spacing:1px;animation:pilin .5s ease forwards;opacity:0;transform:translateY(6px)}
+/* AI Insight Card */
+.ai-card{margin:28px 20px 0;background:rgba(255,255,255,.75);border:1px solid var(--border-gold);border-radius:20px;padding:22px 20px;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 4px 32px rgba(212,175,55,.08),inset 0 1px 0 rgba(255,255,255,.8)}
+.ai-card-top{display:flex;align-items:flex-start;gap:12px;margin-bottom:16px}
+.ai-ico{width:34px;height:34px;border-radius:50%;background:rgba(212,175,55,.12);border:1px solid var(--border-gold);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.ai-lbl{font-size:9px;color:var(--gold);letter-spacing:3px;text-transform:uppercase;margin-bottom:4px}
+.ai-quote{font-family:'Playfair Display',serif;font-size:15px;font-style:italic;line-height:1.75;color:var(--charcoal)}
+.ai-card-bottom{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.scent-pills{display:flex;gap:7px;flex-wrap:wrap;flex:1}
+.spill{background:rgba(212,175,55,.1);border:1px solid rgba(212,175,55,.3);border-radius:20px;padding:4px 12px;font-size:10px;color:var(--charcoal);letter-spacing:.5px;animation:pilin .5s ease forwards;opacity:0;transform:translateY(5px)}
 @keyframes pilin{to{opacity:1;transform:translateY(0)}}
+.match-score{text-align:right;flex-shrink:0}
+.score-num{font-family:'Playfair Display',serif;font-size:28px;font-weight:400;color:var(--charcoal);line-height:1;display:block}
+.score-lbl{font-size:9px;color:var(--muted);letter-spacing:2px;text-transform:uppercase}
+.btn-view{width:100%;margin-top:16px;background:transparent;border:1.5px solid var(--charcoal);color:var(--charcoal);padding:12px;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:4px;font-family:'Inter',sans-serif;transition:all .2s}
+.btn-view:hover{background:var(--charcoal);color:var(--white)}
 
-/* section */
-.rsec{padding:28px 24px 0}
-.rsec-lbl{font-size:10px;color:var(--gold);letter-spacing:4px;text-transform:uppercase;margin-bottom:6px}
-.rsec-ttl{font-family:'Playfair Display',serif;font-size:21px;font-weight:400;color:var(--charcoal);margin-bottom:20px}
+/* Profile summary sidebar-style */
+.profile-row{margin:0 20px;display:flex;gap:8px;margin-top:10px}
+.profile-tag{background:rgba(255,255,255,.6);border:1px solid var(--border);border-radius:8px;padding:8px 12px;font-size:11px;color:var(--charcoal);display:flex;align-items:center;gap:6px;flex:1;justify-content:center}
+.profile-tag-ico{font-size:14px}
 
-/* match cards */
-.mcard{background:var(--card);border:1.5px solid var(--border);border-radius:20px;overflow:hidden;margin-bottom:16px;backdrop-filter:blur(8px);transition:transform .3s,box-shadow .3s}
-.mcard:hover{transform:translateY(-4px);box-shadow:0 16px 48px rgba(44,28,12,.1)}
-.mcard.hero{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold),0 8px 48px rgba(201,169,110,.15)}
-.mcard-top{padding:12px 20px;display:flex;align-items:center;justify-content:space-between}
-.mcard-top.dark{background:var(--charcoal)}
-.mbadge{font-size:10px;letter-spacing:2px;text-transform:uppercase}
-.mbadge.lt{color:var(--gold2)}
+/* Section headers */
+.rsec{padding:28px 20px 0}
+.rsec-lbl{font-size:10px;color:var(--gold);letter-spacing:4px;text-transform:uppercase;margin-bottom:5px}
+.rsec-ttl{font-family:'Playfair Display',serif;font-size:22px;font-weight:400;color:var(--charcoal);margin-bottom:18px}
+.rsec-actions{font-size:11px;color:var(--muted);letter-spacing:1px;cursor:pointer;float:right;margin-top:4px;text-decoration:underline}
+
+/* Match cards */
+.matches-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.mcard{background:rgba(255,255,255,.7);border:1.5px solid var(--border);border-radius:16px;overflow:hidden;transition:transform .3s,box-shadow .3s;backdrop-filter:blur(8px)}
+.mcard:hover{transform:translateY(-3px);box-shadow:0 12px 36px rgba(44,28,12,.1)}
+.mcard.hero{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold),0 6px 32px rgba(212,175,55,.12)}
+.mcard-badge{padding:8px 12px;display:flex;align-items:center;justify-content:space-between}
+.mcard-badge.dark{background:var(--charcoal)}
+.mbadge{font-size:9px;letter-spacing:1.5px;text-transform:uppercase}
+.mbadge.lt{color:var(--gold-lt)}
 .mbadge.mt{color:var(--muted)}
-.mprice{font-size:12px;color:var(--gold);letter-spacing:2px}
-.mcard-body{padding:22px 22px 24px}
-.mbrand{font-size:11px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:4px}
-.mname{font-family:'Playfair Display',serif;font-size:28px;font-weight:400;color:var(--charcoal);margin-bottom:5px;line-height:1.15}
-.mfam{font-size:12px;color:var(--gold);margin-bottom:18px;letter-spacing:.5px}
-.mwhy{font-size:13px;color:var(--muted);line-height:1.75;margin-bottom:18px;padding-bottom:18px;border-bottom:1px solid var(--border);font-style:italic}
-.mnotes{display:flex;gap:7px;flex-wrap:wrap}
-.ntag{background:rgba(201,169,110,.1);border:1px solid var(--gold2);border-radius:20px;padding:4px 12px;font-size:11px;color:var(--charcoal)}
+.mprice{font-size:10px;color:var(--gold);letter-spacing:1.5px}
+.mcard-img{height:100px;display:flex;align-items:center;justify-content:center;overflow:hidden;background:linear-gradient(135deg,rgba(212,175,55,.06),rgba(245,230,218,.4))}
+.mcard-bottle{width:56px;height:80px;opacity:.7}
+.mcard-body{padding:14px 14px 16px}
+.m-brand{font-size:9px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:3px}
+.m-name{font-family:'Playfair Display',serif;font-size:17px;font-weight:400;color:var(--charcoal);margin-bottom:3px;line-height:1.2}
+.m-fam{font-size:10px;color:var(--gold);margin-bottom:10px}
+.m-why{font-size:11px;color:var(--muted);line-height:1.65;margin-bottom:10px;font-style:italic;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.m-notes{display:flex;gap:5px;flex-wrap:wrap}
+.ntag{background:rgba(212,175,55,.08);border:1px solid var(--gold-lt);border-radius:20px;padding:3px 9px;font-size:9px;color:var(--charcoal)}
 
-/* layering */
-.lcard{background:var(--card);border:1.5px solid var(--border);border-radius:20px;padding:24px 22px;margin-bottom:14px;backdrop-filter:blur(8px)}
-.ltlbl{font-size:10px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:18px}
-.lbottles{display:flex;align-items:center;gap:8px;margin-bottom:22px}
-.lbottle{flex:1;background:linear-gradient(135deg,rgba(201,169,110,.07),rgba(232,213,176,.14));border:1px solid var(--gold2);border-radius:14px;padding:16px 10px;text-align:center;font-size:12px;color:var(--charcoal);line-height:1.5}
-.lbico{font-size:24px;display:block;margin-bottom:8px}
-.lblend{display:flex;flex-direction:column;align-items:center;gap:4px;flex-shrink:0;padding:0 4px}
-.lplus{font-size:18px;color:var(--gold);line-height:1}
-.lglow{width:1px;height:20px;background:linear-gradient(to bottom,var(--gold),transparent);opacity:.5}
-.lrlbl{font-size:10px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:8px}
-.lrtxt{font-family:'Playfair Display',serif;font-size:15px;font-style:italic;color:var(--charcoal);line-height:1.8;margin-bottom:12px}
-.linstr{font-size:12px;color:var(--muted);line-height:1.7;padding:10px 14px;background:rgba(201,169,110,.05);border-radius:8px;border-left:2px solid var(--gold2)}
+/* Layering Lab */
+.layer-card{background:rgba(255,255,255,.7);border:1.5px solid var(--border);border-radius:16px;padding:20px 18px;margin-bottom:12px;backdrop-filter:blur(8px)}
+.ltlbl{font-size:10px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:16px}
+.layer-visual{display:flex;align-items:center;gap:8px;margin-bottom:18px}
+.lbottle{flex:1;background:linear-gradient(135deg,rgba(212,175,55,.07),rgba(245,230,218,.3));border:1px solid var(--gold-lt);border-radius:12px;padding:14px 8px;text-align:center}
+.lbico{font-size:22px;display:block;margin-bottom:6px}
+.lname{font-size:11px;color:var(--charcoal);line-height:1.4;font-weight:500}
+.lsub{font-size:10px;color:var(--muted);margin-top:2px}
+.lop{font-size:20px;color:var(--gold);flex-shrink:0;font-weight:300}
+.layer-result{background:rgba(212,175,55,.06);border:1px solid rgba(212,175,55,.2);border-radius:10px;padding:14px}
+.lr-lbl{font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:6px}
+.lr-txt{font-family:'Playfair Display',serif;font-size:14px;font-style:italic;color:var(--charcoal);line-height:1.75;margin-bottom:8px}
+.lr-instr{font-size:11px;color:var(--muted);line-height:1.6}
 
-/* guidance */
-.gcard{background:var(--card);border:1.5px solid var(--border);border-radius:20px;padding:24px 22px;margin-bottom:14px}
-.gdir{display:flex;align-items:center;gap:14px;margin-bottom:14px}
-.gico{width:38px;height:38px;border-radius:50%;background:rgba(201,169,110,.1);border:1px solid var(--gold2);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
-.gfam{font-family:'Playfair Display',serif;font-size:20px;color:var(--charcoal)}
-.gadv{font-size:13px;color:var(--muted);line-height:1.75;font-style:italic}
+/* Strategic Guidance */
+.guidance-card{background:rgba(255,255,255,.7);border:1.5px solid var(--border);border-radius:16px;padding:20px 18px;margin-bottom:12px}
+.guidance-top{display:flex;gap:14px;align-items:flex-start;margin-bottom:14px}
+.guidance-img{width:64px;height:64px;border-radius:12px;background:linear-gradient(135deg,#d4eaf5,#c8d8e8);flex-shrink:0;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:28px}
+.guidance-txt{}
+.guidance-fam{font-family:'Playfair Display',serif;font-size:18px;color:var(--charcoal);margin-bottom:4px}
+.guidance-adv{font-size:12px;color:var(--muted);line-height:1.65;font-style:italic}
+.guidance-dirs{display:flex;gap:8px;margin-top:14px}
+.gdir{flex:1;background:rgba(212,175,55,.07);border:1px solid var(--gold-lt);border-radius:10px;padding:12px 8px;text-align:center}
+.gdir-ico{font-size:20px;margin-bottom:6px}
+.gdir-name{font-size:11px;color:var(--charcoal);font-weight:500;margin-bottom:2px}
+.gdir-sub{font-size:10px;color:var(--muted)}
 
-/* recipe */
-.recipe{background:var(--charcoal);border-radius:22px;padding:30px 26px;margin:28px 24px 0;position:relative;overflow:hidden}
-.recipe::before{content:'';position:absolute;top:-70px;right:-70px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(201,169,110,.1) 0%,transparent 70%);pointer-events:none}
-.recipe::after{content:'';position:absolute;bottom:-40px;left:-40px;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,rgba(201,169,110,.07) 0%,transparent 70%);pointer-events:none}
-.recipe-ttl{font-family:'Playfair Display',serif;font-size:13px;font-weight:400;color:var(--gold2);margin-bottom:24px;text-align:center;letter-spacing:5px;text-transform:uppercase}
-.rrow{display:flex;align-items:flex-start;gap:16px;margin-bottom:20px;padding-bottom:20px;border-bottom:1px solid rgba(255,255,255,.07)}
-.rrow:last-of-type{border-bottom:none;margin-bottom:0;padding-bottom:0}
-.rico{width:36px;height:36px;border-radius:50%;background:rgba(201,169,110,.12);border:1px solid rgba(201,169,110,.25);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
-.rlbl{font-size:9px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:5px}
-.rval{font-family:'Playfair Display',serif;font-size:15px;color:rgba(255,255,255,.88);line-height:1.55;font-style:italic}
-.recipe-acts{display:flex;gap:10px;margin-top:24px}
-.ract{flex:1;padding:14px;border-radius:8px;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all .25s;font-family:'Inter',sans-serif;-webkit-tap-highlight-color:transparent}
-.ract-save{background:rgba(201,169,110,.18);border:1px solid rgba(201,169,110,.4);color:var(--gold2)}
-.ract-save:hover{background:rgba(201,169,110,.3)}
-.ract-ref{background:transparent;border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.5)}
-.ract-ref:hover{border-color:rgba(255,255,255,.35);color:rgba(255,255,255,.8)}
+/* Scent Recipe */
+.recipe{background:var(--charcoal);border-radius:18px;padding:24px 22px;margin:28px 20px 0;position:relative;overflow:hidden}
+.recipe::before{content:'';position:absolute;top:-50px;right:-50px;width:150px;height:150px;border-radius:50%;background:radial-gradient(circle,rgba(212,175,55,.12) 0%,transparent 70%);pointer-events:none}
+.recipe-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.recipe-ttl{font-family:'Playfair Display',serif;font-size:16px;color:var(--gold-lt);letter-spacing:2px}
+.recipe-acts-top{display:flex;gap:10px}
+.ract-sm{background:transparent;border:none;color:rgba(255,255,255,.45);cursor:pointer;font-size:11px;letter-spacing:1px;display:flex;align-items:center;gap:4px;font-family:'Inter',sans-serif;-webkit-tap-highlight-color:transparent}
+.ract-sm:hover{color:rgba(255,255,255,.8)}
+.recipe-cols{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.rcol{border-right:1px solid rgba(255,255,255,.08);padding-right:14px}
+.rcol:last-child{border-right:none;padding-right:0}
+.rcol-ico{width:30px;height:30px;border-radius:50%;background:rgba(212,175,55,.12);border:1px solid rgba(212,175,55,.25);display:flex;align-items:center;justify-content:center;font-size:13px;margin-bottom:8px}
+.rcol-lbl{font-size:8px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:5px}
+.rcol-val{font-family:'Playfair Display',serif;font-size:12px;color:rgba(255,255,255,.85);line-height:1.55;font-style:italic}
+.recipe-footer{margin-top:16px;padding-top:14px;border-top:1px solid rgba(255,255,255,.07);text-align:center;font-size:10px;color:rgba(255,255,255,.3);letter-spacing:1.5px}
 
-/* bottom ctas */
-.bctas{padding:24px 24px 0;display:flex;flex-direction:column;gap:10px}
-.btn-explore{background:var(--charcoal);color:var(--white);border:none;padding:17px;font-family:'Playfair Display',serif;font-size:14px;letter-spacing:2px;cursor:pointer;border-radius:4px;transition:all .3s;-webkit-tap-highlight-color:transparent}
-.btn-explore:hover{background:var(--dark)}
-.btn-restart{background:transparent;border:1px solid var(--border);color:var(--muted);padding:13px;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:4px;transition:all .3s;font-family:'Inter',sans-serif;-webkit-tap-highlight-color:transparent}
-.btn-restart:hover{border-color:var(--gold);color:var(--charcoal)}
-.divln{height:1px;background:var(--border);margin:28px 24px 0}
+/* Bottom CTAs */
+.bctas{padding:24px 20px 0;display:flex;gap:10px}
+.btn-refine{flex:1;background:var(--charcoal);color:var(--white);border:none;padding:16px;font-family:'Playfair Display',serif;font-size:13px;letter-spacing:1.5px;cursor:pointer;border-radius:4px;transition:all .3s;-webkit-tap-highlight-color:transparent}
+.btn-explore{flex:1;background:transparent;border:1.5px solid var(--border);color:var(--charcoal);padding:16px;font-size:12px;letter-spacing:1.5px;cursor:pointer;border-radius:4px;transition:all .3s;font-family:'Inter',sans-serif;-webkit-tap-highlight-color:transparent}
+.btn-explore:hover{border-color:var(--gold)}
+.divln{height:1px;background:var(--border);margin:28px 20px 0}
 
 ::-webkit-scrollbar{width:3px}
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
@@ -267,16 +282,24 @@ const QUIZ=[
 ];
 const HINTS=["Kiša na toplom asfaltu","Stara biblioteka i koža","Jutarnja kava i drvo","Ljetna noć na moru","Cvijeće nakon grmljavine"];
 
+// Bottle SVG for cards
+const BOTTLE_SVG=`<svg viewBox="0 0 56 80" fill="none" xmlns="http://www.w3.org/2000/svg" class="mcard-bottle">
+  <rect x="16" y="28" width="24" height="44" rx="5" fill="#D4AF37" fill-opacity="0.15" stroke="#D4AF37" stroke-width="1"/>
+  <rect x="20" y="18" width="16" height="13" rx="3" fill="#D4AF37" fill-opacity="0.18" stroke="#D4AF37" stroke-width="1"/>
+  <rect x="22" y="13" width="12" height="8" rx="2" fill="#D4AF37" stroke="#D4AF37" stroke-width="1"/>
+  <text x="28" y="57" text-anchor="middle" font-family="Playfair Display,serif" font-size="10" fill="#D4AF37" opacity="0.8">S</text>
+</svg>`;
+
 let S={sc:'landing',qi:0,ans:{},vibe:'',notes:[],notesX:false,coll:[],cin:'',res:null,lmsg:'',_iv:null};
 const ss=p=>{Object.assign(S,p);render()};
 
 function applyBg(kw){
   const k=(kw||[]).join(' ').toLowerCase();
   document.body.className='';
-  if(/marine|ocean|sea|aqua|citrus|fresh|bergamot/.test(k))document.body.classList.add('marine');
-  else if(/floral|rose|jasmine|flower|lily|neroli|iris/.test(k))document.body.classList.add('floral');
-  else if(/woody|wood|oud|cedar|sandalwood|patchouli|vetiver|tobacco|leather|incense/.test(k))document.body.classList.add('woody');
-  else if(/vanilla|sweet|warm|amber|caramel|honey|spice/.test(k))document.body.classList.add('warm');
+  if(/marine|ocean|sea|aqua|citrus|fresh|bergamot/.test(k))document.body.classList.add('scent-marine');
+  else if(/floral|rose|jasmine|flower|lily|neroli|iris/.test(k))document.body.classList.add('scent-floral');
+  else if(/woody|wood|oud|cedar|sandalwood|patchouli|vetiver|tobacco|leather/.test(k))document.body.classList.add('scent-woody');
+  else if(/vanilla|sweet|warm|amber|caramel|honey|spice/.test(k))document.body.classList.add('scent-warm');
 }
 
 function render(){
@@ -290,18 +313,20 @@ function render(){
 function landing(){
   const d=document.createElement('div');d.className='landing';
   d.innerHTML=`
-    <div class="land-bg"></div>
-    <div class="land-top-cover"></div>
-    <div class="land-bot-cover"></div>
-    <div class="land-logo-wrap">
-      <span class="land-logo serif">SILLAGE</span>
-      <span class="land-logo-sub">AI Perfume Expert</span>
+    <div class="land-img"></div>
+    <div class="land-top-mask"></div>
+    <div class="land-bot-mask"></div>
+    <div class="land-hdr">
+      <div class="land-logo-block">
+        <span class="land-logo-txt serif">SILLAGE</span>
+        <span class="land-logo-tag">AI Perfume Expert</span>
+      </div>
     </div>
-    <div class="land-content">
+    <div class="land-body">
       <h1 class="land-headline serif">Your scent,<br><em>decoded.</em></h1>
       <div class="land-rule"></div>
       <p class="land-sub">AI-crafted fragrance profile tailored to your emotions, memories and desires.</p>
-      <button class="btn-cta" id="s0">Saznaj svoj recept <span class="btn-cta-spark">✦</span></button>
+      <button class="btn-cta" id="s0">Saznaj svoj recept <span class="btn-spark">✦</span></button>
       <div class="land-lang">HR | EN</div>
     </div>
   `;
@@ -318,18 +343,18 @@ function quiz(){
     <div class="hdr"><button class="hdr-back" id="bk">← Natrag</button><div class="hdr-logo serif">SILLAGE</div></div>
     <div class="prog">
       <div class="prog-lbl">Korak ${S.qi+1} od ${QUIZ.length}</div>
-      <div class="prog-track"><div class="prog-fill" style="width:${((S.qi+1)/QUIZ.length)*100}%"></div></div>
-      <div class="prog-dots">${QUIZ.map((_,i)=>`<div class="pdot${i<S.qi?' done':i===S.qi?' on':''}"></div>`).join('')}</div>
+      <div class="prog-bar"><div class="prog-fill" style="width:${((S.qi+1)/QUIZ.length)*100}%"></div></div>
+      <div class="prog-dots">${QUIZ.map((_,i)=>`<div class="dot${i<S.qi?' done':i===S.qi?' on':''}"></div>`).join('')}</div>
     </div>
     <div class="qbody">
       <div class="qlbl">Korak ${S.qi+1}</div>
       <div class="qq serif">${step.q}</div>
       <div class="qsub">${step.sub}</div>
-      <div class="ogrid">${step.opts.map(o=>{const s=isMul?(ans&&ans.includes(o.v)):(ans===o.v);return`<div class="ocard${s?' sel':''}" data-v="${o.v}"><div class="ocard-ico">${o.i}</div><div class="ocard-lbl serif">${o.l}</div><div class="ocard-desc">${o.d}</div></div>`}).join('')}</div>
-      <button class="btn-next" id="nx" ${ok?'':'disabled'}>Dalje →</button>
+      <div class="opts">${step.opts.map(o=>{const s=isMul?(ans&&ans.includes(o.v)):(ans===o.v);return`<div class="opt${s?' sel':''}" data-v="${o.v}"><div class="opt-ico">${o.i}</div><div class="opt-lbl serif">${o.l}</div><div class="opt-dsc">${o.d}</div></div>`}).join('')}</div>
+      <button class="btn-nxt" id="nx" ${ok?'':'disabled'}>Dalje →</button>
     </div>
   `;
-  d.querySelectorAll('.ocard').forEach(c=>{c.onclick=()=>{const v=c.dataset.v;if(isMul){const cur=S.ans[step.id]||[];ss({ans:{...S.ans,[step.id]:cur.includes(v)?cur.filter(x=>x!==v):[...cur,v]}})}else ss({ans:{...S.ans,[step.id]:v}})}});
+  d.querySelectorAll('.opt').forEach(c=>{c.onclick=()=>{const v=c.dataset.v;if(isMul){const cur=S.ans[step.id]||[];ss({ans:{...S.ans,[step.id]:cur.includes(v)?cur.filter(x=>x!==v):[...cur,v]}})}else ss({ans:{...S.ans,[step.id]:v}})}});
   d.querySelector('#bk').onclick=()=>S.qi>0?ss({qi:S.qi-1}):ss({sc:'landing'});
   d.querySelector('#nx').onclick=()=>S.qi<QUIZ.length-1?ss({qi:S.qi+1}):ss({sc:'vibe'});
   return d;
@@ -348,7 +373,7 @@ function vibe(){
       <div class="vctr" id="vc">${S.vibe.length}/300</div>
       <div class="hlbl">Inspiracija</div>
       <div class="hints">${HINTS.map(h=>`<div class="hchip" data-h="${h}">${h}</div>`).join('')}</div>
-      <button class="btn-next" id="nx">Dalje →</button>
+      <button class="btn-nxt" id="nx">Dalje →</button>
     </div>
   `;
   const ta=d.querySelector('#vt'),vc=d.querySelector('#vc');
@@ -371,7 +396,7 @@ function notes(){
       <div class="sdesc">Možeš odabrati više — ili preskočiti.</div>
       <div class="ngrid">${NOTES.map((n,i)=>`<div class="nchip${sel.includes(n.id)?' sel':''}${(!sx&&i>=12)?' hide':''}" data-id="${n.id}"><div class="nchip-ico">${n.i}</div><div class="nchip-lbl">${n.l}</div></div>`).join('')}</div>
       ${!sx?`<button class="btn-more" id="sm">+ Prikaži sve note (${NOTES.length-12} više)</button>`:''}
-      <button class="btn-next" id="nx">Dalje →</button>
+      <button class="btn-nxt" id="nx">Dalje →</button>
       <button class="btn-skip" id="sk">Preskoči</button>
     </div>
   `;
@@ -392,12 +417,24 @@ function collection(){
       <div class="slbl">Digitalna Polica</div>
       <div class="stitle serif">Što već imaš?</div>
       <div class="sdesc">Dodaj parfeme koje posjeduješ — AI će maksimizirati tvoju kolekciju kroz layering.</div>
-      <div class="cinwrap">
-        <input class="cin" id="ci" placeholder='npr. "Dior Sauvage EDT"' value="${S.cin||''}">
-        <button class="cadd" id="ca">+</button>
+      <div class="cwrap">
+        <div class="cleft">
+          <div class="cinrow">
+            <input class="cin" id="ci" placeholder='npr. "Dior Sauvage EDT"' value="${S.cin||''}">
+            <button class="cadd" id="ca">+</button>
+          </div>
+          <div class="clist">${S.coll.length===0?'<div class="cempty">Još nisi dodao/la ništa.</div>':S.coll.map((x,i)=>`<div class="citem"><span>🫙 ${x}</span><button class="crem" data-i="${i}">✕</button></div>`).join('')}</div>
+        </div>
+        <div class="cright">
+          <svg class="cbottle" viewBox="0 0 70 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="18" y="32" width="34" height="50" rx="6" fill="#D4AF37" fill-opacity="0.15" stroke="#D4AF37" stroke-width="1.5"/>
+            <rect x="22" y="20" width="26" height="15" rx="4" fill="#D4AF37" fill-opacity="0.18" stroke="#D4AF37" stroke-width="1.5"/>
+            <rect x="25" y="12" width="20" height="11" rx="3" fill="#D4AF37" stroke="#D4AF37" stroke-width="1.5"/>
+            <text x="35" y="62" text-anchor="middle" font-family="Playfair Display,serif" font-size="16" fill="#D4AF37" opacity="0.7">S</text>
+          </svg>
+        </div>
       </div>
-      <div class="clist">${S.coll.length===0?'<div class="cempty">Još nisi dodao/la ništa.</div>':S.coll.map((x,i)=>`<div class="citem"><span>🫙 ${x}</span><button class="crem" data-i="${i}">✕</button></div>`).join('')}</div>
-      <button class="btn-next" id="an">Analiziraj moj profil ✦</button>
+      <button class="btn-nxt" id="an">Analiziraj moj profil ✦</button>
       <button class="btn-skip" id="sk">Preskoči i analiziraj</button>
     </div>
   `;
@@ -428,13 +465,14 @@ async function analyze(){
   if(S._iv)clearInterval(S._iv);
   S._iv=setInterval(()=>{mi=(mi+1)%msgs.length;const el=document.getElementById('lm');if(el)el.textContent=msgs[mi]},2200);
 
-  const sd={preferences:{scent_family:S.ans.family,season:S.ans.season,occasions:S.ans.occasion,intensity:S.ans.intensity,vibe_text:S.vibe||'not provided',selected_notes:S.notes},current_collection:S.coll};
+  const sd={user_context:{collection:S.coll,vibe_description:S.vibe||'not provided',preferences:{intensity:S.ans.intensity,preferred_notes:S.notes,season:S.ans.season,family:S.ans.family,occasion:S.ans.occasion}}};
   const h2=S.coll.length>=2;
-  const sys=`You are SILLAGE — a world-class luxury perfume expert. Write with the poetic sensibility of a master perfumer. Return ONLY valid JSON, no markdown, no backticks, no extra text:
-{"profile_summary":"2-3 poetic editorial sentences about their unique scent personality — write like Vogue, not Wikipedia","confidence_score":92,"scent_keywords":["evocative keyword 1","keyword 2","keyword 3","keyword 4"],"recommendations":{"top_match":{"brand":"","name":"","concentration":"","scent_family":"","price_range":"$/$$/$$$/$$$$","reasoning":"1-2 sentences written like a luxury perfumer — evocative, sensory, personal","key_notes":["n1","n2","n3","n4"]},"second_match":{"brand":"","name":"","concentration":"","scent_family":"","price_range":"","reasoning":"evocative 1-2 sentences","key_notes":["n1","n2","n3"]},"strategic_guidance":{"family":"","advice":"1-2 evocative sentences pointing to their next fragrance chapter"}},"layering_lab":{"internal_combination":${h2?`{"perfume_a":"${S.coll[0]}","perfume_b":"${S.coll[1]}","result_vibe":"Write like a perfumer: opens with X, settles into Y — no generic phrases","instructions":"Practical layering steps"}`:'null'},"upsell_layering":{"existing":"${S.coll[0]||'their preferred style'}","recommended_add":"Brand Name","effect":"Write like a perfumer: opens with X, settles into Y"}},"final_recipe":{"nosi":"","slozi":"","istrazi":""}}`;
+
+  const sys=`You are SILLAGE — a world-class luxury AI perfume expert. Write with the sensibility of a master perfumer and the voice of a luxury brand. Return ONLY valid JSON, no markdown:
+{"match_score":92,"ai_insight":"2-3 poetic sentences about their scent personality — write like Vogue, evocative and personal","scent_keywords":["keyword1","keyword2","keyword3","keyword4","keyword5"],"profile_summary":{"intensity":"${S.ans.intensity||'medium'}","season":"${S.ans.season||'summer'}","occasion":"${(S.ans.occasion||['evening']).join(', ')}","top_notes":"2-3 dominant note families they prefer"},"recommendations":{"top_match":{"brand":"","name":"","concentration":"","scent_family":"","price_range":"$/$$/$$$/$$$$","reasoning":"1-2 evocative sentences like a perfumer","key_notes":["n1","n2","n3","n4"]},"second_match":{"brand":"","name":"","concentration":"","scent_family":"","price_range":"","reasoning":"1-2 evocative sentences","key_notes":["n1","n2","n3"]}},"layering_lab":{"internal":${h2?`{"a":"${S.coll[0]}","b":"${S.coll[1]}","a_sub":"","b_sub":"","result":"poetic blend description opening with X settling into Y","instruction":"practical steps"}`:'null'},"upsell":{"existing":"${S.coll[0]||'your signature scent'}","add":"Brand Name","add_sub":"brief descriptor","result":"poetic blend description","instruction":"practical tip"}},"strategic_guidance":{"family":"Family Name","headline":"catchy direction headline","advice":"2 evocative sentences","emoji":"🌊","directions":[{"name":"","sub":"","emoji":""},{"name":"","sub":"","emoji":""},{"name":"","sub":"","emoji":""}]},"final_recipe":{"nosi":"","nosi_desc":"short poetic description","slozi":"","slozi_desc":"short poetic description","istrazi":"","istrazi_desc":"short direction"}}`;
 
   try{
-    const r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1200,system:sys,messages:[{role:'user',content:JSON.stringify(sd)}]})});
+    const r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1400,system:sys,messages:[{role:'user',content:JSON.stringify(sd)}]})});
     const data=await r.json();
     const txt=data.content[0].text.replace(/```json|```/g,'').trim();
     clearInterval(S._iv);
@@ -443,7 +481,7 @@ async function analyze(){
     ss({res:p,sc:'results'});
   }catch(e){
     clearInterval(S._iv);
-    const fb={profile_summary:"You seek warmth without weight — a fragrance that settles into skin like a second self. Your instinct gravitates toward the intimate, the evocative, the kind of scent that lingers in a room long after you've left.",confidence_score:88,scent_keywords:["Toplo","Senzualno","Drvenasto","Intimno"],recommendations:{top_match:{brand:"Maison Margiela",name:"Jazz Club",concentration:"EDT",scent_family:"Oriental Woody",price_range:"$$$",reasoning:"Opens with a swirl of rum and tobacco — as if stepping into a candlelit bar. The vanilla drydown wraps everything in warmth that's present but never loud.",key_notes:["Duhan","Vanilija","Rum","Drvo"]},second_match:{brand:"Tom Ford",name:"Oud Wood",concentration:"EDP",scent_family:"Woody Oriental",price_range:"$$$$",reasoning:"Quietly commanding. Oud and sandalwood create a presence that doesn't announce itself — it's simply, unforgettably there.",key_notes:["Oud","Sandalovina","Vetiver"]},strategic_guidance:{family:"Oriental Woody",advice:"Follow the thread of warm resins and dark wood — the Chypre family awaits, with its sophisticated mossy depth and bergamot brightness."}},layering_lab:{internal_combination:h2?{perfume_a:S.coll[0],perfume_b:S.coll[1],result_vibe:"Opens with bright citrus clarity, then deepens into a warm amber drydown that carries beautifully past midnight.",instructions:"2 spreja prvog parfema kao baza — pričekaj minutu, zatim 1 sprej drugog na pulsnim točkama."}:null,upsell_layering:{existing:S.coll[0]||"Tvoj omiljeni miris",recommended_add:"By the Fireplace — Maison Margiela",effect:"Opens with smoky birch sweetness, then settles into a warm vanilla-amber accord that makes every room feel like a winter evening."}},final_recipe:{nosi:"Maison Margiela Jazz Club",slozi:"Jazz Club + "+(S.coll[0]||"Versace Eros"),istrazi:"Oriental Woody → Chypre obitelj"}};
+    const fb={match_score:92,ai_insight:"You are drawn to the ephemeral magic of Mediterranean summers, where salt-kissed skin meets jasmine-heavy night air. Your fragrance soul craves the intoxicating sweetness that dances between ocean breeze and moonlit romance — a siren call to summer's most precious moments.",scent_keywords:["mediterranean nights","ocean breeze","jasmine intoxication","summer romance","seaside"],profile_summary:{intensity:"medium",season:"summer",occasion:"evening, special",top_notes:"Floral, Marine, Vanilla"},recommendations:{top_match:{brand:"Dolce & Gabbana",name:"Light Blue Forever",concentration:"EDP",scent_family:"Fresh Floral",price_range:"$$$",reasoning:"Like liquid moonlight on warm skin, this captures your vision perfectly — coconut milk sweetness wrapped in ylang-ylang and jasmine, with that crucial marine breeze that whispers of Adriatic summers.",key_notes:["coconut","ylang-ylang","jasmine","sea salt"]},second_match:{brand:"Escada",name:"Island Kiss",concentration:"EDT",scent_family:"Fruity Floral",price_range:"$$",reasoning:"Your gateway to that seaside sweetness — tropical passion fruit and coconut create the perfect summer night reverie.",key_notes:["passion fruit","coconut","frangipani"]}},layering_lab:{internal:h2?{a:S.coll[0],b:S.coll[1],a_sub:"your signature",b_sub:"depth booster",result:"Opens with pure oceanic freshness, then your sweet florals bloom like night-blooming jasmine against driftwood and sand.",instruction:"Spray first on chest as base, wait 60 seconds, add 1 spray of second on pulse points."}:null,upsell:{existing:S.coll[0]||"sweet summer romance",add:"Maison Margiela Beach Walk",add_sub:"marine depth booster",result:"Opens with pure oceanic freshness, then your sweet florals bloom like night-blooming jasmine against driftwood and sand.",instruction:"Spray Beach Walk on chest, your signature on wrists — let them meet on skin."}},strategic_guidance:{family:"Solar Florals & Aquatic Gourmands",headline:"Fresh Floral with Vanilla Base",advice:"Begin with lighter tropical sweetness, then evolve toward more sophisticated marine florals — your next chapter should embrace white flowers kissed by sea spray.",emoji:"🌊",directions:[{name:"Citrus Marine",sub:"Fresh & Energizing",emoji:"🍋"},{name:"White Florals",sub:"Light & Elegant",emoji:"🌸"},{name:"Soft Woods",sub:"Warm & Comforting",emoji:"🪵"}]},final_recipe:{nosi:"Light Blue Forever",nosi_desc:"Lagane, svježe note koje evociraju ljetne noći uz more",slozi:"Light Blue + Maison Margiela Beach Walk",slozi_desc:"Kombinacija morskih i cvjetnih nota s vanilijom za posebne prilike",istrazi:"Solar Florals & Aquatic Gourmands",istrazi_desc:"Istražite svježi cvjetni profil s vanilla bazom"}};
     applyBg(fb.scent_keywords);
     ss({res:fb,sc:'results'});
   }
@@ -453,101 +491,177 @@ async function analyze(){
 function results(){
   const r=S.res;if(!r)return document.createElement('div');
   const d=document.createElement('div');d.className='rpage';
-  const ic=r.layering_lab?.internal_combination;
-  const up=r.layering_lab?.upsell_layering;
+  const ic=r.layering_lab?.internal;
+  const up=r.layering_lab?.upsell;
+  const sg=r.strategic_guidance;
+  const ps=r.profile_summary||{};
 
   d.innerHTML=`
-    <div class="rhero">
-      <div class="rlogo">SILLAGE</div>
-      <div class="rbadge"><div class="rbdot"></div><div class="rbtxt">${r.confidence_score||89}% Match · AI Profil</div></div>
-      <div class="glass-card">
-        <p class="profile-txt serif">"${r.profile_summary}"</p>
-        <div class="pills">${(r.scent_keywords||[]).map((k,i)=>`<span class="pill" style="animation-delay:${i*.12}s">${k}</span>`).join('')}</div>
-      </div>
-    </div>
-
-    <div class="rsec">
-      <div class="rsec-lbl">The Matches</div>
-      <div class="rsec-ttl serif">Specifične preporuke</div>
-      <div class="mcard hero">
-        <div class="mcard-top dark"><span class="mbadge lt">✦ Best match for your profile</span><span class="mprice">${r.recommendations.top_match.price_range}</span></div>
-        <div class="mcard-body">
-          <div class="mbrand">${r.recommendations.top_match.brand}</div>
-          <div class="mname serif">${r.recommendations.top_match.name}</div>
-          <div class="mfam">${r.recommendations.top_match.scent_family} · ${r.recommendations.top_match.concentration}</div>
-          <div class="mwhy">${r.recommendations.top_match.reasoning}</div>
-          <div class="mnotes">${(r.recommendations.top_match.key_notes||[]).map(n=>`<span class="ntag">${n}</span>`).join('')}</div>
+    <!-- AI Insight Card -->
+    <div class="ai-card">
+      <div class="ai-card-top">
+        <div class="ai-ico">✦</div>
+        <div>
+          <div class="ai-lbl">AI Insight · ${r.match_score||89}% Match</div>
+          <div class="ai-quote serif">"${r.ai_insight}"</div>
         </div>
       </div>
-      <div class="mcard">
-        <div class="mcard-top"><span class="mbadge mt">Alternativa</span><span class="mprice">${r.recommendations.second_match.price_range}</span></div>
-        <div class="mcard-body">
-          <div class="mbrand">${r.recommendations.second_match.brand}</div>
-          <div class="mname serif">${r.recommendations.second_match.name}</div>
-          <div class="mfam">${r.recommendations.second_match.scent_family} · ${r.recommendations.second_match.concentration}</div>
-          <div class="mwhy">${r.recommendations.second_match.reasoning}</div>
-          <div class="mnotes">${(r.recommendations.second_match.key_notes||[]).map(n=>`<span class="ntag">${n}</span>`).join('')}</div>
+      <div class="ai-card-bottom">
+        <div class="scent-pills">
+          ${(r.scent_keywords||[]).map((k,i)=>`<span class="spill" style="animation-delay:${i*.1}s">${k}</span>`).join('')}
+        </div>
+        <div class="match-score">
+          <span class="score-num serif">${r.match_score||89}%</span>
+          <span class="score-lbl">Profile<br>match</span>
+        </div>
+      </div>
+      <button class="btn-view" id="viewBtn">Pogledaj preporuke →</button>
+    </div>
+
+    <!-- Profile summary tags -->
+    <div class="profile-row">
+      ${ps.intensity?`<div class="profile-tag"><span class="profile-tag-ico">💫</span>${ps.intensity}</div>`:''}
+      ${ps.season?`<div class="profile-tag"><span class="profile-tag-ico">☀️</span>${ps.season}</div>`:''}
+      ${ps.occasion?`<div class="profile-tag"><span class="profile-tag-ico">🌙</span>${ps.occasion.split(',')[0]}</div>`:''}
+    </div>
+
+    <!-- Matches -->
+    <div class="rsec">
+      <div class="rsec-lbl">The Matches</div>
+      <div class="rsec-ttl serif" style="margin-bottom:16px">Specifične preporuke</div>
+      <div class="matches-grid">
+        <!-- Top Match -->
+        <div class="mcard hero">
+          <div class="mcard-badge dark">
+            <span class="mbadge lt">✦ Tvoj top match</span>
+            <span class="mprice">${r.recommendations.top_match.price_range}</span>
+          </div>
+          <div class="mcard-img">${BOTTLE_SVG}</div>
+          <div class="mcard-body">
+            <div class="m-brand">${r.recommendations.top_match.brand}</div>
+            <div class="m-name serif">${r.recommendations.top_match.name}</div>
+            <div class="m-fam">${r.recommendations.top_match.scent_family} · ${r.recommendations.top_match.concentration}</div>
+            <div class="m-why">${r.recommendations.top_match.reasoning}</div>
+            <div class="m-notes">${(r.recommendations.top_match.key_notes||[]).map(n=>`<span class="ntag">${n}</span>`).join('')}</div>
+          </div>
+        </div>
+        <!-- Alternative -->
+        <div class="mcard">
+          <div class="mcard-badge">
+            <span class="mbadge mt">Alternativa</span>
+            <span class="mprice">${r.recommendations.second_match.price_range}</span>
+          </div>
+          <div class="mcard-img">${BOTTLE_SVG}</div>
+          <div class="mcard-body">
+            <div class="m-brand">${r.recommendations.second_match.brand}</div>
+            <div class="m-name serif">${r.recommendations.second_match.name}</div>
+            <div class="m-fam">${r.recommendations.second_match.scent_family} · ${r.recommendations.second_match.concentration}</div>
+            <div class="m-why">${r.recommendations.second_match.reasoning}</div>
+            <div class="m-notes">${(r.recommendations.second_match.key_notes||[]).map(n=>`<span class="ntag">${n}</span>`).join('')}</div>
+          </div>
         </div>
       </div>
     </div>
 
     <div class="divln"></div>
 
+    <!-- Layering Lab -->
     <div class="rsec">
       <div class="rsec-lbl">Layering Lab</div>
       <div class="rsec-ttl serif">Umjetnost slojevitosti</div>
-      ${ic?`<div class="lcard">
+      ${ic?`<div class="layer-card">
         <div class="ltlbl">Internal · Iz tvoje kolekcije</div>
-        <div class="lbottles">
-          <div class="lbottle"><span class="lbico">🫙</span>${ic.perfume_a}</div>
-          <div class="lblend"><div class="lglow"></div><div class="lplus">+</div><div class="lglow"></div></div>
-          <div class="lbottle"><span class="lbico">🫙</span>${ic.perfume_b}</div>
+        <div class="layer-visual">
+          <div class="lbottle"><span class="lbico">🫙</span><div class="lname">${ic.a}</div>${ic.a_sub?`<div class="lsub">${ic.a_sub}</div>`:''}</div>
+          <div class="lop">+</div>
+          <div class="lbottle"><span class="lbico">🫙</span><div class="lname">${ic.b}</div>${ic.b_sub?`<div class="lsub">${ic.b_sub}</div>`:''}</div>
+          <div class="lop">=</div>
+          <div class="lbottle" style="background:linear-gradient(135deg,rgba(212,175,55,.12),rgba(245,230,218,.5));border-color:rgba(212,175,55,.4)"><span class="lbico">✨</span><div class="lname" style="font-size:10px;color:var(--gold)">Blend</div></div>
         </div>
-        <div class="lrlbl">Dobivaš</div>
-        <div class="lrtxt">"${ic.result_vibe}"</div>
-        <div class="linstr">${ic.instructions}</div>
+        <div class="layer-result">
+          <div class="lr-lbl">Dobivaš</div>
+          <div class="lr-txt">"${ic.result}"</div>
+          <div class="lr-instr">${ic.instruction}</div>
+        </div>
       </div>`:''}
-      ${up?`<div class="lcard">
-        <div class="ltlbl">Upsell · Nadogradnja kolekcije</div>
-        <div class="lbottles">
-          <div class="lbottle"><span class="lbico">🫙</span>${up.existing}</div>
-          <div class="lblend"><div class="lglow"></div><div class="lplus">+</div><div class="lglow"></div></div>
-          <div class="lbottle"><span class="lbico">✨</span>${up.recommended_add}</div>
+      ${up?`<div class="layer-card">
+        <div class="ltlbl">Upsell Layering · Nadogradnja kolekcije <span style="background:rgba(212,175,55,.15);border:1px solid rgba(212,175,55,.3);border-radius:10px;padding:2px 8px;font-size:9px;color:var(--gold);letter-spacing:1px;float:right">AI PREPORUKA ✦</span></div>
+        <div class="layer-visual">
+          <div class="lbottle"><span class="lbico">🫙</span><div class="lname">${up.existing}</div></div>
+          <div class="lop">+</div>
+          <div class="lbottle" style="border-color:rgba(212,175,55,.5);background:rgba(212,175,55,.08)"><span class="lbico">✨</span><div class="lname">${up.add}</div>${up.add_sub?`<div class="lsub">${up.add_sub}</div>`:''}</div>
+          <div class="lop">=</div>
+          <div class="lbottle" style="background:linear-gradient(135deg,rgba(212,175,55,.12),rgba(245,230,218,.5));border-color:rgba(212,175,55,.4)"><span class="lbico">🌸</span><div class="lname" style="font-size:10px;color:var(--gold)">Result</div></div>
         </div>
-        <div class="lrlbl">Efekt</div>
-        <div class="lrtxt">"${up.effect}"</div>
-      </div>`:''}
-      ${r.recommendations.strategic_guidance?`<div class="gcard">
-        <div class="ltlbl">Strategic Guidance · Tvoj sljedeći smjer</div>
-        <div class="gdir">
-          <div class="gico">🧭</div>
-          <div class="gfam serif">${r.recommendations.strategic_guidance.family}</div>
+        <div class="layer-result">
+          <div class="lr-lbl">Efekt</div>
+          <div class="lr-txt">"${up.result}"</div>
+          <div class="lr-instr">${up.instruction}</div>
         </div>
-        <div class="gadv">${r.recommendations.strategic_guidance.advice}</div>
       </div>`:''}
     </div>
 
-    <div class="recipe">
-      <div class="recipe-ttl">✦ Tvoj Scent Recipe</div>
-      <div class="rrow"><div class="rico">👃</div><div><div class="rlbl">NOSI</div><div class="rval">${r.final_recipe.nosi}</div></div></div>
-      <div class="rrow"><div class="rico">🫙</div><div><div class="rlbl">SLOŽI</div><div class="rval">${r.final_recipe.slozi}</div></div></div>
-      <div class="rrow"><div class="rico">🧭</div><div><div class="rlbl">ISTRAŽI</div><div class="rval">${r.final_recipe.istrazi}</div></div></div>
-      <div class="recipe-acts">
-        <button class="ract ract-save" id="sh">✦ Spremi profil</button>
-        <button class="ract ract-ref" id="rf">Refine →</button>
+    <div class="divln"></div>
+
+    <!-- Strategic Guidance -->
+    ${sg?`<div class="rsec">
+      <div class="rsec-lbl">Strategic Guidance</div>
+      <div class="rsec-ttl serif">Tvoj sljedeći smjer</div>
+      <div class="guidance-card">
+        <div class="guidance-top">
+          <div class="guidance-img">${sg.emoji||'🌊'}</div>
+          <div class="guidance-txt">
+            <div class="guidance-fam serif">${sg.headline||sg.family}</div>
+            <div class="guidance-adv">${sg.advice}</div>
+          </div>
+        </div>
+        ${sg.directions&&sg.directions.length?`<div class="guidance-dirs">${sg.directions.map(dir=>`<div class="gdir"><div class="gdir-ico">${dir.emoji||'✦'}</div><div class="gdir-name">${dir.name}</div><div class="gdir-sub">${dir.sub}</div></div>`).join('')}</div>`:''}
       </div>
+    </div>`:''}
+
+    <div class="divln"></div>
+
+    <!-- Scent Recipe -->
+    <div class="recipe">
+      <div class="recipe-hdr">
+        <div class="recipe-ttl serif">✦ Tvoj Scent Recipe</div>
+        <div class="recipe-acts-top">
+          <button class="ract-sm" id="saveBtn">💾 Save recipe</button>
+          <button class="ract-sm" id="shareBtn">↗ Share</button>
+        </div>
+      </div>
+      <div class="recipe-cols">
+        <div class="rcol">
+          <div class="rcol-ico">👃</div>
+          <div class="rcol-lbl">NOSI</div>
+          <div class="rcol-val">${r.final_recipe.nosi}</div>
+        </div>
+        <div class="rcol">
+          <div class="rcol-ico">🫙</div>
+          <div class="rcol-lbl">SLOŽI</div>
+          <div class="rcol-val">${r.final_recipe.slozi}</div>
+        </div>
+        <div class="rcol">
+          <div class="rcol-ico">🧭</div>
+          <div class="rcol-lbl">ISTRAŽI</div>
+          <div class="rcol-val">${r.final_recipe.istrazi}</div>
+        </div>
+      </div>
+      <div class="recipe-footer">Synthesized by the collective intelligence.</div>
     </div>
 
+    <!-- Bottom CTAs -->
     <div class="bctas">
-      <button class="btn-explore" id="ex">Istraži drugi vibe →</button>
-      <button class="btn-restart" id="rs">↺ Počni iznova</button>
+      <button class="btn-refine" id="rfBtn">Refine your scent +</button>
+      <button class="btn-explore" id="exBtn">Explore another vibe</button>
     </div>
   `;
 
-  d.querySelector('#rs').onclick=()=>{document.body.className='';ss({sc:'landing',qi:0,ans:{},vibe:'',notes:[],notesX:false,coll:[],cin:'',res:null})};
-  d.querySelector('#rf').onclick=()=>ss({sc:'vibe'});
-  d.querySelector('#ex').onclick=()=>ss({sc:'vibe'});
-  d.querySelector('#sh').onclick=()=>{if(navigator.share)navigator.share({title:'Moj SILLAGE Scent Recipe',text:r.final_recipe.nosi,url:location.href});else{navigator.clipboard?.writeText(location.href);alert('Link kopiran!')}};
+  d.querySelector('#viewBtn').onclick=()=>d.querySelector('.rsec').scrollIntoView({behavior:'smooth'});
+  d.querySelector('#rfBtn').onclick=()=>ss({sc:'vibe'});
+  d.querySelector('#exBtn').onclick=()=>ss({sc:'vibe'});
+  d.querySelector('#shareBtn').onclick=()=>{if(navigator.share)navigator.share({title:'Moj SILLAGE Scent Recipe',text:r.final_recipe.nosi,url:location.href});else{navigator.clipboard?.writeText(location.href);alert('Link kopiran!')}};
+  d.querySelector('#saveBtn').onclick=()=>{if(navigator.share)navigator.share({title:'SILLAGE — Moj Scent Recipe',text:`NOSI: ${r.final_recipe.nosi}\nSLOŽI: ${r.final_recipe.slozi}\nISTRAŽI: ${r.final_recipe.istrazi}`,url:location.href});else alert('Profil kopiran!')};
   return d;
 }
 
