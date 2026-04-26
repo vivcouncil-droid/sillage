@@ -2,629 +2,1302 @@
 <html lang="hr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>SILLAGE | AI Perfume Expert</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>SILLAGE</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-/* ─── RESET ─── */
+/* BASE */
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;-webkit-font-smoothing:antialiased}
-html,body{height:100%;overflow-x:hidden;background:#F4E3D1;color:#2B2928;font-family:'Inter',sans-serif}
+html,body{height:100%;background:#F4E3D1}
+body{font-family:'Inter',sans-serif;color:#2B2928;font-size:15px}
+.s{font-family:'Playfair Display',serif}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+input,textarea{font-family:inherit;-webkit-appearance:none}
+img{display:block;max-width:100%}
 
-/* ─── APP WRAPPER ─── */
-#app{max-width:430px;margin:0 auto;min-height:100vh;position:relative}
+/* APP SHELL */
+#app{
+  max-width:430px;
+  margin:0 auto;
+  min-height:100vh;
+  position:relative;
+  overflow-x:hidden;
+}
 
-/* ─── SCREEN BASE ─── */
-.screen{min-height:100vh;width:100%;position:relative;display:flex;flex-direction:column;overflow:hidden}
-.screen-bg{position:absolute;inset:0;background-size:cover;background-position:center top;background-repeat:no-repeat}
-.screen-overlay{position:absolute;inset:0}
-.screen-content{position:relative;z-index:2;display:flex;flex-direction:column;flex:1}
+/* ══════════════════════════════
+   PAGE: LANDING
+══════════════════════════════ */
+#pg-landing{
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  background:linear-gradient(170deg,#fff9f5 0%,#F4E3D1 50%,#e8d2bc 100%);
+}
+.land-header{
+  padding:44px 28px 0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  text-align:center;
+}
+.land-logo{
+  font-family:'Playfair Display',serif;
+  font-size:24px;
+  letter-spacing:.2em;
+  color:#2B2928;
+  margin-bottom:5px;
+}
+.land-tagline{
+  font-size:9px;
+  letter-spacing:.5em;
+  text-transform:uppercase;
+  color:#C9A15E;
+}
+.land-bottle{
+  flex:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:24px 40px 0;
+}
+.land-bottle img{
+  width:100%;
+  max-width:260px;
+  height:auto;
+  object-fit:contain;
+  filter:drop-shadow(0 16px 40px rgba(160,100,60,.22));
+  animation:float 5s ease-in-out infinite;
+}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.land-body{
+  padding:0 28px 52px;
+  text-align:center;
+}
+.land-headline{
+  font-family:'Playfair Display',serif;
+  font-size:38px;
+  font-weight:400;
+  line-height:1.1;
+  margin-bottom:10px;
+}
+.land-headline em{
+  font-style:italic;
+  color:#B8746C;
+  display:block;
+}
+.land-divider{
+  width:20px;height:1px;
+  background:#C9A15E;
+  margin:16px auto;
+}
+.land-desc{
+  font-size:14px;
+  color:#6B5E54;
+  line-height:1.7;
+  margin-bottom:32px;
+  max-width:260px;
+  margin-left:auto;
+  margin-right:auto;
+}
+.land-cta{
+  width:100%;
+  background:#2B2928;
+  color:#fff;
+  border-radius:50px;
+  padding:18px 24px;
+  font-family:'Playfair Display',serif;
+  font-size:16px;
+  letter-spacing:.08em;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  box-shadow:0 6px 28px rgba(43,41,40,.25);
+  transition:transform .15s;
+}
+.land-cta:active{transform:scale(.98)}
+.land-cta-star{animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:.4}50%{opacity:1}}
+.land-lang{
+  font-size:10px;
+  letter-spacing:.35em;
+  color:#9C8F86;
+  margin-top:16px;
+}
 
-/* ─── TYPOGRAPHY ─── */
-.sf{font-family:'Playfair Display',serif}
-.gold{color:#C9A15E}
-.muted{color:#9C8F86}
+/* ══════════════════════════════
+   INNER PAGES — SHARED
+══════════════════════════════ */
+.inner-page{
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  position:relative;
+}
+.inner-page::before{
+  content:'';
+  position:fixed;
+  inset:0;
+  max-width:430px;
+  margin:0 auto;
+  z-index:0;
+  background-size:cover;
+  background-position:center;
+  background-repeat:no-repeat;
+  opacity:.12;
+  pointer-events:none;
+}
+.bg-shelf::before{background-image:url('./shelf-bg.jpg')}
+.bg-notes::before{background-image:url('./notes-bg.jpg')}
+.bg-vibe::before{background-image:url('./vibe-bg.jpg')}
+.bg-quiz::before{background-image:url('./quiz-bg.jpg')}
+.bg-results::before{background-image:url('./results-bg.jpg');opacity:.18}
 
-/* ═══════════════════════════
-   01 LANDING
-═══════════════════════════ */
-.land-bg{background-image:none;background:linear-gradient(160deg,#fff8f4 0%,#F4E3D1 55%,#ecdbc7 100%)}
-/* Gradient: top clear → bottom cream (covers any image text at bottom) */
-.land-overlay{display:none}
+/* NAV BAR */
+.nav{
+  position:sticky;
+  top:0;
+  z-index:10;
+  background:rgba(244,227,209,.95);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:15px 20px;
+  border-bottom:1px solid rgba(227,201,169,.4);
+}
+.nav-back{
+  display:flex;
+  align-items:center;
+  gap:5px;
+  color:#9C8F86;
+  font-size:13px;
+  padding:4px;
+}
+.nav-back svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.nav-logo{
+  font-family:'Playfair Display',serif;
+  font-size:14px;
+  letter-spacing:.4em;
+  color:#2B2928;
+}
+.nav-space{width:60px}
 
-.land-top{padding:36px 28px 0;display:flex;align-items:center;justify-content:space-between}
-.land-logo{font-family:'Playfair Display',serif;font-size:18px;font-weight:400;letter-spacing:.18em;color:#2B2928}
-.land-logo-tag{font-size:8px;letter-spacing:.4em;color:#C9A15E;text-transform:uppercase;margin-top:3px}
+/* PROGRESS */
+.progress{
+  position:relative;
+  z-index:1;
+  padding:12px 20px 0;
+}
+.progress-text{font-size:10px;letter-spacing:.2em;color:#9C8F86;text-transform:uppercase;margin-bottom:8px}
+.progress-bar{height:1px;background:#E3C9A9}
+.progress-fill{height:1px;background:#C9A15E;transition:width .4s ease}
+.progress-dots{display:flex;gap:6px;margin-top:8px}
+.pdot{width:5px;height:5px;border-radius:50%;background:#E3C9A9;transition:all .25s}
+.pdot.active{background:#C9A15E;transform:scale(1.4)}
+.pdot.done{background:#e8d5b0}
 
-.land-body{margin-top:auto;padding:0 28px 52px}
-.land-h1{font-family:'Playfair Display',serif;font-size:38px;font-weight:400;line-height:1.1;color:#2B2928;margin-bottom:8px}
-.land-h1 em{font-style:italic;color:#B8746C;display:block}
-.land-rule{width:20px;height:1px;background:#C9A15E;margin:16px 0;opacity:.9}
-.land-desc{font-size:14px;color:#5B514C;line-height:1.65;margin-bottom:32px;max-width:260px}
-.btn-land{display:inline-flex;align-items:center;gap:10px;background:#2B2928;color:#fff;border:none;padding:17px 36px;font-family:'Playfair Display',serif;font-size:15px;letter-spacing:.1em;border-radius:50px;cursor:pointer;box-shadow:0 0 28px rgba(233,183,170,.7);transition:transform .2s;width:100%;justify-content:center}
-.btn-land:active{transform:scale(.98)}
-.btn-spark{animation:sp 2s ease-in-out infinite;font-size:13px}
-@keyframes sp{0%,100%{opacity:.4}50%{opacity:1}}
-.land-lang{font-size:10px;letter-spacing:.3em;color:rgba(92,81,76,.5);margin-top:16px;text-align:center}
-
-/* ═══════════════════════════
-   HEADER (all inner screens)
-═══════════════════════════ */
-.hdr{display:flex;align-items:center;justify-content:space-between;padding:16px 20px 0;position:sticky;top:0;z-index:10;background:rgba(244,227,209,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
-.hdr-back{display:flex;align-items:center;gap:6px;background:none;border:none;color:#9C8F86;font-size:13px;cursor:pointer;padding:4px;font-family:'Inter',sans-serif}
-.hdr-back svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.hdr-logo{font-family:'Playfair Display',serif;font-size:14px;letter-spacing:.4em;color:#2B2928}
-
-/* ═══════════════════════════
-   PROGRESS BAR
-═══════════════════════════ */
-.prog{padding:12px 20px 0}
-.prog-label{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#9C8F86;margin-bottom:8px}
-.prog-track{height:1px;background:#E3C9A9;border-radius:1px;overflow:hidden}
-.prog-fill{height:100%;background:#C9A15E;transition:width .5s ease}
-.prog-dots{display:flex;gap:6px;margin-top:8px}
-.dot{width:5px;height:5px;border-radius:50%;background:#E3C9A9;transition:all .3s}
-.dot.on{background:#C9A15E;transform:scale(1.4)}
-.dot.done{background:#E8D5B0}
-
-/* ═══════════════════════════
-   INNER PAGE BODY
-═══════════════════════════ */
-.pg{padding:24px 20px 40px;flex:1}
-.pg-lbl{font-size:10px;letter-spacing:.4em;text-transform:uppercase;color:#C9A15E;margin-bottom:14px}
+/* PAGE BODY */
+.page-body{
+  position:relative;
+  z-index:1;
+  padding:24px 20px 48px;
+  flex:1;
+}
+.pg-label{font-size:10px;letter-spacing:.4em;text-transform:uppercase;color:#C9A15E;margin-bottom:14px}
 .pg-title{font-family:'Playfair Display',serif;font-size:28px;font-weight:400;line-height:1.25;margin-bottom:8px}
 .pg-sub{font-size:13px;color:#9C8F86;margin-bottom:24px;line-height:1.5}
 
-/* Inner screen backgrounds */
-.shelf-bg-wrap .hdr,.shelf-bg-wrap .prog{background:rgba(244,227,209,.88)}
-.bg-shelf{background-image:url('./shelf-bg.jpg')}
-.bg-notes{background-image:url('./notes-bg.jpg')}
-.bg-vibe{background-image:url('./vibe-bg.jpg')}
-.bg-quiz{background-image:url('./quiz-bg.jpg')}
-.bg-results{background-image:url('./results-bg.jpg')}
-.page-with-bg{position:relative}
-.page-with-bg::before{content:'';position:fixed;inset:0;z-index:-1;background-size:cover;background-position:center;background-repeat:no-repeat;opacity:.18}
-.page-shelf::before{background-image:url('./shelf-bg.jpg')}
-.page-notes::before{background-image:url('./notes-bg.jpg')}
-.page-vibe::before{background-image:url('./vibe-bg.jpg')}
-.page-quiz::before{background-image:url('./quiz-bg.jpg')}
-.page-results::before{background-image:url('./results-bg.jpg');opacity:.22}
+/* BUTTONS */
+.btn-primary{
+  width:100%;
+  background:#2B2928;
+  color:#fff;
+  padding:16px;
+  border-radius:6px;
+  font-family:'Playfair Display',serif;
+  font-size:15px;
+  letter-spacing:.08em;
+  transition:opacity .15s;
+  margin-top:4px;
+}
+.btn-primary:active{opacity:.85}
+.btn-primary:disabled{opacity:.3;cursor:not-allowed}
+.btn-outline{
+  width:100%;
+  background:transparent;
+  border:1px solid #E3C9A9;
+  color:#9C8F86;
+  padding:14px;
+  border-radius:6px;
+  font-size:11px;
+  letter-spacing:.2em;
+  text-transform:uppercase;
+  transition:all .15s;
+  margin-top:10px;
+}
+.btn-outline:hover{border-color:#C9A15E;color:#2B2928}
 
-/* ═══════════════════════════
-   QUIZ OPTIONS
-═══════════════════════════ */
-.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:24px}
-.opt{background:rgba(255,255,255,.75);border:1.5px solid #E3C9A9;border-radius:16px;padding:18px 14px;cursor:pointer;transition:all .2s;text-align:left;display:flex;flex-direction:column;gap:7px}
-.opt:active{transform:scale(.98)}
-.opt.sel{border-color:#C9A15E;background:rgba(201,161,94,.1);box-shadow:0 0 0 1px #C9A15E}
-.opt-ico{font-size:24px}
-.opt-lbl{font-family:'Playfair Display',serif;font-size:16px;color:#2B2928}
-.opt-dsc{font-size:11px;color:#9C8F86;line-height:1.4}
+/* ══════════════════════════════
+   PAGE: SHELF
+══════════════════════════════ */
+.shelf-input-row{display:flex;gap:10px;margin-bottom:14px}
+.shelf-input{
+  flex:1;
+  background:rgba(255,255,255,.85);
+  border:1.5px solid #E3C9A9;
+  border-radius:10px;
+  padding:13px 16px;
+  font-size:14px;
+  color:#2B2928;
+  outline:none;
+}
+.shelf-input:focus{border-color:#C9A15E}
+.shelf-input::placeholder{color:#B8ABA4}
+.shelf-add{
+  width:48px;height:48px;
+  background:#2B2928;
+  color:#fff;
+  border-radius:10px;
+  font-size:24px;
+  line-height:1;
+  flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+}
+.shelf-empty{font-size:13px;color:#9C8F86;font-style:italic;padding:4px 0 18px}
+.shelf-list{display:flex;flex-direction:column;gap:8px;margin-bottom:20px}
+.shelf-item{
+  background:rgba(255,255,255,.75);
+  border:1px solid #E3C9A9;
+  border-radius:8px;
+  padding:12px 14px;
+  display:flex;align-items:center;justify-content:space-between;
+  font-size:13px;
+}
+.shelf-remove{color:#C0B4AC;font-size:15px;padding:2px 6px}
 
-/* ═══════════════════════════
-   BUTTONS
-═══════════════════════════ */
-.btn{width:100%;border:none;padding:16px;font-family:'Playfair Display',serif;font-size:15px;letter-spacing:.1em;cursor:pointer;border-radius:4px;transition:all .2s}
-.btn-dark{background:#2B2928;color:#fff}
-.btn-dark:active{background:#1a1208}
-.btn-dark:disabled{opacity:.3;cursor:not-allowed}
-.btn-ghost{background:transparent;border:1px solid #E3C9A9;color:#9C8F86;font-family:'Inter',sans-serif;font-size:12px;letter-spacing:.2em;text-transform:uppercase;margin-top:10px}
-.btn-ghost:hover{border-color:#C9A15E;color:#2B2928}
-
-/* ═══════════════════════════
-   NOTES GRID
-═══════════════════════════ */
-.notes-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:14px}
-.note{background:rgba(255,255,255,.75);border:1.5px solid #E3C9A9;border-radius:12px;padding:12px 6px;text-align:center;cursor:pointer;transition:all .2s}
-.note:active{transform:scale(.96)}
-.note.sel{border-color:#C9A15E;background:rgba(201,161,94,.1)}
-.note.hide{display:none}
+/* ══════════════════════════════
+   PAGE: NOTES
+══════════════════════════════ */
+.notes-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:9px;
+  margin-bottom:14px;
+}
+.note-chip{
+  background:rgba(255,255,255,.8);
+  border:1.5px solid #E3C9A9;
+  border-radius:12px;
+  padding:13px 6px 11px;
+  text-align:center;
+  transition:all .15s;
+}
+.note-chip:active{transform:scale(.95)}
+.note-chip.picked{border-color:#C9A15E;background:rgba(201,161,94,.1)}
+.note-chip.hidden{display:none}
 .note-ico{font-size:20px;margin-bottom:5px}
-.note-lbl{font-size:11px;color:#2B2928}
-.btn-more{width:100%;background:transparent;border:1px solid #E3C9A9;color:#9C8F86;padding:11px;font-size:11px;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;border-radius:8px;margin-bottom:14px;font-family:'Inter',sans-serif;transition:all .2s}
-.btn-more:hover{border-color:#C9A15E}
+.note-lbl{font-size:10px;color:#2B2928}
+.btn-more-notes{
+  width:100%;
+  background:transparent;
+  border:1px solid #E3C9A9;
+  color:#9C8F86;
+  padding:11px;
+  font-size:10px;
+  letter-spacing:.15em;
+  text-transform:uppercase;
+  border-radius:8px;
+  margin-bottom:14px;
+  transition:all .15s;
+}
+.btn-more-notes:hover{border-color:#C9A15E}
 
-/* ═══════════════════════════
-   VIBE TEXTAREA
-═══════════════════════════ */
-.vtxt{width:100%;min-height:130px;background:rgba(255,255,255,.8);border:1.5px solid #E3C9A9;border-radius:14px;padding:16px;font-family:'Inter',sans-serif;font-size:14px;color:#2B2928;resize:none;line-height:1.7;outline:none;-webkit-appearance:none}
-.vtxt:focus{border-color:#C9A15E}
-.vtxt::placeholder{color:#9C8F86;font-style:italic}
-.vctr{text-align:right;font-size:11px;color:#9C8F86;margin-top:6px;margin-bottom:18px}
-.hints-lbl{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#9C8F86;margin-bottom:10px}
-.hints{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:26px}
-.hchip{background:rgba(239,221,190,.6);border:none;border-radius:20px;padding:7px 14px;font-size:12px;color:#2B2928;cursor:pointer;transition:all .15s}
-.hchip:active{background:#EFDDBE}
+/* ══════════════════════════════
+   PAGE: VIBE
+══════════════════════════════ */
+.vibe-textarea{
+  width:100%;
+  min-height:130px;
+  background:rgba(255,255,255,.85);
+  border:1.5px solid #E3C9A9;
+  border-radius:14px;
+  padding:16px;
+  font-size:14px;
+  line-height:1.7;
+  color:#2B2928;
+  resize:none;
+  outline:none;
+}
+.vibe-textarea:focus{border-color:#C9A15E}
+.vibe-textarea::placeholder{color:#B8ABA4;font-style:italic}
+.vibe-counter{text-align:right;font-size:11px;color:#9C8F86;margin:6px 0 18px}
+.vibe-hints-label{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#9C8F86;margin-bottom:10px}
+.vibe-hints{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:26px}
+.hint-chip{
+  background:rgba(201,161,94,.12);
+  border:1px solid rgba(201,161,94,.3);
+  border-radius:20px;
+  padding:7px 14px;
+  font-size:12px;
+  color:#2B2928;
+  transition:background .15s;
+}
+.hint-chip:active{background:rgba(201,161,94,.25)}
 
-/* ═══════════════════════════
-   COLLECTION
-═══════════════════════════ */
-.cin-row{display:flex;gap:10px;margin-bottom:14px}
-.cin{flex:1;background:rgba(255,255,255,.8);border:1.5px solid #E3C9A9;border-radius:10px;padding:13px 16px;font-family:'Inter',sans-serif;font-size:14px;color:#2B2928;outline:none;-webkit-appearance:none}
-.cin:focus{border-color:#C9A15E}
-.cadd{width:48px;height:48px;background:#2B2928;color:#fff;border:none;border-radius:10px;cursor:pointer;font-size:22px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.clist{display:flex;flex-direction:column;gap:8px;margin-bottom:22px}
-.citem{background:rgba(255,255,255,.7);border:1px solid #E3C9A9;border-radius:8px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;font-size:13px}
-.crem{background:none;border:none;color:#9C8F86;cursor:pointer;font-size:16px;padding:2px 6px}
-.cempty{font-size:13px;color:#9C8F86;font-style:italic;padding:8px 0;margin-bottom:14px}
+/* ══════════════════════════════
+   PAGE: QUIZ
+══════════════════════════════ */
+.quiz-options{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-bottom:24px;
+}
+.quiz-opt{
+  background:rgba(255,255,255,.82);
+  border:1.5px solid #E3C9A9;
+  border-radius:16px;
+  padding:18px 14px 16px;
+  text-align:left;
+  transition:all .15s;
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+}
+.quiz-opt:active{transform:scale(.97)}
+.quiz-opt.chosen{border-color:#C9A15E;background:rgba(201,161,94,.1);box-shadow:0 0 0 1px #C9A15E}
+.quiz-opt-ico{font-size:24px;line-height:1}
+.quiz-opt-name{font-family:'Playfair Display',serif;font-size:16px;color:#2B2928}
+.quiz-opt-desc{font-size:11px;color:#9C8F86;line-height:1.4}
 
-/* ═══════════════════════════
-   LOADING
-═══════════════════════════ */
-.loading-screen{min-height:100vh;background:url('./loading-bg.jpg') center/cover;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 24px}
-.loading-screen::before{content:'';position:absolute;inset:0;background:rgba(244,227,209,.5)}
-.loading-inner{position:relative;z-index:1}
-.llogo{font-family:'Playfair Display',serif;font-size:28px;letter-spacing:.15em;color:#2B2928;display:block;margin-bottom:6px}
-.lsub{font-size:9px;letter-spacing:.5em;color:#C9A15E;text-transform:uppercase;margin-bottom:56px}
-.lring{width:120px;height:120px;margin-bottom:48px;animation:spin 4s linear infinite}
+/* ══════════════════════════════
+   PAGE: LOADING
+══════════════════════════════ */
+#pg-loading{
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:40px 28px;
+  background:url('./loading-bg.jpg') center/cover no-repeat;
+  position:relative;
+}
+#pg-loading::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:rgba(244,227,209,.55);
+}
+.loading-content{position:relative;z-index:1}
+.loading-logo{font-family:'Playfair Display',serif;font-size:28px;letter-spacing:.2em;color:#2B2928;display:block;margin-bottom:6px}
+.loading-subtitle{font-size:9px;letter-spacing:.5em;text-transform:uppercase;color:#C9A15E;margin-bottom:56px}
+.loading-ring{
+  width:110px;height:110px;
+  margin:0 auto 48px;
+  animation:spin 5s linear infinite;
+}
 @keyframes spin{to{transform:rotate(360deg)}}
-.lmsg{font-family:'Playfair Display',serif;font-size:18px;font-style:italic;color:#5B514C;line-height:1.6}
+.loading-msg{
+  font-family:'Playfair Display',serif;
+  font-size:18px;
+  font-style:italic;
+  color:#5B514C;
+  line-height:1.6;
+}
 
-/* ═══════════════════════════
-   RESULTS
-═══════════════════════════ */
-.results-page{background:url('./results-bg.jpg') center top/cover fixed;min-height:100vh}
-.results-inner{background:rgba(244,227,209,.88);min-height:100vh;padding-bottom:80px}
+/* ══════════════════════════════
+   PAGE: RESULTS
+══════════════════════════════ */
+#pg-results{
+  min-height:100vh;
+  background:#F4E3D1;
+  padding-bottom:80px;
+  position:relative;
+}
+#pg-results::before{
+  content:'';
+  position:fixed;
+  inset:0;
+  max-width:430px;
+  margin:0 auto;
+  background:url('./results-bg.jpg') center top/cover no-repeat;
+  opacity:.15;
+  z-index:0;
+  pointer-events:none;
+}
 
-/* AI card */
-.ai-card{background:rgba(255,255,255,.7);border:1px solid rgba(201,161,94,.25);border-radius:20px;padding:22px 18px;margin:0 16px;backdrop-filter:blur(16px);box-shadow:0 4px 24px rgba(201,161,94,.08)}
-.ai-badge{display:inline-flex;align-items:center;gap:7px;background:rgba(201,161,94,.1);border:1px solid rgba(201,161,94,.3);border-radius:20px;padding:5px 14px;margin-bottom:14px}
-.ai-badge-dot{width:5px;height:5px;border-radius:50%;background:#C9A15E;animation:sp 2s ease infinite}
-.ai-badge-txt{font-size:10px;color:#C9A15E;letter-spacing:.2em;text-transform:uppercase}
-.ai-quote{font-family:'Playfair Display',serif;font-size:15px;font-style:italic;line-height:1.8;color:#2B2928;margin-bottom:16px}
-.ai-bottom{display:flex;align-items:flex-end;justify-content:space-between;gap:12px}
-.spills{display:flex;gap:6px;flex-wrap:wrap;flex:1}
-.spill{background:rgba(201,161,94,.1);border:1px solid rgba(201,161,94,.3);border-radius:20px;padding:4px 10px;font-size:10px;color:#2B2928}
-.match-pct{font-family:'Playfair Display',serif;font-size:32px;color:#2B2928;line-height:1;text-align:right}
-.match-pct-lbl{font-size:9px;color:#9C8F86;letter-spacing:.15em;text-align:right}
+/* AI INSIGHT CARD */
+.insight-card{
+  position:relative;z-index:1;
+  margin:20px 16px 0;
+  background:rgba(255,255,255,.78);
+  border:1px solid rgba(201,161,94,.25);
+  border-radius:20px;
+  padding:22px 18px;
+  backdrop-filter:blur(16px);
+}
+.insight-badge{
+  display:inline-flex;align-items:center;gap:7px;
+  background:rgba(201,161,94,.1);
+  border:1px solid rgba(201,161,94,.3);
+  border-radius:20px;
+  padding:5px 14px;
+  margin-bottom:14px;
+}
+.insight-badge-dot{width:5px;height:5px;border-radius:50%;background:#C9A15E;animation:pulse 2s ease infinite}
+.insight-badge-text{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#C9A15E}
+.insight-quote{
+  font-family:'Playfair Display',serif;
+  font-size:15px;
+  font-style:italic;
+  line-height:1.8;
+  color:#2B2928;
+  margin-bottom:16px;
+}
+.insight-row{display:flex;align-items:flex-end;justify-content:space-between;gap:12px}
+.insight-pills{display:flex;flex-wrap:wrap;gap:6px;flex:1}
+.pill{
+  background:rgba(201,161,94,.1);
+  border:1px solid rgba(201,161,94,.3);
+  border-radius:20px;
+  padding:4px 10px;
+  font-size:10px;
+  color:#2B2928;
+}
+.insight-score{text-align:right}
+.score-num{font-family:'Playfair Display',serif;font-size:34px;color:#2B2928;line-height:1;display:block}
+.score-label{font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:#9C8F86}
 
-/* Profile tags */
-.ptags{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 16px 0}
-.ptag{background:rgba(255,255,255,.65);border:1px solid #E3C9A9;border-radius:10px;padding:10px 12px;display:flex;align-items:center;gap:8px}
-.ptag-ico{font-size:16px}
-.ptag-lbl{font-size:9px;color:#9C8F86;letter-spacing:.1em;text-transform:uppercase;margin-bottom:2px}
-.ptag-val{font-size:12px;color:#2B2928;font-weight:500}
+/* PROFILE TAGS */
+.profile-tags{
+  position:relative;z-index:1;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin:10px 16px 0;
+}
+.profile-tag{
+  background:rgba(255,255,255,.7);
+  border:1px solid #E3C9A9;
+  border-radius:10px;
+  padding:10px 12px;
+  display:flex;align-items:center;gap:8px;
+}
+.profile-tag-ico{font-size:16px}
+.profile-tag-info{}
+.profile-tag-label{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#9C8F86;margin-bottom:2px}
+.profile-tag-value{font-size:12px;font-weight:500;color:#2B2928}
 
-/* Section */
-.rsec{padding:24px 16px 0}
-.rsec-lbl{font-size:10px;color:#C9A15E;letter-spacing:.35em;text-transform:uppercase;margin-bottom:5px}
-.rsec-ttl{font-family:'Playfair Display',serif;font-size:22px;color:#2B2928;margin-bottom:16px}
+/* SECTION HEADERS */
+.section{position:relative;z-index:1;padding:26px 16px 0}
+.section-label{font-size:10px;letter-spacing:.4em;text-transform:uppercase;color:#C9A15E;margin-bottom:5px}
+.section-title{font-family:'Playfair Display',serif;font-size:22px;color:#2B2928;margin-bottom:16px}
 
-/* Match cards */
-.mcards{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.mcard{background:rgba(255,255,255,.75);border:1.5px solid #E3C9A9;border-radius:16px;overflow:hidden}
-.mcard.hero{border-color:#C9A15E;box-shadow:0 0 0 1px #C9A15E,0 4px 20px rgba(201,161,94,.12)}
-.mcard-top{padding:8px 12px;display:flex;align-items:center;justify-content:space-between}
-.mcard-top.dark{background:#2B2928}
-.mbadge{font-size:8px;letter-spacing:.15em;text-transform:uppercase}
-.mbadge.lt{color:#F2D28B}
-.mbadge.mt{color:#9C8F86}
-.mprice{font-size:10px;color:#C9A15E;letter-spacing:.1em}
-.mcard-img{height:80px;background:linear-gradient(135deg,rgba(201,161,94,.06),rgba(244,227,209,.4));display:flex;align-items:center;justify-content:center;font-size:36px}
-.mcard-body{padding:12px 12px 14px}
-.m-brand{font-size:9px;color:#9C8F86;letter-spacing:.15em;text-transform:uppercase;margin-bottom:3px}
-.m-name{font-family:'Playfair Display',serif;font-size:16px;color:#2B2928;margin-bottom:3px;line-height:1.2}
-.m-fam{font-size:10px;color:#C9A15E;margin-bottom:8px}
-.m-why{font-size:11px;color:#6E625A;line-height:1.6;margin-bottom:8px;font-style:italic;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
-.m-notes{display:flex;gap:4px;flex-wrap:wrap}
-.ntag{border:1px solid rgba(201,161,94,.3);border-radius:20px;padding:3px 8px;font-size:9px;color:#2B2928}
+/* MATCH CARDS */
+.match-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.match-card{
+  background:rgba(255,255,255,.82);
+  border:1.5px solid #E3C9A9;
+  border-radius:16px;
+  overflow:hidden;
+  transition:transform .2s;
+}
+.match-card.top{border-color:#C9A15E;box-shadow:0 0 0 1px #C9A15E,0 4px 20px rgba(201,161,94,.12)}
+.match-card-header{
+  padding:8px 12px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.match-card-header.dark{background:#2B2928}
+.match-badge{font-size:8px;letter-spacing:.15em;text-transform:uppercase}
+.match-badge.gold{color:#F2D28B}
+.match-badge.gray{color:#9C8F86}
+.match-price{font-size:10px;color:#C9A15E;letter-spacing:.1em}
+.match-img{
+  height:80px;
+  background:linear-gradient(135deg,rgba(201,161,94,.07),rgba(244,227,209,.4));
+  display:flex;align-items:center;justify-content:center;
+  font-size:36px;
+}
+.match-body{padding:12px}
+.match-brand{font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:#9C8F86;margin-bottom:3px}
+.match-name{font-family:'Playfair Display',serif;font-size:16px;color:#2B2928;line-height:1.2;margin-bottom:3px}
+.match-family{font-size:10px;color:#C9A15E;margin-bottom:8px}
+.match-why{font-size:11px;color:#6B5E54;line-height:1.6;font-style:italic;margin-bottom:8px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical}
+.match-notes{display:flex;flex-wrap:wrap;gap:4px}
+.match-note{border:1px solid rgba(201,161,94,.3);border-radius:20px;padding:3px 8px;font-size:9px;color:#2B2928}
 
-/* Layering */
-.lcard{background:rgba(255,255,255,.72);border:1.5px solid #E3C9A9;border-radius:16px;padding:18px 16px;margin-bottom:12px}
-.ltlbl{font-size:10px;letter-spacing:.25em;color:#C9A15E;text-transform:uppercase;margin-bottom:14px}
-.lvis{display:flex;align-items:flex-end;gap:8px;margin-bottom:16px}
-.lbot{flex:1;background:linear-gradient(135deg,rgba(201,161,94,.07),rgba(244,227,209,.3));border:1px solid rgba(201,161,94,.25);border-radius:12px;padding:12px 8px;text-align:center}
-.lbico{font-size:22px;display:block;margin-bottom:5px}
-.lbname{font-size:11px;color:#2B2928;font-weight:500;line-height:1.3}
-.lbsub{font-size:10px;color:#9C8F86;margin-top:2px}
-.lop{font-size:20px;color:#C9A15E;padding-bottom:12px;flex-shrink:0}
-.lresult{background:rgba(201,161,94,.06);border:1px solid rgba(201,161,94,.15);border-radius:10px;padding:12px 14px}
-.lrlbl{font-size:9px;letter-spacing:.2em;color:#9C8F86;text-transform:uppercase;margin-bottom:5px}
-.lrtxt{font-family:'Playfair Display',serif;font-size:13px;font-style:italic;color:#2B2928;line-height:1.75;margin-bottom:8px}
-.lrinstr{font-size:11px;color:#9C8F86;line-height:1.6}
+/* LAYERING CARD */
+.layer-card{
+  background:rgba(255,255,255,.78);
+  border:1.5px solid #E3C9A9;
+  border-radius:16px;
+  padding:18px 16px;
+  margin-bottom:12px;
+}
+.layer-label{font-size:10px;letter-spacing:.25em;text-transform:uppercase;color:#C9A15E;margin-bottom:14px}
+.layer-visual{display:flex;align-items:flex-end;gap:8px;margin-bottom:16px}
+.layer-bottle{
+  flex:1;
+  background:linear-gradient(135deg,rgba(201,161,94,.07),rgba(244,227,209,.3));
+  border:1px solid rgba(201,161,94,.25);
+  border-radius:12px;
+  padding:13px 8px;
+  text-align:center;
+}
+.layer-bottle-icon{font-size:22px;display:block;margin-bottom:5px}
+.layer-bottle-name{font-size:11px;color:#2B2928;font-weight:500;line-height:1.3}
+.layer-bottle-sub{font-size:10px;color:#9C8F86;margin-top:2px}
+.layer-op{font-size:20px;color:#C9A15E;flex-shrink:0;padding-bottom:12px}
+.layer-result-box{
+  background:rgba(201,161,94,.06);
+  border:1px solid rgba(201,161,94,.15);
+  border-radius:10px;
+  padding:13px;
+}
+.layer-result-label{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:#9C8F86;margin-bottom:5px}
+.layer-result-text{font-family:'Playfair Display',serif;font-size:13px;font-style:italic;color:#2B2928;line-height:1.75;margin-bottom:7px}
+.layer-result-tip{font-size:11px;color:#9C8F86;line-height:1.6}
 
-/* Guidance */
-.gcard{background:rgba(255,255,255,.72);border:1.5px solid #E3C9A9;border-radius:16px;padding:18px 16px;margin-bottom:12px}
-.gfam{font-family:'Playfair Display',serif;font-size:18px;color:#2B2928;margin-bottom:6px}
-.gadv{font-size:12px;color:#6E625A;line-height:1.65;font-style:italic;margin-bottom:14px}
-.gdirs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.gdir{background:rgba(201,161,94,.07);border:1px solid rgba(201,161,94,.2);border-radius:10px;padding:12px 8px;text-align:center}
-.gdir-ico{font-size:20px;margin-bottom:5px}
-.gdir-name{font-size:11px;color:#2B2928;font-weight:500;margin-bottom:2px}
-.gdir-sub{font-size:10px;color:#9C8F86}
+/* GUIDANCE CARD */
+.guidance-card{
+  background:rgba(255,255,255,.78);
+  border:1.5px solid #E3C9A9;
+  border-radius:16px;
+  padding:18px 16px;
+  margin-bottom:12px;
+}
+.guidance-title{font-family:'Playfair Display',serif;font-size:18px;color:#2B2928;margin-bottom:6px}
+.guidance-text{font-size:12px;color:#6B5E54;line-height:1.65;font-style:italic;margin-bottom:14px}
+.guidance-dirs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.guidance-dir{
+  background:rgba(201,161,94,.07);
+  border:1px solid rgba(201,161,94,.2);
+  border-radius:10px;
+  padding:12px 8px;
+  text-align:center;
+}
+.guidance-dir-ico{font-size:20px;margin-bottom:5px}
+.guidance-dir-name{font-size:11px;color:#2B2928;font-weight:500;margin-bottom:2px}
+.guidance-dir-sub{font-size:10px;color:#9C8F86}
 
-/* Recipe */
-.recipe{background:#2B2928;border-radius:18px;padding:22px 18px;margin:24px 16px 0;position:relative;overflow:hidden}
-.recipe::after{content:'';position:absolute;top:-50px;right:-50px;width:140px;height:140px;border-radius:50%;background:radial-gradient(circle,rgba(201,161,94,.12),transparent 70%);pointer-events:none}
-.recipe-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
-.recipe-ttl{font-family:'Playfair Display',serif;font-size:16px;color:#F2D28B;letter-spacing:.1em}
-.recipe-acts{display:flex;gap:12px}
-.ract{background:transparent;border:none;color:rgba(255,255,255,.4);cursor:pointer;font-size:12px;letter-spacing:.1em;font-family:'Inter',sans-serif}
-.ract:hover{color:rgba(255,255,255,.8)}
-.recipe-cols{display:grid;grid-template-columns:repeat(3,1fr);gap:0}
-.rcol{padding:0 12px 0 0;border-right:1px solid rgba(255,255,255,.07)}
-.rcol:nth-child(2){padding:0 12px}
-.rcol:last-child{border-right:none;padding:0 0 0 12px}
-.rcol-lbl{font-size:8px;letter-spacing:.25em;color:#C9A15E;text-transform:uppercase;margin-bottom:6px}
-.rcol-val{font-family:'Playfair Display',serif;font-size:12px;color:rgba(255,255,255,.85);line-height:1.6;font-style:italic}
-.recipe-foot{margin-top:16px;padding-top:12px;border-top:1px solid rgba(255,255,255,.07);font-size:9px;color:rgba(255,255,255,.25);letter-spacing:.1em;text-align:center}
+/* RECIPE CARD */
+.recipe-card{
+  background:#2B2928;
+  border-radius:18px;
+  padding:22px 18px;
+  margin:24px 16px 0;
+  position:relative;
+  overflow:hidden;
+}
+.recipe-card::after{
+  content:'';
+  position:absolute;top:-50px;right:-50px;
+  width:140px;height:140px;border-radius:50%;
+  background:radial-gradient(circle,rgba(201,161,94,.12),transparent 70%);
+  pointer-events:none;
+}
+.recipe-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.recipe-title{font-family:'Playfair Display',serif;font-size:16px;color:#F2D28B;letter-spacing:.1em}
+.recipe-share{color:rgba(255,255,255,.45);font-size:12px;letter-spacing:.08em}
+.recipe-cols{display:grid;grid-template-columns:repeat(3,1fr)}
+.recipe-col{padding:0 12px 0 0;border-right:1px solid rgba(255,255,255,.07)}
+.recipe-col:nth-child(2){padding:0 12px}
+.recipe-col:last-child{border:none;padding:0 0 0 12px}
+.recipe-col-label{font-size:8px;letter-spacing:.25em;text-transform:uppercase;color:#C9A15E;margin-bottom:6px}
+.recipe-col-text{font-family:'Playfair Display',serif;font-size:12px;color:rgba(255,255,255,.85);line-height:1.6;font-style:italic}
+.recipe-footer{margin-top:16px;padding-top:12px;border-top:1px solid rgba(255,255,255,.07);font-size:9px;color:rgba(255,255,255,.25);letter-spacing:.1em;text-align:center}
 
-/* CTAs at bottom of results */
-.bctas{padding:24px 16px 0;display:flex;gap:10px}
-.btn-refine{flex:1;background:#2B2928;color:#fff;border:none;padding:15px;font-family:'Playfair Display',serif;font-size:13px;letter-spacing:.1em;cursor:pointer;border-radius:4px}
-.btn-explore{flex:1;background:transparent;border:1.5px solid #E3C9A9;color:#2B2928;padding:15px;font-size:12px;letter-spacing:.1em;cursor:pointer;border-radius:4px;font-family:'Inter',sans-serif}
-.btn-explore:hover{border-color:#C9A15E}
+/* BOTTOM CTAs */
+.results-ctas{display:flex;gap:10px;padding:24px 16px 0;position:relative;z-index:1}
+.cta-refine{
+  flex:1;background:#2B2928;color:#fff;
+  padding:15px;border-radius:6px;
+  font-family:'Playfair Display',serif;font-size:13px;letter-spacing:.08em;
+}
+.cta-explore{
+  flex:1;background:transparent;
+  border:1.5px solid #E3C9A9;color:#2B2928;
+  padding:15px;border-radius:6px;
+  font-size:12px;letter-spacing:.08em;
+}
 
-.divider{height:1px;background:#E3C9A9;margin:24px 16px 0}
+/* DIVIDER */
+.divider{height:1px;background:#E3C9A9;margin:24px 16px 0;position:relative;z-index:1}
 </style>
 </head>
 <body>
 <div id="app"></div>
+
 <script>
-const NOTES=[
+/* ─────────────── DATA ─────────────── */
+const NOTES = [
   ['🪵','Oud'],['🟡','Amber'],['🍋','Bergamot'],['🌸','Jasmin'],
   ['🤍','Vanilija'],['🌿','Pačuli'],['🌹','Ruža'],['🌾','Vetiver'],
   ['🪨','Sandalovina'],['🌲','Cedar'],['🫧','Mošus'],['🍂','Duhan'],
   ['💜','Iris'],['🖤','Papar'],['🌼','Neroli'],['🤎','Koža'],
   ['🕯️','Tamjan'],['🥥','Kokos']
 ];
-const QUIZ=[
-  {id:'family',k:'KORAK 1',q:'Koji mirisi ti se najviše odgovaraju?',s:'Odaberi jedan smjer',t:'s',opts:[
-    ['🍯','Slatko','Vanilija, karamel, mošus'],
-    ['🌿','Svježe','Citrus, aqua, zeleno'],
-    ['🪵','Drvenasto','Sandalovina, cedar, pačuli'],
-    ['🌶️','Začinjeno','Oud, crni papar, kardamom']]},
-  {id:'season',k:'KORAK 2',q:'Koje godišnje doba opisuje tvoj idealni miris?',s:'Svako doba nosi svoju energiju',t:'s',opts:[
-    ['🌸','Proljeće','Cvjetno, svježe, nježno'],
-    ['☀️','Ljeto','Morsko, lagano, citrus'],
-    ['🍂','Jesen','Toplo, začinjeno, amber'],
-    ['❄️','Zima','Duboko, kožno, dimno']]},
-  {id:'occasion',k:'KORAK 3',q:'Kada ga nosiš?',s:'Možeš odabrati više',t:'m',opts:[
-    ['☕','Svakodnevno','Casual, lagan, svjež'],
-    ['🌙','Večernji','Taman, bogat, intrigantan'],
-    ['💼','Posao','Profesionalan, nenametljiv'],
-    ['✨','Posebne prilike','Upečatljiv, nezaboravan']]},
-  {id:'intensity',k:'KORAK 4',q:'Koji intenzitet preferiraš?',s:'Koliko daleko ide tvoj sillage?',t:'s',opts:[
-    ['🪷','Nježan','Blizak, intiman'],
-    ['🌺','Umjeren','Prisutan, ugodan'],
-    ['💥','Jak','Upečatljiv, dalekosežan'],
-    ['🎭','Ovisi','Prilagodljiv, kontekstualan']]}
+
+const STEPS = [
+  {
+    id: 'family',
+    label: 'KORAK 1',
+    question: 'Koji mirisi ti se najviše odgovaraju?',
+    hint: 'Odaberi jedan smjer',
+    multi: false,
+    options: [
+      ['🍯','Slatko','Vanilija, karamel, mošus'],
+      ['🌿','Svježe','Citrus, aqua, zeleno'],
+      ['🪵','Drvenasto','Sandalovina, cedar, pačuli'],
+      ['🌶️','Začinjeno','Oud, crni papar, kardamom']
+    ]
+  },
+  {
+    id: 'season',
+    label: 'KORAK 2',
+    question: 'Koje godišnje doba opisuje tvoj idealni miris?',
+    hint: 'Svako doba nosi svoju energiju',
+    multi: false,
+    options: [
+      ['🌸','Proljeće','Cvjetno, svježe, nježno'],
+      ['☀️','Ljeto','Morsko, lagano, citrus'],
+      ['🍂','Jesen','Toplo, začinjeno, amber'],
+      ['❄️','Zima','Duboko, kožno, dimno']
+    ]
+  },
+  {
+    id: 'occasion',
+    label: 'KORAK 3',
+    question: 'Kada ga nosiš?',
+    hint: 'Možeš odabrati više',
+    multi: true,
+    options: [
+      ['☕','Svakodnevno','Casual, lagan, svjež'],
+      ['🌙','Večernji','Taman, bogat, intrigantan'],
+      ['💼','Posao','Profesionalan, nenametljiv'],
+      ['✨','Posebne prilike','Upečatljiv, nezaboravan']
+    ]
+  },
+  {
+    id: 'intensity',
+    label: 'KORAK 4',
+    question: 'Koji intenzitet preferiraš?',
+    hint: 'Koliko daleko ide tvoj sillage?',
+    multi: false,
+    options: [
+      ['🪷','Nježan','Blizak, intiman'],
+      ['🌺','Umjeren','Prisutan, ugodan'],
+      ['💥','Jak','Upečatljiv, dalekosežan'],
+      ['🎭','Ovisi','Prilagodljiv, kontekstualan']
+    ]
+  }
 ];
-const HINTS=['Kiša na toplom asfaltu','Stara biblioteka i koža','Jutarnja kava i drvo','Ljetna noć na moru','Cvijeće nakon grmljavine'];
-const BACK=`<svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>`;
 
-let S={pg:'landing',qi:0,ans:{},vibe:'',notes:[],notesX:false,coll:[],cin:'',res:null,lmsg:'',_iv:null};
-const go=pg=>{S.pg=pg;window.scrollTo({top:0,behavior:'smooth'});render()};
-const ss=p=>{Object.assign(S,p);render()};
+const HINTS = [
+  'Kiša na toplom asfaltu',
+  'Stara biblioteka i koža',
+  'Jutarnja kava i drvo',
+  'Ljetna noć na moru',
+  'Cvijeće nakon grmljavine'
+];
 
-function hdr(back){
-  return`<div class="hdr"><button class="hdr-back" id="bk">${BACK} Natrag</button><div class="hdr-logo sf">SILLAGE</div><div style="width:60px"></div></div>`;
+/* ─────────────── STATE ─────────────── */
+let state = {
+  page: 'landing',
+  collection: [],
+  collectionInput: '',
+  notes: [],
+  notesExpanded: false,
+  vibe: '',
+  quizStep: 0,
+  answers: {},
+  result: null,
+  loadingMsg: ''
+};
+
+function setState(patch) {
+  Object.assign(state, patch);
+  render();
 }
-function prog(){
-  const pct=((S.qi+1)/QUIZ.length)*100;
-  return`<div class="prog">
-    <div class="prog-label">Korak ${S.qi+1} od ${QUIZ.length}</div>
-    <div class="prog-track"><div class="prog-fill" style="width:${pct}%"></div></div>
-    <div class="prog-dots">${QUIZ.map((_,i)=>`<div class="dot${i<S.qi?' done':i===S.qi?' on':''}"></div>`).join('')}</div>
-  </div>`;
+
+function goTo(page) {
+  state.page = page;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  render();
 }
 
-/* ── LANDING ── */
-function landingPage(){
-  const d=document.createElement('div');
-  d.innerHTML=`
-    <div class="screen">
-      <div class="screen-bg land-bg"></div>
-      <div class="screen-overlay land-overlay"></div>
-      <div class="screen-content">
-        <div class="land-top">
-          <div>
-            <div class="land-logo sf">SILLAGE</div>
-            <div class="land-logo-tag">AI Perfume Expert</div>
-          </div>
+/* ─────────────── HELPERS ─────────────── */
+function nav(onBack) {
+  const el = document.createElement('div');
+  el.className = 'nav';
+  el.innerHTML = `
+    <button class="nav-back">
+      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+      Natrag
+    </button>
+    <div class="nav-logo s">SILLAGE</div>
+    <div class="nav-space"></div>
+  `;
+  el.querySelector('.nav-back').onclick = onBack;
+  return el;
+}
+
+/* ─────────────── LANDING ─────────────── */
+function renderLanding() {
+  const el = document.createElement('div');
+  el.id = 'pg-landing';
+  el.innerHTML = `
+    <div class="land-header">
+      <div class="land-logo s">SILLAGE</div>
+      <div class="land-tagline">AI Perfume Expert</div>
+    </div>
+    <div class="land-bottle">
+      <img src="./bottle-hero.jpg" alt="">
+    </div>
+    <div class="land-body">
+      <h1 class="land-headline s">Your scent,<br><em>decoded.</em></h1>
+      <div class="land-divider"></div>
+      <p class="land-desc">AI-crafted fragrance profile prilagođen tvojim emocijama, uspomenama i željama.</p>
+      <button class="land-cta">
+        Saznaj svoj recept
+        <span class="land-cta-star">✦</span>
+      </button>
+      <div class="land-lang">HR | EN</div>
+    </div>
+  `;
+  el.querySelector('.land-cta').onclick = () => goTo('shelf');
+  return el;
+}
+
+/* ─────────────── SHELF ─────────────── */
+function renderShelf() {
+  const el = document.createElement('div');
+  el.className = 'inner-page bg-shelf';
+
+  const itemsHTML = state.collection.length === 0
+    ? '<div class="shelf-empty">Još nisi dodao/la ništa.</div>'
+    : state.collection.map((item, i) => `
+        <div class="shelf-item">
+          <span>🫙 ${item}</span>
+          <button class="shelf-remove" data-i="${i}">✕</button>
         </div>
-        <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:20px 0">
-          <img src="./bottle-hero.jpg" style="max-height:42vh;max-width:75%;object-fit:contain;filter:drop-shadow(0 20px 40px rgba(180,120,80,.2));animation:float 6s ease-in-out infinite" alt="" onerror="this.style.display='none'">
-        </div>
-        <div class="land-body">
-          <h1 class="land-h1 sf">Your scent,<br><em>decoded.</em></h1>
-          <div class="land-rule"></div>
-          <p class="land-desc">AI-crafted fragrance profile prilagođen tvojim emocijama, uspomenama i željama.</p>
-          <button class="btn-land" id="s0">Saznaj svoj recept <span class="btn-spark">✦</span></button>
-          <div class="land-lang">HR | EN</div>
-        </div>
-      </div>
-    </div>`;
-  d.querySelector('#s0').onclick=()=>go('shelf');
-  return d;
+      `).join('');
+
+  el.appendChild(nav(() => goTo('landing')));
+  const body = document.createElement('div');
+  body.className = 'page-body';
+  body.innerHTML = `
+    <div class="pg-label">Digitalna Polica</div>
+    <h1 class="pg-title s">Što već imaš?</h1>
+    <p class="pg-sub">Dodaj parfeme koje posjeduješ — AI će maksimizirati tvoju kolekciju kroz layering.</p>
+    <div class="shelf-input-row">
+      <input class="shelf-input" id="shelf-in" placeholder='npr. "Dior Sauvage EDT"' value="${state.collectionInput}">
+      <button class="shelf-add" id="shelf-add">+</button>
+    </div>
+    <div class="shelf-list" id="shelf-list">${itemsHTML}</div>
+    <button class="btn-primary" id="shelf-go">Analiziraj moj profil ✦</button>
+    <button class="btn-outline" id="shelf-skip">Preskoči i analiziraj</button>
+  `;
+  el.appendChild(body);
+
+  const input = el.querySelector('#shelf-in');
+  input.oninput = () => { state.collectionInput = input.value; };
+  input.onkeydown = (e) => { if (e.key === 'Enter') addItem(); };
+  el.querySelector('#shelf-add').onclick = addItem;
+  function addItem() {
+    const v = (state.collectionInput || '').trim();
+    if (!v) return;
+    setState({ collection: [...state.collection, v], collectionInput: '' });
+  }
+  el.querySelectorAll('.shelf-remove').forEach(btn => {
+    btn.onclick = () => {
+      const i = parseInt(btn.dataset.i);
+      setState({ collection: state.collection.filter((_, idx) => idx !== i) });
+    };
+  });
+  el.querySelector('#shelf-go').onclick = () => goTo('notes');
+  el.querySelector('#shelf-skip').onclick = () => goTo('notes');
+  return el;
 }
 
-/* ── SHELF ── */
-function shelfPage(){
-  const items=S.coll.length===0
-    ?`<div class="cempty">Još nisi dodao/la ništa.</div>`
-    :S.coll.map((x,i)=>`<div class="citem"><span>🫙 ${x}</span><button class="crem" data-i="${i}">✕</button></div>`).join('');
-  const d=document.createElement('div');d.className='page-with-bg page-shelf';
-  d.innerHTML=`
-    ${hdr()}
-    <div class="pg">
-      <div class="pg-lbl">Digitalna Polica</div>
-      <h1 class="pg-title sf">Što već imaš?</h1>
-      <p class="pg-sub">Dodaj parfeme koje posjeduješ — AI će maksimizirati tvoju kolekciju kroz layering.</p>
-      <div class="cin-row">
-        <input class="cin" id="ci" placeholder='npr. "Dior Sauvage EDT"' value="${S.cin||''}">
-        <button class="cadd" id="cadd">+</button>
-      </div>
-      <div class="clist">${items}</div>
-      <button class="btn btn-dark" id="an">Analiziraj moj profil ✦</button>
-      <button class="btn btn-ghost" id="sk">Preskoči i analiziraj</button>
-    </div>`;
-  d.querySelector('#bk').onclick=()=>go('landing');
-  const inp=d.querySelector('#ci');
-  inp.oninput=()=>{S.cin=inp.value};
-  inp.onkeydown=e=>{if(e.key==='Enter')add()};
-  function add(){const v=(S.cin||'').trim();if(v)ss({coll:[...S.coll,v],cin:''})}
-  d.querySelector('#cadd').onclick=add;
-  d.querySelectorAll('.crem').forEach(b=>{b.onclick=()=>ss({coll:S.coll.filter((_,i)=>i!==parseInt(b.dataset.i))})});
-  d.querySelector('#an').onclick=()=>go('notes');
-  d.querySelector('#sk').onclick=()=>go('notes');
-  return d;
+/* ─────────────── NOTES ─────────────── */
+function renderNotes() {
+  const el = document.createElement('div');
+  el.className = 'inner-page bg-notes';
+  el.appendChild(nav(() => goTo('shelf')));
+
+  const body = document.createElement('div');
+  body.className = 'page-body';
+
+  const showAll = state.notesExpanded;
+  const notesHTML = NOTES.map((n, i) => `
+    <div class="note-chip${state.notes.includes(n[1]) ? ' picked' : ''}${!showAll && i >= 12 ? ' hidden' : ''}" data-note="${n[1]}">
+      <div class="note-ico">${n[0]}</div>
+      <div class="note-lbl">${n[1]}</div>
+    </div>
+  `).join('');
+
+  const hiddenCount = NOTES.length - 12;
+
+  body.innerHTML = `
+    <div class="pg-label">Note Picker</div>
+    <h1 class="pg-title s">Odaberi note koje te privlače</h1>
+    <p class="pg-sub">Možeš odabrati više, ili preskočiti.</p>
+    <div class="notes-grid">${notesHTML}</div>
+    ${!showAll ? `<button class="btn-more-notes" id="notes-more">+ Prikaži sve note (${hiddenCount} više)</button>` : ''}
+    <button class="btn-primary" id="notes-next">Dalje →</button>
+    <button class="btn-outline" id="notes-skip">Preskoči</button>
+  `;
+  el.appendChild(body);
+
+  el.querySelectorAll('.note-chip').forEach(chip => {
+    chip.onclick = () => {
+      const note = chip.dataset.note;
+      const notes = state.notes.includes(note)
+        ? state.notes.filter(n => n !== note)
+        : [...state.notes, note];
+      setState({ notes });
+    };
+  });
+  const moreBtn = el.querySelector('#notes-more');
+  if (moreBtn) moreBtn.onclick = () => setState({ notesExpanded: true });
+  el.querySelector('#notes-next').onclick = () => goTo('vibe');
+  el.querySelector('#notes-skip').onclick = () => goTo('vibe');
+  return el;
 }
 
-/* ── NOTES ── */
-function notesPage(){
-  const sel=S.notes,sx=S.notesX;
-  const d=document.createElement('div');d.className='page-with-bg page-notes';
-  d.innerHTML=`
-    ${hdr()}
-    <div class="pg">
-      <div class="pg-lbl">Note Picker</div>
-      <h1 class="pg-title sf">Odaberi note koje te privlače</h1>
-      <p class="pg-sub">Možeš odabrati više, ili preskočiti.</p>
-      <div class="notes-grid">
-        ${NOTES.map((n,i)=>`<div class="note${sel.includes(n[1])?' sel':''}${(!sx&&i>=12)?' hide':''}" data-n="${n[1]}"><div class="note-ico">${n[0]}</div><div class="note-lbl">${n[1]}</div></div>`).join('')}
-      </div>
-      ${!sx?`<button class="btn-more" id="sm">+ Prikaži sve note (${NOTES.length-12} više)</button>`:''}
-      <button class="btn btn-dark" id="nx">Dalje →</button>
-      <button class="btn btn-ghost" id="sk">Preskoči</button>
-    </div>`;
-  d.querySelector('#bk').onclick=()=>go('shelf');
-  d.querySelectorAll('.note').forEach(c=>{c.onclick=()=>{const n=c.dataset.n;ss({notes:sel.includes(n)?sel.filter(x=>x!==n):[...sel,n]})}});
-  d.querySelector('#nx').onclick=()=>go('vibe');
-  d.querySelector('#sk').onclick=()=>go('vibe');
-  const sm=d.querySelector('#sm');if(sm)sm.onclick=()=>ss({notesX:true});
-  return d;
+/* ─────────────── VIBE ─────────────── */
+function renderVibe() {
+  const el = document.createElement('div');
+  el.className = 'inner-page bg-vibe';
+  el.appendChild(nav(() => goTo('notes')));
+
+  const body = document.createElement('div');
+  body.className = 'page-body';
+  body.innerHTML = `
+    <div class="pg-label">The Vibe Box</div>
+    <h1 class="pg-title s">Opiši svoj vibe</h1>
+    <p class="pg-sub">Napiši što želiš da tvoj idealni miris opisuje, osjeća se, podsjeća na...</p>
+    <textarea class="vibe-textarea" id="vibe-text" maxlength="300" placeholder='"Tražim nešto što miriše na staru knjižnicu i kišu, ali da ima malo citrusa."'>${state.vibe}</textarea>
+    <div class="vibe-counter" id="vibe-count">${state.vibe.length}/300</div>
+    <div class="vibe-hints-label">Inspiracija</div>
+    <div class="vibe-hints">
+      ${HINTS.map(h => `<button class="hint-chip" data-hint="${h}">${h}</button>`).join('')}
+    </div>
+    <button class="btn-primary" id="vibe-next">Dalje →</button>
+  `;
+  el.appendChild(body);
+
+  const ta = el.querySelector('#vibe-text');
+  const counter = el.querySelector('#vibe-count');
+  ta.oninput = () => {
+    state.vibe = ta.value;
+    counter.textContent = `${ta.value.length}/300`;
+  };
+  el.querySelectorAll('.hint-chip').forEach(chip => {
+    chip.onclick = () => {
+      ta.value = chip.dataset.hint;
+      state.vibe = chip.dataset.hint;
+      counter.textContent = `${chip.dataset.hint.length}/300`;
+    };
+  });
+  el.querySelector('#vibe-next').onclick = () => setState({ page: 'quiz', quizStep: 0, answers: {} });
+  return el;
 }
 
-/* ── VIBE ── */
-function vibePage(){
-  const d=document.createElement('div');d.className='page-with-bg page-vibe';
-  d.innerHTML=`
-    ${hdr()}
-    <div class="pg">
-      <div class="pg-lbl">The Vibe Box</div>
-      <h1 class="pg-title sf">Opiši svoj vibe</h1>
-      <p class="pg-sub">Napiši što želiš da tvoj idealni miris opisuje, osjeća se, podsjeća na...</p>
-      <textarea class="vtxt" id="vt" maxlength="300" placeholder='"Tražim nešto što miriše na staru knjižnicu i kišu, ali da ima malo citrusa."'>${S.vibe}</textarea>
-      <div class="vctr" id="vc">${S.vibe.length}/300</div>
-      <div class="hints-lbl">Inspiracija</div>
-      <div class="hints">${HINTS.map(h=>`<button class="hchip" data-h="${h}">${h}</button>`).join('')}</div>
-      <button class="btn btn-dark" id="nx">Dalje →</button>
-    </div>`;
-  d.querySelector('#bk').onclick=()=>go('notes');
-  const ta=d.querySelector('#vt'),vc=d.querySelector('#vc');
-  ta.oninput=()=>{S.vibe=ta.value;vc.textContent=`${ta.value.length}/300`};
-  d.querySelectorAll('.hchip').forEach(c=>{c.onclick=()=>{ta.value=c.dataset.h;S.vibe=c.dataset.h;vc.textContent=`${c.dataset.h.length}/300`}});
-  d.querySelector('#nx').onclick=()=>ss({pg:'quiz',qi:0,ans:{}});
-  return d;
+/* ─────────────── QUIZ ─────────────── */
+function renderQuiz() {
+  const step = STEPS[state.quizStep];
+  const ans = state.answers[state.quizStep];
+  const isMulti = step.multi;
+  const isReady = isMulti ? (ans && ans.length > 0) : !!ans;
+  const isLast = state.quizStep === STEPS.length - 1;
+  const pct = ((state.quizStep + 1) / STEPS.length) * 100;
+
+  const el = document.createElement('div');
+  el.className = 'inner-page bg-quiz';
+  el.appendChild(nav(() => {
+    if (state.quizStep > 0) setState({ quizStep: state.quizStep - 1 });
+    else goTo('vibe');
+  }));
+
+  const prog = document.createElement('div');
+  prog.className = 'progress';
+  prog.innerHTML = `
+    <div class="progress-text">Korak ${state.quizStep + 1} od ${STEPS.length}</div>
+    <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+    <div class="progress-dots">
+      ${STEPS.map((_, i) => `<div class="pdot${i < state.quizStep ? ' done' : i === state.quizStep ? ' active' : ''}"></div>`).join('')}
+    </div>
+  `;
+  el.appendChild(prog);
+
+  const body = document.createElement('div');
+  body.className = 'page-body';
+  body.innerHTML = `
+    <div class="pg-label">${step.label}</div>
+    <h1 class="pg-title s">${step.question}</h1>
+    <p class="pg-sub">${step.hint}</p>
+    <div class="quiz-options">
+      ${step.options.map(([ico, name, desc]) => {
+        const sel = isMulti ? (ans && ans.includes(name)) : (ans === name);
+        return `<div class="quiz-opt${sel ? ' chosen' : ''}" data-val="${name}">
+          <div class="quiz-opt-ico">${ico}</div>
+          <div class="quiz-opt-name s">${name}</div>
+          <div class="quiz-opt-desc">${desc}</div>
+        </div>`;
+      }).join('')}
+    </div>
+    <button class="btn-primary" id="quiz-next" ${isReady ? '' : 'disabled'}>
+      ${isLast ? 'Završi →' : 'Dalje →'}
+    </button>
+  `;
+  el.appendChild(body);
+
+  el.querySelectorAll('.quiz-opt').forEach(opt => {
+    opt.onclick = () => {
+      const val = opt.dataset.val;
+      let newAns;
+      if (isMulti) {
+        const cur = state.answers[state.quizStep] || [];
+        newAns = cur.includes(val) ? cur.filter(v => v !== val) : [...cur, val];
+      } else {
+        newAns = val;
+      }
+      setState({ answers: { ...state.answers, [state.quizStep]: newAns } });
+    };
+  });
+  el.querySelector('#quiz-next').onclick = () => {
+    if (!isReady) return;
+    if (isLast) analyze();
+    else setState({ quizStep: state.quizStep + 1 });
+  };
+  return el;
 }
 
-/* ── QUIZ ── */
-function quizPage(){
-  const step=QUIZ[S.qi],ans=S.ans[S.qi],isMul=step.t==='m';
-  const ok=isMul?(ans&&ans.length>0):!!ans;
-  const d=document.createElement('div');d.className='page-with-bg page-quiz';
-  d.innerHTML=`
-    ${hdr()}
-    ${prog()}
-    <div class="pg">
-      <div class="pg-lbl">${step.k}</div>
-      <h1 class="pg-title sf">${step.q}</h1>
-      <p class="pg-sub">${step.s}</p>
-      <div class="opts">
-        ${step.opts.map(([ico,lbl,dsc])=>{
-          const sel=isMul?(ans&&ans.includes(lbl)):(ans===lbl);
-          return`<div class="opt${sel?' sel':''}" data-v="${lbl}">
-            <div class="opt-ico">${ico}</div>
-            <div class="opt-lbl sf">${lbl}</div>
-            <div class="opt-dsc">${dsc}</div>
-          </div>`;
-        }).join('')}
-      </div>
-      <button class="btn btn-dark" id="nx" ${ok?'':'disabled'}>${S.qi===QUIZ.length-1?'Završi →':'Dalje →'}</button>
-    </div>`;
-  d.querySelector('#bk').onclick=()=>S.qi>0?ss({qi:S.qi-1}):go('vibe');
-  d.querySelectorAll('.opt').forEach(c=>{c.onclick=()=>{
-    const v=c.dataset.v;
-    if(isMul){const cur=S.ans[S.qi]||[];ss({ans:{...S.ans,[S.qi]:cur.includes(v)?cur.filter(x=>x!==v):[...cur,v]}})}
-    else ss({ans:{...S.ans,[S.qi]:v}});
-  }});
-  d.querySelector('#nx').onclick=()=>{if(!ok)return;S.qi<QUIZ.length-1?ss({qi:S.qi+1}):analyze()};
-  return d;
+/* ─────────────── LOADING ─────────────── */
+function renderLoading() {
+  const el = document.createElement('div');
+  el.id = 'pg-loading';
+  el.innerHTML = `
+    <div class="loading-content">
+      <span class="loading-logo s">SILLAGE</span>
+      <div class="loading-subtitle">Crafting your scent profile</div>
+      <img class="loading-ring" src="./icon-ring.png" alt=""
+        onerror="this.outerHTML='<div class=\'loading-ring\' style=\'border:1px solid #C9A15E;border-top-color:transparent;border-radius:50%;\'></div>'">
+      <div class="loading-msg" id="loading-msg">${state.loadingMsg || 'Analiziram tvoj mirisni profil...'}</div>
+    </div>
+  `;
+  return el;
 }
 
-/* ── LOADING ── */
-function loadingPage(){
-  const d=document.createElement('div');
-  d.innerHTML=`
-    <div class="loading-screen">
-      <div class="loading-inner">
-        <span class="llogo sf">SILLAGE</span>
-        <div class="lsub">Crafting your scent profile</div>
-        <img class="lring" src="./icon-ring.png" alt="" onerror="this.style.cssText='width:100px;height:100px;margin-bottom:48px;border-radius:50%;border:1px solid #C9A15E;border-top-color:transparent;animation:spin 1s linear infinite'">
-        <div class="lmsg" id="lm">${S.lmsg||'Analiziram tvoj mirisni profil...'}</div>
-      </div>
-    </div>`;
-  return d;
-}
+/* ─────────────── ANALYZE ─────────────── */
+async function analyze() {
+  const messages = [
+    'Analiziram tvoj mirisni profil...',
+    'Pronalazim savršene kombinacije...',
+    'Gradim tvoj Scent Recipe...',
+    'Još trenutak...'
+  ];
+  let mi = 0;
+  setState({ page: 'loading', loadingMsg: messages[0] });
 
-/* ── ANALYZE ── */
-async function analyze(){
-  const msgs=['Analiziram tvoj mirisni profil...','Pronalazim savršene kombinacije...','Gradim tvoj Scent Recipe...','Još trenutak...'];
-  let mi=0;
-  ss({pg:'loading',lmsg:msgs[0]});
-  if(S._iv)clearInterval(S._iv);
-  S._iv=setInterval(()=>{mi=(mi+1)%msgs.length;const el=document.getElementById('lm');if(el)el.textContent=msgs[mi]},2200);
+  const interval = setInterval(() => {
+    mi = (mi + 1) % messages.length;
+    const el = document.getElementById('loading-msg');
+    if (el) el.textContent = messages[mi];
+  }, 2200);
 
-  const payload={collection:S.coll,vibe:S.vibe||'nije opisano',family:S.ans[0],season:S.ans[1],occasion:S.ans[2],intensity:S.ans[3],notes:S.notes};
-  const h2=S.coll.length>=2;
+  const data = {
+    collection: state.collection,
+    vibe: state.vibe || 'nije opisano',
+    family: state.answers[0],
+    season: state.answers[1],
+    occasion: state.answers[2],
+    intensity: state.answers[3],
+    notes: state.notes
+  };
 
-  const sys=`Ti si SILLAGE — vrhunski AI parfemski stručnjak. Piši poetski, kao majstor parfimer. Svi opisi i tekstovi moraju biti na HRVATSKOM jeziku, osim naziva brendova i parfema koji ostaju na originalnom jeziku. Vrati SAMO valjani JSON bez markdowna:
-{"match_score":92,"ai_insight":"2-3 poetske rečenice o njihovoj mirisnoj osobnosti na HR","scent_keywords":["kw1","kw2","kw3","kw4"],"profile":{"intenzitet":"","sezona":"","prigoda":"","note":""},"top_match":{"brand":"","name":"","concentration":"","scent_family":"","price_range":"$/$$/$$$/$$$$","why":"1-2 poetske rečenice na HR","notes":["n1","n2","n3","n4"]},"alt_match":{"brand":"","name":"","concentration":"","scent_family":"","price_range":"","why":"poetska rečenica na HR","notes":["n1","n2","n3"]},"layering":{"a":"${S.coll[0]||'tvoj omiljeni miris'}","a_sub":"","b":"naziv preporučenog parfema","b_sub":"kratki opis","result":"poetski opis blend-a na HR","tip":"praktičan savjet na HR"},"guidance":{"emoji":"🌊","title":"Naziv mirisne familije","text":"2 poetske rečenice na HR","dirs":[{"ico":"","name":"","sub":""},{"ico":"","name":"","sub":""},{"ico":"","name":"","sub":""}]},"recipe":{"nosi_desc":"kratki poetski opis","slozi_desc":"kratki opis layering kombinacije","istrazi_desc":"kratki smjer"}}`;
+  const systemPrompt = `Ti si SILLAGE — vrhunski AI parfemski stručnjak. Piši poetski i elegantno. Svi opisi moraju biti na HRVATSKOM, osim naziva brendova i parfema koji ostaju u originalu. Vrati ISKLJUČIVO validan JSON bez ikakvih markdowna ili objašnjenja:
+{
+  "match_score": 92,
+  "ai_insight": "2-3 poetske rečenice o njihovoj mirisnoj osobnosti",
+  "keywords": ["kw1","kw2","kw3","kw4"],
+  "profile": {
+    "intenzitet": "Umjeren 🌺",
+    "sezona": "Ljeto ☀️",
+    "prigoda": "Večernji 🌙",
+    "note": "Vanilija, Jasmin, Mošus"
+  },
+  "top": {
+    "brand": "IME BRENDA",
+    "name": "Ime Parfema",
+    "conc": "EDP",
+    "family": "Fresh Floral",
+    "price": "$$$",
+    "why": "1-2 poetske rečenice zašto ovaj miris",
+    "notes": ["nota1","nota2","nota3","nota4"]
+  },
+  "alt": {
+    "brand": "IME BRENDA",
+    "name": "Ime Parfema",
+    "conc": "EDT",
+    "family": "Floral",
+    "price": "$$",
+    "why": "kratka poetska rečenica",
+    "notes": ["nota1","nota2","nota3"]
+  },
+  "layering": {
+    "a": "${data.collection[0] || 'tvoj omiljeni miris'}",
+    "a_sub": "kratki opis",
+    "b": "naziv preporučenog parfema",
+    "b_sub": "kratki opis",
+    "result": "poetski opis blenda",
+    "tip": "praktičan savjet"
+  },
+  "guidance": {
+    "emoji": "🌊",
+    "title": "Naziv smjera",
+    "text": "2 rečenice savjeta",
+    "dirs": [
+      {"ico":"🍋","name":"Citrus Marine","sub":"Svjež & Energičan"},
+      {"ico":"🌸","name":"White Florals","sub":"Lagan & Elegantan"},
+      {"ico":"🌿","name":"Soft Woods","sub":"Topao & Utješan"}
+    ]
+  },
+  "recipe": {
+    "nosi": "kratki poetski opis za nošenje",
+    "slozi": "kratki opis layering kombinacije",
+    "istrazi": "kratki smjer za istraživanje"
+  }
+}`;
 
-  try{
-    const r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1400,system:sys,messages:[{role:'user',content:JSON.stringify(payload)}]})});
-    const data=await r.json();
-    clearInterval(S._iv);
-    const p=JSON.parse(data.content[0].text.replace(/```json|```/g,'').trim());
-    ss({res:p,pg:'results'});
-  }catch(e){
-    clearInterval(S._iv);
-    ss({res:{match_score:92,ai_insight:"Privlači te efemerna magija mediteranskih ljeta, gdje slani zrak sreće noćni jasmin. Tvoja mirisna duša čezne za opojem slatkoćom koja pleše između oceana i romanike.",scent_keywords:["mediteranske noći","ocean","jasmin","romanika"],profile:{intenzitet:"Umjeren 🌺",sezona:"Ljeto ☀️",prigoda:"Večernji 🌙",note:"Vanilija, Jasmin, Mošus"},top_match:{brand:"TOM FORD",name:"Soleil Blanc",concentration:"EDP",scent_family:"Solar Floral",price_range:"$$$$",why:"Kao tekući mjesečev sjaj na toploj koži — kremasta slatkoća kokosa omotana u jasmin i ylang-ylang.",notes:["kokos","ylang-ylang","jasmin","morska sol"]},alt_match:{brand:"ESCADA",name:"Island Kiss",concentration:"EDT",scent_family:"Fruity Floral",price_range:"$$",why:"Tvoj ulaz u primorsku slatkoću — tropski voćni buket savršen za ljetne noći.",notes:["passion fruit","kokos","frangipani"]},layering:{a:S.coll[0]||"tvoj omiljeni miris",a_sub:"svježe cvjetne note",b:"Parma Blu Mediterraneo",b_sub:"morski pojačivač",result:"Oceanski povjetarac koji se sleđe u mekanu cvjetnu vaniliju.",tip:"Prskaj morski sprej na prsa, tvoj potpis na zapešća."},guidance:{emoji:"🌊",title:"Solar Florals & Aquatic Gourmands",text:"Kreni s laganom tropskom slatkoćom, zatim evoluiraj prema sofisticiranijim morskim cvjetovima.",dirs:[{ico:"🍋",name:"Citrus Marine",sub:"Svjež & Energičan"},{ico:"🌸",name:"White Florals",sub:"Lagan & Elegantan"},{ico:"🌿",name:"Soft Woods",sub:"Topao & Utješan"}]},recipe:{nosi_desc:"Lagane, svježe note koje evociraju ljetne noći uz more",slozi_desc:"Kombinacija morskih i cvjetnih nota s vanilijom za posebne prilike",istrazi_desc:"Istražite svježi cvjetni profil s vanilla bazom"}},pg:'results'});
+  try {
+    const res = await fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1500,
+        system: systemPrompt,
+        messages: [{ role: 'user', content: JSON.stringify(data) }]
+      })
+    });
+    const json = await res.json();
+    const text = json.content[0].text.replace(/```json|```/g, '').trim();
+    clearInterval(interval);
+    setState({ result: JSON.parse(text), page: 'results' });
+  } catch (e) {
+    clearInterval(interval);
+    setState({
+      result: {
+        match_score: 92,
+        ai_insight: 'Privlači te efemerna magija mediteranskih ljeta, gdje slani zrak sreće noćni jasmin. Tvoja mirisna duša čezne za opojem slatkoćom koja pleše između oceana i zvjezdane romanike.',
+        keywords: ['mediteranske noći','ocean','jasmin','romanika'],
+        profile: { intenzitet:'Umjeren 🌺', sezona:'Ljeto ☀️', prigoda:'Večernji 🌙', note:'Vanilija, Jasmin, Mošus' },
+        top: { brand:'TOM FORD', name:'Soleil Blanc', conc:'EDP', family:'Solar Floral', price:'$$$$', why:'Kao tekući mjesečev sjaj — kremasta slatkoća kokosa omotana u jasmin i ylang-ylang s morskim povjetarcem.', notes:['kokos','ylang-ylang','jasmin','morska sol'] },
+        alt: { brand:'ESCADA', name:'Island Kiss', conc:'EDT', family:'Fruity Floral', price:'$$', why:'Tropski voćni buket savršen za ljetne noći uz more.', notes:['passion fruit','kokos','frangipani'] },
+        layering: { a: data.collection[0]||'tvoj omiljeni miris', a_sub:'svježe cvjetne note', b:'Acqua di Parma Blu Mediterraneo', b_sub:'morski pojačivač dubine', result:'Oceanski povjetarac koji se sleđe u mekanu cvjetnu vaniliju.', tip:'Prskaj morski sprej na prsa, a tvoj potpis na zapešća — neka se spoje na koži.' },
+        guidance: { emoji:'🌊', title:'Solar Florals & Aquatic Gourmands', text:'Kreni s laganom tropskom slatkoćom, zatim evoluiraj prema sofisticiranijim morskim cvjetovima koji cvatu u noći.', dirs:[{ico:'🍋',name:'Citrus Marine',sub:'Svjež & Energičan'},{ico:'🌸',name:'White Florals',sub:'Lagan & Elegantan'},{ico:'🌿',name:'Soft Woods',sub:'Topao & Utješan'}] },
+        recipe: { nosi:'Lagane, svježe note koje evociraju ljetne noći uz more', slozi:'Kombinacija morskih i cvjetnih nota s vanilijom za posebne prilike', istrazi:'Istražite svježi cvjetni profil s vanilla bazom' }
+      },
+      page: 'results'
+    });
   }
 }
 
-/* ── RESULTS ── */
-function resultsPage(){
-  const r=S.res;if(!r)return document.createElement('div');
-  const d=document.createElement('div');
-  const l=r.layering||{};const g=r.guidance||{};const p=r.profile||{};
+/* ─────────────── RESULTS ─────────────── */
+function renderResults() {
+  const r = state.result;
+  const el = document.createElement('div');
+  el.id = 'pg-results';
 
-  d.innerHTML=`
-    <div class="results-page">
-      <div class="results-inner">
-        ${hdr()}
+  const n = nav(() => goTo('landing'));
+  n.style.position = 'sticky';
+  n.style.top = '0';
+  n.style.zIndex = '10';
+  el.appendChild(n);
 
-        <div style="padding:20px 0 0">
-          <div class="ai-card">
-            <div class="ai-badge"><div class="ai-badge-dot"></div><div class="ai-badge-txt">✦ ${r.match_score||89}% Match · AI Profil</div></div>
-            <div class="ai-quote sf">"${r.ai_insight}"</div>
-            <div class="ai-bottom">
-              <div class="spills">${(r.scent_keywords||[]).map(k=>`<span class="spill">${k}</span>`).join('')}</div>
-              <div><div class="match-pct sf">${r.match_score||89}%</div><div class="match-pct-lbl">Match</div></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="ptags">
-          ${p.intenzitet?`<div class="ptag"><div class="ptag-ico">💫</div><div><div class="ptag-lbl">Intenzitet</div><div class="ptag-val">${p.intenzitet}</div></div></div>`:''}
-          ${p.sezona?`<div class="ptag"><div class="ptag-ico">☀️</div><div><div class="ptag-lbl">Sezona</div><div class="ptag-val">${p.sezona}</div></div></div>`:''}
-          ${p.prigoda?`<div class="ptag"><div class="ptag-ico">🌙</div><div><div class="ptag-lbl">Prigoda</div><div class="ptag-val">${p.prigoda}</div></div></div>`:''}
-          ${p.note?`<div class="ptag"><div class="ptag-ico">🌸</div><div><div class="ptag-lbl">Note</div><div class="ptag-val">${p.note}</div></div></div>`:''}
-        </div>
-
-        <div class="rsec" id="matches">
-          <div class="rsec-lbl">The Matches</div>
-          <div class="rsec-ttl sf">Specifične preporuke</div>
-          <div class="mcards">
-            <div class="mcard hero">
-              <div class="mcard-top dark"><span class="mbadge lt">✦ Top match</span><span class="mprice">${r.top_match.price_range}</span></div>
-              <div class="mcard-img">🧴</div>
-              <div class="mcard-body">
-                <div class="m-brand">${r.top_match.brand}</div>
-                <div class="m-name sf">${r.top_match.name}</div>
-                <div class="m-fam">${r.top_match.scent_family} · ${r.top_match.concentration}</div>
-                <div class="m-why">${r.top_match.why}</div>
-                <div class="m-notes">${(r.top_match.notes||[]).map(n=>`<span class="ntag">${n}</span>`).join('')}</div>
-              </div>
-            </div>
-            <div class="mcard">
-              <div class="mcard-top"><span class="mbadge mt">Alternativa</span><span class="mprice">${r.alt_match.price_range}</span></div>
-              <div class="mcard-img">🧴</div>
-              <div class="mcard-body">
-                <div class="m-brand">${r.alt_match.brand}</div>
-                <div class="m-name sf">${r.alt_match.name}</div>
-                <div class="m-fam">${r.alt_match.scent_family} · ${r.alt_match.concentration}</div>
-                <div class="m-why">${r.alt_match.why}</div>
-                <div class="m-notes">${(r.alt_match.notes||[]).map(n=>`<span class="ntag">${n}</span>`).join('')}</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="divider"></div>
-
-        <div class="rsec">
-          <div class="rsec-lbl">Layering Lab</div>
-          <div class="rsec-ttl sf">Umjetnost slojevitosti</div>
-          <div class="lcard">
-            <div class="ltlbl">Upsell · Nadogradnja kolekcije</div>
-            <div class="lvis">
-              <div class="lbot"><span class="lbico">🫙</span><div class="lbname">${l.a}</div><div class="lbsub">${l.a_sub||''}</div></div>
-              <div class="lop">+</div>
-              <div class="lbot" style="border-color:rgba(201,161,94,.4)"><span class="lbico">✨</span><div class="lbname">${l.b}</div><div class="lbsub">${l.b_sub||''}</div></div>
-              <div class="lop">=</div>
-              <div class="lbot" style="background:rgba(201,161,94,.08);border-color:rgba(201,161,94,.3)"><span class="lbico">🌸</span><div class="lbsub" style="color:#C9A15E;font-size:10px">Blend</div></div>
-            </div>
-            <div class="lresult">
-              <div class="lrlbl">Dobivaš</div>
-              <div class="lrtxt">"${l.result||''}"</div>
-              <div class="lrinstr">${l.tip||''}</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="divider"></div>
-
-        ${g.title?`<div class="rsec">
-          <div class="rsec-lbl">Strategic Guidance</div>
-          <div class="rsec-ttl sf">Tvoj sljedeći smjer</div>
-          <div class="gcard">
-            <div class="ltlbl">${g.emoji||''} ${g.title}</div>
-            <div class="gadv">${g.text||''}</div>
-            <div class="gdirs">${(g.dirs||[]).map(dir=>`<div class="gdir"><div class="gdir-ico">${dir.ico}</div><div class="gdir-name">${dir.name}</div><div class="gdir-sub">${dir.sub}</div></div>`).join('')}</div>
-          </div>
-        </div>`:''}
-
-        <div class="divider"></div>
-
-        <div class="recipe">
-          <div class="recipe-hdr">
-            <div class="recipe-ttl sf">✦ Tvoj Scent Recipe</div>
-            <div class="recipe-acts">
-              <button class="ract" id="shareBtn">↗ Podijeli</button>
-            </div>
-          </div>
-          <div class="recipe-cols">
-            <div class="rcol"><div class="rcol-lbl">NOSI</div><div class="rcol-val">${r.recipe?.nosi_desc||''}</div></div>
-            <div class="rcol"><div class="rcol-lbl">SLOŽI</div><div class="rcol-val">${r.recipe?.slozi_desc||''}</div></div>
-            <div class="rcol"><div class="rcol-lbl">ISTRAŽI</div><div class="rcol-val">${r.recipe?.istrazi_desc||''}</div></div>
-          </div>
-          <div class="recipe-foot">Synthesized by the collective intelligence.</div>
-        </div>
-
-        <div class="bctas">
-          <button class="btn-refine" id="rfBtn">Refine your scent ✦</button>
-          <button class="btn-explore" id="exBtn">Explore another vibe</button>
-        </div>
-
+  el.innerHTML += `
+    <!-- AI Insight -->
+    <div class="insight-card">
+      <div class="insight-badge">
+        <div class="insight-badge-dot"></div>
+        <div class="insight-badge-text">✦ ${r.match_score}% Match · AI Profil</div>
       </div>
-    </div>`;
+      <div class="insight-quote s">"${r.ai_insight}"</div>
+      <div class="insight-row">
+        <div class="insight-pills">
+          ${(r.keywords||[]).map(k=>`<span class="pill">${k}</span>`).join('')}
+        </div>
+        <div class="insight-score">
+          <span class="score-num s">${r.match_score}%</span>
+          <div class="score-label">Match</div>
+        </div>
+      </div>
+    </div>
 
-  d.querySelector('#bk').onclick=()=>{S.res=null;go('landing')};
-  d.querySelector('#rfBtn').onclick=()=>go('vibe');
-  d.querySelector('#exBtn').onclick=()=>ss({pg:'quiz',qi:0,ans:{}});
-  d.querySelector('#shareBtn').onclick=()=>{if(navigator.share)navigator.share({title:'Moj SILLAGE Scent Recipe',url:location.href});else{navigator.clipboard?.writeText(location.href);alert('Link kopiran!')}};
-  return d;
+    <!-- Profile -->
+    <div class="profile-tags">
+      <div class="profile-tag"><div class="profile-tag-ico">💫</div><div class="profile-tag-info"><div class="profile-tag-label">Intenzitet</div><div class="profile-tag-value">${r.profile?.intenzitet||''}</div></div></div>
+      <div class="profile-tag"><div class="profile-tag-ico">☀️</div><div class="profile-tag-info"><div class="profile-tag-label">Sezona</div><div class="profile-tag-value">${r.profile?.sezona||''}</div></div></div>
+      <div class="profile-tag"><div class="profile-tag-ico">🌙</div><div class="profile-tag-info"><div class="profile-tag-label">Prigoda</div><div class="profile-tag-value">${r.profile?.prigoda||''}</div></div></div>
+      <div class="profile-tag"><div class="profile-tag-ico">🌸</div><div class="profile-tag-info"><div class="profile-tag-label">Note</div><div class="profile-tag-value">${r.profile?.note||''}</div></div></div>
+    </div>
+
+    <!-- Matches -->
+    <div class="section">
+      <div class="section-label">The Matches</div>
+      <div class="section-title s">Specifične preporuke</div>
+      <div class="match-grid">
+        <div class="match-card top">
+          <div class="match-card-header dark">
+            <span class="match-badge gold">✦ Top match</span>
+            <span class="match-price">${r.top?.price||''}</span>
+          </div>
+          <div class="match-img">🧴</div>
+          <div class="match-body">
+            <div class="match-brand">${r.top?.brand||''}</div>
+            <div class="match-name s">${r.top?.name||''}</div>
+            <div class="match-family">${r.top?.family||''} · ${r.top?.conc||''}</div>
+            <div class="match-why">${r.top?.why||''}</div>
+            <div class="match-notes">${(r.top?.notes||[]).map(n=>`<span class="match-note">${n}</span>`).join('')}</div>
+          </div>
+        </div>
+        <div class="match-card">
+          <div class="match-card-header">
+            <span class="match-badge gray">Alternativa</span>
+            <span class="match-price">${r.alt?.price||''}</span>
+          </div>
+          <div class="match-img">🧴</div>
+          <div class="match-body">
+            <div class="match-brand">${r.alt?.brand||''}</div>
+            <div class="match-name s">${r.alt?.name||''}</div>
+            <div class="match-family">${r.alt?.family||''} · ${r.alt?.conc||''}</div>
+            <div class="match-why">${r.alt?.why||''}</div>
+            <div class="match-notes">${(r.alt?.notes||[]).map(n=>`<span class="match-note">${n}</span>`).join('')}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Layering -->
+    <div class="section">
+      <div class="section-label">Layering Lab</div>
+      <div class="section-title s">Umjetnost slojevitosti</div>
+      <div class="layer-card">
+        <div class="layer-label">Nadogradnja kolekcije</div>
+        <div class="layer-visual">
+          <div class="layer-bottle">
+            <span class="layer-bottle-icon">🫙</span>
+            <div class="layer-bottle-name">${r.layering?.a||''}</div>
+            <div class="layer-bottle-sub">${r.layering?.a_sub||''}</div>
+          </div>
+          <div class="layer-op">+</div>
+          <div class="layer-bottle" style="border-color:rgba(201,161,94,.4)">
+            <span class="layer-bottle-icon">✨</span>
+            <div class="layer-bottle-name">${r.layering?.b||''}</div>
+            <div class="layer-bottle-sub">${r.layering?.b_sub||''}</div>
+          </div>
+          <div class="layer-op">=</div>
+          <div class="layer-bottle" style="background:rgba(201,161,94,.08);border-color:rgba(201,161,94,.3)">
+            <span class="layer-bottle-icon">🌸</span>
+            <div class="layer-bottle-name" style="color:#C9A15E;font-size:10px">Blend</div>
+          </div>
+        </div>
+        <div class="layer-result-box">
+          <div class="layer-result-label">Dobivaš</div>
+          <div class="layer-result-text s">"${r.layering?.result||''}"</div>
+          <div class="layer-result-tip">${r.layering?.tip||''}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Guidance -->
+    <div class="section">
+      <div class="section-label">Strategic Guidance</div>
+      <div class="section-title s">Tvoj sljedeći smjer</div>
+      <div class="guidance-card">
+        <div class="guidance-title s">${r.guidance?.emoji||''} ${r.guidance?.title||''}</div>
+        <div class="guidance-text">${r.guidance?.text||''}</div>
+        <div class="guidance-dirs">
+          ${(r.guidance?.dirs||[]).map(d=>`
+            <div class="guidance-dir">
+              <div class="guidance-dir-ico">${d.ico}</div>
+              <div class="guidance-dir-name">${d.name}</div>
+              <div class="guidance-dir-sub">${d.sub}</div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Recipe -->
+    <div class="recipe-card">
+      <div class="recipe-header">
+        <div class="recipe-title s">✦ Tvoj Scent Recipe</div>
+        <button class="recipe-share" id="share-btn">↗ Podijeli</button>
+      </div>
+      <div class="recipe-cols">
+        <div class="recipe-col">
+          <div class="recipe-col-label">Nosi</div>
+          <div class="recipe-col-text">${r.recipe?.nosi||''}</div>
+        </div>
+        <div class="recipe-col">
+          <div class="recipe-col-label">Složi</div>
+          <div class="recipe-col-text">${r.recipe?.slozi||''}</div>
+        </div>
+        <div class="recipe-col">
+          <div class="recipe-col-label">Istraži</div>
+          <div class="recipe-col-text">${r.recipe?.istrazi||''}</div>
+        </div>
+      </div>
+      <div class="recipe-footer">Synthesized by the collective intelligence.</div>
+    </div>
+
+    <!-- CTAs -->
+    <div class="results-ctas">
+      <button class="cta-refine" id="refine-btn">Refine your scent ✦</button>
+      <button class="cta-explore" id="explore-btn">Explore another vibe</button>
+    </div>
+  `;
+
+  el.querySelector('#share-btn').onclick = () => {
+    if (navigator.share) navigator.share({ title: 'Moj SILLAGE Scent Recipe', url: location.href });
+    else { navigator.clipboard?.writeText(location.href); alert('Link kopiran!'); }
+  };
+  el.querySelector('#refine-btn').onclick = () => goTo('vibe');
+  el.querySelector('#explore-btn').onclick = () => setState({ page: 'quiz', quizStep: 0, answers: {} });
+  return el;
 }
 
-/* ── RENDER ── */
-function render(){
-  const app=document.getElementById('app');if(!app)return;
-  app.innerHTML='';
-  const fns={landing:landingPage,shelf:shelfPage,notes:notesPage,vibe:vibePage,quiz:quizPage,loading:loadingPage,results:resultsPage};
-  const fn=fns[S.pg];
-  if(fn)app.appendChild(fn());
+/* ─────────────── RENDER ─────────────── */
+function render() {
+  const app = document.getElementById('app');
+  app.innerHTML = '';
+  const pages = {
+    landing: renderLanding,
+    shelf: renderShelf,
+    notes: renderNotes,
+    vibe: renderVibe,
+    quiz: renderQuiz,
+    loading: renderLoading,
+    results: renderResults
+  };
+  const fn = pages[state.page];
+  if (fn) app.appendChild(fn());
 }
+
 render();
 </script>
 </body>
