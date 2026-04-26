@@ -3,240 +3,277 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>SILLAGE — AI Perfume Expert</title>
-<meta name="description" content="Your scent, decoded. AI-crafted fragrance profile.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<title>SILLAGE | AI Perfume Expert</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-font-smoothing:antialiased}
 :root{
-  --nude:#F5E6DA;--gold:#D4AF37;--gold-lt:#E8D5B0;--gold-pale:#F5ECD8;
-  --charcoal:#2C2C2C;--dark:#16100A;--white:#FEFAF6;
-  --muted:#9B8E82;--border:#E2CEB4;--border-gold:rgba(212,175,55,0.35);
-  --card:rgba(255,255,255,0.55);--glass:rgba(255,251,247,0.65);
-  --bg:#F5E6DA;
+  --nude:#F5E6DA;--nude2:#EDD9C4;--nude3:#E4CBB0;
+  --gold:#D4AF37;--gold2:rgba(212,175,55,0.3);--gold3:#E8D5B0;
+  --charcoal:#2C2C2C;--dark:#1a1208;--white:#fff;
+  --glass:rgba(255,255,255,0.45);--glass-border:rgba(212,175,55,0.3);
+  --muted:#8C7E74;--border:#E0CDB8;--text2:#6B5E54;
 }
-html,body{min-height:100%;font-family:'Inter',sans-serif;color:var(--charcoal)}
-body{background:var(--bg);transition:background 1.5s ease}
-body.scent-marine{--bg:#e4edf3}
-body.scent-floral{--bg:#f5e6ee}
-body.scent-woody{--bg:#ede0d0}
-body.scent-warm{--bg:#f5e2c8}
-.serif{font-family:'Playfair Display',Georgia,serif}
-#app{max-width:430px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;padding-bottom:60px}
+html,body{min-height:100%;font-family:'Inter',sans-serif;color:var(--charcoal);background:var(--nude)}
+.sf{font-family:'Playfair Display',serif}
+#app{max-width:430px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;padding-bottom:40px}
 
-/* ── LANDING ── */
-.landing{min-height:100vh;display:flex;flex-direction:column;justify-content:space-between;background:radial-gradient(ellipse at top,#FFFFFF 0%,#F5E6DA 60%,#EDD9C4 100%);padding:0}
-.land-top{padding:52px 32px 0;text-align:center}
-.land-logo-txt{font-family:'Playfair Display',serif;font-size:28px;font-weight:400;letter-spacing:.15em;color:var(--charcoal);display:block;margin-bottom:6px}
-.land-logo-tag{font-size:9px;letter-spacing:5px;color:#B8866A;text-transform:uppercase}
-.land-mid{flex:1;display:flex;align-items:center;justify-content:center;padding:20px 0}
-.land-bottle-wrap{position:relative;width:180px;height:220px}
-.land-bottle-wrap::before{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(212,175,55,.12) 0%,transparent 70%)}
-.land-s-line{width:1px;height:80px;background:linear-gradient(to bottom,transparent,var(--gold),transparent);margin:0 auto}
-.land-bottle-svg{width:120px;height:160px;margin:0 auto;display:block}
-.land-body{padding:0 32px 52px;text-align:center}
+/* ════ LANDING ════ */
+.land{position:relative;min-height:100vh;display:flex;flex-direction:column}
+
+/* Photo zone — top 58% of screen */
+.land-photo{position:relative;height:58vh;overflow:hidden;flex-shrink:0}
+.land-photo-bg{position:absolute;inset:0;background:url('./landing-bg.jpg') center top/cover no-repeat}
+/* Soft bottom fade on photo */
+.land-photo-fade{position:absolute;bottom:0;left:0;right:0;height:50%;background:linear-gradient(to bottom,rgba(245,230,218,0) 0%,rgba(245,230,218,0.7) 70%,var(--nude) 100%)}
+
+/* Logo — top of photo */
+.land-logo-zone{position:absolute;top:0;left:0;right:0;z-index:2;padding:36px 0 0;text-align:center}
+.land-logo{font-family:'Playfair Display',serif;font-size:24px;font-weight:400;letter-spacing:.18em;color:var(--charcoal);display:block}
+.land-logo-sub{font-size:9px;letter-spacing:5px;color:#B0785A;text-transform:uppercase;margin-top:4px;display:block}
+
+/* Content zone — bottom */
+.land-content{flex:1;background:var(--nude);padding:8px 32px 52px;display:flex;flex-direction:column;align-items:center;text-align:center}
 .land-headline{font-family:'Playfair Display',serif;font-size:34px;font-weight:400;line-height:1.2;color:var(--charcoal);margin-bottom:10px}
-.land-headline em{font-style:italic;color:#8B5E3C}
-.land-rule{width:24px;height:1px;background:var(--gold);margin:16px auto;opacity:.9}
-.land-sub{font-size:13px;color:#6B5E54;line-height:1.7;margin-bottom:36px;max-width:250px;margin-left:auto;margin-right:auto}
-.btn-cta{display:inline-flex;align-items:center;gap:10px;background:var(--charcoal);color:var(--white);border:none;padding:18px 44px;font-family:'Playfair Display',serif;font-size:14px;letter-spacing:2px;cursor:pointer;border-radius:60px;position:relative;overflow:hidden;transition:all .4s;box-shadow:0 0 0 1px rgba(212,175,55,.3),0 8px 32px rgba(16,10,4,.2);-webkit-tap-highlight-color:transparent}
-.btn-cta::after{content:'';position:absolute;top:-50%;left:-70%;width:35%;height:200%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.12),transparent);transform:skewX(-20deg);animation:shine 3.5s infinite}
+.land-headline em{font-style:italic;color:#8B5E3C;display:block}
+.land-line{width:22px;height:1px;background:var(--gold);margin:14px auto;opacity:.9}
+.land-sub{font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:32px;max-width:240px}
+.btn-land{display:inline-flex;align-items:center;gap:10px;background:var(--charcoal);color:var(--white);border:none;padding:17px 42px;font-family:'Playfair Display',serif;font-size:14px;letter-spacing:2px;cursor:pointer;border-radius:60px;position:relative;overflow:hidden;transition:all .3s;box-shadow:0 0 0 1px rgba(212,175,55,.25),0 6px 28px rgba(26,18,8,.22);-webkit-tap-highlight-color:transparent}
+.btn-land::after{content:'';position:absolute;top:-50%;left:-70%;width:35%;height:200%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.1),transparent);transform:skewX(-20deg);animation:shine 3.5s infinite}
 @keyframes shine{0%{left:-70%}100%{left:130%}}
-.btn-cta:hover{background:var(--dark);transform:translateY(-2px)}
-.btn-cta:active{transform:scale(.98)}
-.btn-spark{animation:sparkle 2s ease-in-out infinite;font-size:13px}
-@keyframes sparkle{0%,100%{opacity:.4;transform:scale(1)}50%{opacity:1;transform:scale(1.3)}}
-.land-lang{font-size:10px;color:rgba(80,65,55,.4);margin-top:18px;letter-spacing:4px}
+.btn-land:active{transform:scale(.98)}
+.btn-spark{animation:sp 2s ease-in-out infinite;font-size:12px}
+@keyframes sp{0%,100%{opacity:.4;transform:scale(1)}50%{opacity:1;transform:scale(1.3)}}
+.land-lang{font-size:10px;color:rgba(80,65,55,.4);margin-top:16px;letter-spacing:4px}
 
-/* ── HEADER ── */
-.hdr{padding:18px 24px 0;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:rgba(245,230,218,.93);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);z-index:30}
-.hdr-logo{font-family:'Playfair Display',serif;font-size:15px;letter-spacing:5px;color:var(--charcoal)}
+/* ════ HEADER ════ */
+.hdr{padding:16px 22px 0;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:rgba(245,230,218,.95);backdrop-filter:blur(14px);z-index:30}
+.hdr-logo{font-family:'Playfair Display',serif;font-size:14px;letter-spacing:5px;color:var(--charcoal)}
 .hdr-back{background:none;border:none;color:var(--muted);cursor:pointer;font-size:12px;display:flex;align-items:center;gap:5px;padding:4px;font-family:'Inter',sans-serif;-webkit-tap-highlight-color:transparent}
 
-/* ── PROGRESS ── */
-.prog{padding:14px 24px 0}
-.prog-lbl{font-size:10px;color:var(--muted);letter-spacing:2.5px;text-transform:uppercase;margin-bottom:9px}
+/* ════ PROGRESS ════ */
+.prog{padding:14px 22px 0}
+.prog-txt{font-size:10px;color:var(--muted);letter-spacing:2.5px;text-transform:uppercase;margin-bottom:8px}
 .prog-bar{height:1px;background:var(--border);overflow:hidden}
-.prog-fill{height:100%;background:linear-gradient(90deg,var(--gold),#E8C87A);transition:width .6s ease}
-.prog-dots{display:flex;gap:7px;margin-top:9px}
-.dot{width:5px;height:5px;border-radius:50%;background:var(--border);transition:all .3s}
-.dot.on{background:var(--gold);transform:scale(1.4)}
-.dot.done{background:var(--gold-lt)}
+.prog-fill{height:100%;background:var(--gold);transition:width .5s ease}
+.prog-dots{display:flex;gap:7px;margin-top:8px}
+.pdot{width:5px;height:5px;border-radius:50%;background:var(--border);transition:all .3s}
+.pdot.on{background:var(--gold);transform:scale(1.4)}
+.pdot.done{background:var(--gold3)}
 
-/* ── QUIZ ── */
-.qbody{padding:28px 24px 0}
+/* ════ QUIZ ════ */
+.qbody{padding:26px 22px 0}
 .qlbl{font-size:10px;color:var(--gold);letter-spacing:4px;text-transform:uppercase;margin-bottom:16px}
-.qq{font-family:'Playfair Display',serif;font-size:24px;font-weight:400;line-height:1.3;margin-bottom:7px}
-.qsub{font-size:13px;color:var(--muted);margin-bottom:28px}
-.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:28px}
-.opt{background:rgba(255,255,255,.6);border:1.5px solid var(--border);border-radius:14px;padding:18px 14px;cursor:pointer;transition:all .22s;display:flex;flex-direction:column;gap:7px;backdrop-filter:blur(8px);-webkit-tap-highlight-color:transparent}
+.qtitle{font-family:'Playfair Display',serif;font-size:24px;font-weight:400;line-height:1.3;margin-bottom:6px}
+.qsub{font-size:13px;color:var(--muted);margin-bottom:24px}
+
+/* 2x2 grid */
+.opts-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:24px}
+/* 4-column row for occasions */
+.opts-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:24px}
+
+.opt{background:rgba(255,255,255,.75);border:1.5px solid var(--border);border-radius:14px;padding:18px 14px 16px;cursor:pointer;transition:all .2s;display:flex;flex-direction:column;gap:7px;-webkit-tap-highlight-color:transparent}
 .opt:hover{border-color:var(--gold);transform:translateY(-2px)}
-.opt.sel{border-color:var(--gold);background:rgba(212,175,55,.1);box-shadow:0 0 0 1px var(--gold)}
-.opt-ico{font-size:22px}
+.opt.sel{border-color:var(--gold);background:rgba(212,175,55,.08);box-shadow:0 0 0 1px var(--gold)}
+/* Compact opts for 4-col layout */
+.opt.sm{padding:14px 8px 12px;border-radius:12px;text-align:center;align-items:center}
+.opt-ico{font-size:22px;line-height:1}
 .opt-lbl{font-family:'Playfair Display',serif;font-size:15px;color:var(--charcoal)}
 .opt-dsc{font-size:11px;color:var(--muted);line-height:1.4}
-.btn-nxt{width:100%;background:var(--charcoal);color:var(--white);border:none;padding:16px;font-family:'Playfair Display',serif;font-size:14px;letter-spacing:2px;cursor:pointer;border-radius:4px;transition:all .3s;-webkit-tap-highlight-color:transparent}
-.btn-nxt:hover:not(:disabled){background:var(--dark)}
-.btn-nxt:disabled{opacity:.28;cursor:not-allowed}
+/* Small opt labels */
+.opt.sm .opt-lbl{font-size:12px}
+.opt.sm .opt-dsc{font-size:10px}
 
-/* ── VIBE ── */
-.vbody{padding:28px 24px}
+.btn-next{width:100%;background:var(--charcoal);color:var(--white);border:none;padding:16px;font-family:'Playfair Display',serif;font-size:14px;letter-spacing:2px;cursor:pointer;border-radius:4px;transition:all .3s;-webkit-tap-highlight-color:transparent}
+.btn-next:hover:not(:disabled){background:var(--dark)}
+.btn-next:disabled{opacity:.28;cursor:not-allowed}
+
+/* ════ SILK BACKGROUND for quiz/vibe/notes ════ */
+/* Subtle pink silk texture from landing-bg used at very low opacity */
+.silk-bg{position:fixed;inset:0;background:url('./landing-bg.jpg') center/cover no-repeat;opacity:.06;pointer-events:none;z-index:-1}
+
+/* ════ VIBE BOX ════ */
+.vbody{padding:26px 22px}
 .slbl{font-size:10px;color:var(--gold);letter-spacing:4px;text-transform:uppercase;margin-bottom:14px}
 .stitle{font-family:'Playfair Display',serif;font-size:24px;font-weight:400;line-height:1.3;margin-bottom:8px}
 .sdesc{font-size:13px;color:var(--muted);margin-bottom:22px;line-height:1.6}
-.vtxt{width:100%;min-height:136px;background:rgba(255,255,255,.7);border:1.5px solid var(--border);border-radius:14px;padding:16px;font-family:'Inter',sans-serif;font-size:14px;color:var(--charcoal);resize:none;line-height:1.75;outline:none;transition:border .2s;-webkit-appearance:none}
+.vtxt{width:100%;min-height:130px;background:rgba(255,255,255,.8);border:1.5px solid var(--border);border-radius:14px;padding:16px;font-family:'Inter',sans-serif;font-size:14px;color:var(--charcoal);resize:none;line-height:1.75;outline:none;transition:border .2s;-webkit-appearance:none}
 .vtxt:focus{border-color:var(--gold)}
 .vtxt::placeholder{color:var(--muted);font-style:italic}
-.vctr{text-align:right;font-size:11px;color:var(--muted);margin-top:6px;margin-bottom:20px}
+.vctr{text-align:right;font-size:11px;color:var(--muted);margin-top:6px;margin-bottom:18px}
 .hlbl{font-size:10px;color:var(--muted);margin-bottom:10px;letter-spacing:2px;text-transform:uppercase}
-.hints{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
-.hchip{background:rgba(212,175,55,.1);border:1px solid var(--gold-lt);border-radius:20px;padding:6px 14px;font-size:12px;color:var(--charcoal);cursor:pointer;transition:all .2s;-webkit-tap-highlight-color:transparent}
-.hchip:hover{background:rgba(212,175,55,.22)}
+.hints{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:26px}
+.hchip{background:rgba(212,175,55,.1);border:1px solid rgba(212,175,55,.3);border-radius:20px;padding:6px 14px;font-size:12px;color:var(--charcoal);cursor:pointer;transition:all .2s;-webkit-tap-highlight-color:transparent}
+.hchip:hover,.hchip:active{background:rgba(212,175,55,.22)}
 
-/* ── NOTES ── */
-.nbody{padding:28px 24px}
-.ngrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
-.nchip{background:rgba(255,255,255,.6);border:1.5px solid var(--border);border-radius:12px;padding:14px 8px;cursor:pointer;transition:all .2s;text-align:center;backdrop-filter:blur(6px);-webkit-tap-highlight-color:transparent}
+/* ════ NOTES ════ */
+.nbody{padding:26px 22px}
+/* 4 columns like mockup */
+.ngrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
+.nchip{background:rgba(255,255,255,.75);border:1.5px solid var(--border);border-radius:12px;padding:12px 6px;cursor:pointer;transition:all .2s;text-align:center;-webkit-tap-highlight-color:transparent}
 .nchip:hover{border-color:var(--gold);transform:translateY(-1px)}
-.nchip.sel{border-color:var(--gold);background:rgba(212,175,55,.12)}
+.nchip.sel{border-color:var(--gold);background:rgba(212,175,55,.1)}
 .nchip.hide{display:none}
-.nchip-ico{font-size:20px;margin-bottom:6px}
-.nchip-lbl{font-size:11px;color:var(--charcoal)}
-.btn-more{width:100%;background:transparent;border:1px solid var(--border);color:var(--muted);padding:12px;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:8px;margin-bottom:16px;transition:all .2s;font-family:'Inter',sans-serif}
+.nchip-ico{font-size:18px;margin-bottom:5px}
+.nchip-lbl{font-size:10px;color:var(--charcoal)}
+.btn-more{width:100%;background:transparent;border:1px solid var(--border);color:var(--muted);padding:12px;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:8px;margin-bottom:14px;font-family:'Inter',sans-serif;transition:all .2s}
 .btn-more:hover{border-color:var(--gold);color:var(--charcoal)}
 .btn-skip{width:100%;margin-top:10px;background:transparent;border:1px solid var(--border);color:var(--muted);padding:13px;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:8px;font-family:'Inter',sans-serif;transition:all .2s}
 .btn-skip:hover{border-color:var(--gold);color:var(--charcoal)}
 
-/* ── COLLECTION ── */
-.cbody{padding:28px 24px}
-.cwrap{display:flex;gap:16px;align-items:flex-start}
+/* ════ COLLECTION ════ */
+.cbody{padding:26px 22px}
+.cwrap{display:flex;gap:14px}
 .cleft{flex:1}
-.cright{width:80px;flex-shrink:0;display:flex;align-items:center;justify-content:center;padding-top:8px}
-.cbottle{width:70px;height:90px;opacity:.25}
-.cinrow{display:flex;gap:10px;margin-bottom:16px}
-.cin{flex:1;background:rgba(255,255,255,.7);border:1.5px solid var(--border);border-radius:10px;padding:13px 16px;font-family:'Inter',sans-serif;font-size:14px;color:var(--charcoal);outline:none;transition:border .2s;-webkit-appearance:none}
+.cright{width:72px;flex-shrink:0;display:flex;align-items:flex-start;padding-top:4px}
+.cinwrap{display:flex;gap:8px;margin-bottom:14px}
+.cin{flex:1;background:rgba(255,255,255,.8);border:1.5px solid var(--border);border-radius:10px;padding:12px 14px;font-family:'Inter',sans-serif;font-size:14px;color:var(--charcoal);outline:none;transition:border .2s;-webkit-appearance:none}
 .cin:focus{border-color:var(--gold)}
-.cadd{background:var(--charcoal);color:var(--white);border:none;padding:0 18px;border-radius:10px;cursor:pointer;font-size:22px;height:48px;-webkit-tap-highlight-color:transparent}
-.clist{display:flex;flex-direction:column;gap:8px;margin-bottom:24px;min-height:44px}
-.citem{background:rgba(255,255,255,.6);border:1px solid var(--border);border-radius:8px;padding:11px 14px;display:flex;align-items:center;justify-content:space-between;font-size:13px}
-.crem{background:none;border:none;color:var(--muted);cursor:pointer;font-size:15px;padding:4px;-webkit-tap-highlight-color:transparent}
+.cadd{background:var(--charcoal);color:var(--white);border:none;width:44px;border-radius:10px;cursor:pointer;font-size:20px;-webkit-tap-highlight-color:transparent;flex-shrink:0}
+.clist{display:flex;flex-direction:column;gap:8px;margin-bottom:22px;min-height:44px}
+.citem{background:rgba(255,255,255,.7);border:1px solid var(--border);border-radius:8px;padding:11px 14px;display:flex;align-items:center;justify-content:space-between;font-size:13px}
+.crem{background:none;border:none;color:var(--muted);cursor:pointer;font-size:14px;padding:4px;-webkit-tap-highlight-color:transparent}
 .cempty{font-size:13px;color:var(--muted);font-style:italic;padding:8px 0}
+/* SVG bottle for collection screen */
+.cbottle-svg{width:60px;height:80px;opacity:.3}
 
-/* ── LOADING ── */
-.lscreen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:40px 24px;text-align:center;background:var(--bg)}
-.llogo{font-family:'Playfair Display',serif;font-size:28px;letter-spacing:8px;color:var(--charcoal);margin-bottom:6px}
-.lsub{font-size:10px;letter-spacing:5px;color:var(--gold);text-transform:uppercase;margin-bottom:60px}
-.lanim{position:relative;width:72px;height:72px;margin-bottom:40px}
+/* ════ LOADING ════ */
+.lscreen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:40px 24px;text-align:center;background:radial-gradient(ellipse at top,#fff 0%,var(--nude) 60%)}
+.llogo{font-family:'Playfair Display',serif;font-size:32px;letter-spacing:.15em;color:var(--charcoal);margin-bottom:8px}
+.lsub{font-size:9px;letter-spacing:5px;color:var(--gold);text-transform:uppercase;margin-bottom:60px}
+.lanim{position:relative;width:68px;height:68px;margin-bottom:40px}
 .ring{position:absolute;inset:0;border-radius:50%;border:1px solid transparent;animation:spin 2s linear infinite}
 .r1{border-top-color:var(--gold)}
-.r2{border-right-color:var(--gold-lt);animation-duration:3s;inset:8px}
-.r3{border-bottom-color:rgba(212,175,55,.3);animation-duration:4.5s;inset:16px}
-.rdot{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:6px;height:6px;border-radius:50%;background:var(--gold)}
+.r2{border-right-color:var(--gold3);animation-duration:3s;inset:8px}
+.r3{border-bottom-color:rgba(212,175,55,.25);animation-duration:4.5s;inset:16px}
+.rdot{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:5px;height:5px;border-radius:50%;background:var(--gold)}
 @keyframes spin{to{transform:rotate(360deg)}}
-.lmsg{font-family:'Playfair Display',serif;font-size:17px;font-style:italic;color:var(--charcoal);opacity:.7;min-height:26px}
+.lmsg{font-family:'Playfair Display',serif;font-size:17px;font-style:italic;color:var(--charcoal);opacity:.65;min-height:26px}
 
-/* ── RESULTS ── */
-.rpage{padding-bottom:80px}
+/* ════ RESULTS ════ */
+.rpage{background:var(--nude);padding-bottom:80px}
 
 /* AI Insight Card */
-.ai-card{margin:28px 20px 0;background:rgba(255,255,255,.75);border:1px solid var(--border-gold);border-radius:20px;padding:22px 20px;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 4px 32px rgba(212,175,55,.08),inset 0 1px 0 rgba(255,255,255,.8)}
-.ai-card-top{display:flex;align-items:flex-start;gap:12px;margin-bottom:16px}
-.ai-ico{width:34px;height:34px;border-radius:50%;background:rgba(212,175,55,.12);border:1px solid var(--border-gold);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
-.ai-lbl{font-size:9px;color:var(--gold);letter-spacing:3px;text-transform:uppercase;margin-bottom:4px}
-.ai-quote{font-family:'Playfair Display',serif;font-size:15px;font-style:italic;line-height:1.75;color:var(--charcoal)}
-.ai-card-bottom{display:flex;align-items:center;justify-content:space-between;gap:12px}
-.scent-pills{display:flex;gap:7px;flex-wrap:wrap;flex:1}
-.spill{background:rgba(212,175,55,.1);border:1px solid rgba(212,175,55,.3);border-radius:20px;padding:4px 12px;font-size:10px;color:var(--charcoal);letter-spacing:.5px;animation:pilin .5s ease forwards;opacity:0;transform:translateY(5px)}
+.ai-wrap{padding:20px 18px 0}
+.ai-card{background:rgba(255,255,255,.75);border:1px solid rgba(212,175,55,.25);border-radius:18px;padding:20px 18px;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 4px 24px rgba(212,175,55,.07),inset 0 1px 0 rgba(255,255,255,.8)}
+.ai-top{display:flex;gap:12px;margin-bottom:16px}
+.ai-badge{display:inline-flex;align-items:center;gap:7px;background:rgba(212,175,55,.1);border:1px solid rgba(212,175,55,.3);border-radius:20px;padding:5px 14px;margin-bottom:12px;width:fit-content}
+.ai-badge-dot{width:5px;height:5px;border-radius:50%;background:var(--gold);animation:sp 2s ease infinite}
+.ai-badge-txt{font-size:10px;color:var(--gold);letter-spacing:2px;text-transform:uppercase}
+.ai-ico-wrap{width:36px;height:36px;border-radius:50%;background:rgba(212,175,55,.12);border:1px solid rgba(212,175,55,.3);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;margin-top:2px}
+.ai-content{}
+.ai-label{font-size:9px;color:var(--gold);letter-spacing:3px;text-transform:uppercase;margin-bottom:6px}
+.ai-quote{font-family:'Playfair Display',serif;font-size:15px;font-style:italic;line-height:1.8;color:var(--charcoal)}
+.ai-bottom{display:flex;align-items:flex-end;justify-content:space-between;gap:10px;margin-top:14px}
+.spills{display:flex;gap:7px;flex-wrap:wrap;flex:1}
+.spill{background:rgba(212,175,55,.1);border:1px solid rgba(212,175,55,.3);border-radius:20px;padding:4px 12px;font-size:10px;color:var(--charcoal);animation:pilin .5s ease forwards;opacity:0;transform:translateY(5px)}
 @keyframes pilin{to{opacity:1;transform:translateY(0)}}
-.match-score{text-align:right;flex-shrink:0}
-.score-num{font-family:'Playfair Display',serif;font-size:28px;font-weight:400;color:var(--charcoal);line-height:1;display:block}
+.ai-score{text-align:right;flex-shrink:0}
+.score-pct{font-family:'Playfair Display',serif;font-size:30px;font-weight:400;color:var(--charcoal);line-height:1;display:block}
 .score-lbl{font-size:9px;color:var(--muted);letter-spacing:2px;text-transform:uppercase}
-.btn-view{width:100%;margin-top:16px;background:transparent;border:1.5px solid var(--charcoal);color:var(--charcoal);padding:12px;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:4px;font-family:'Inter',sans-serif;transition:all .2s}
-.btn-view:hover{background:var(--charcoal);color:var(--white)}
+.btn-analysis{width:100%;margin-top:14px;background:var(--charcoal);color:var(--white);border:none;padding:13px;font-family:'Playfair Display',serif;font-size:13px;letter-spacing:1.5px;cursor:pointer;border-radius:4px;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px}
 
-/* Profile summary sidebar-style */
-.profile-row{margin:0 20px;display:flex;gap:8px;margin-top:10px}
-.profile-tag{background:rgba(255,255,255,.6);border:1px solid var(--border);border-radius:8px;padding:8px 12px;font-size:11px;color:var(--charcoal);display:flex;align-items:center;gap:6px;flex:1;justify-content:center}
-.profile-tag-ico{font-size:14px}
+/* Profile summary */
+.profile-summary{padding:12px 18px 0;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.ptag{background:rgba(255,255,255,.65);border:1px solid var(--border);border-radius:10px;padding:10px 12px;display:flex;align-items:center;gap:8px}
+.ptag-ico{font-size:14px;flex-shrink:0}
+.ptag-info{}
+.ptag-label{font-size:9px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:2px}
+.ptag-val{font-size:12px;color:var(--charcoal);font-weight:500}
 
-/* Section headers */
-.rsec{padding:28px 20px 0}
+/* Section */
+.rsec{padding:24px 18px 0}
 .rsec-lbl{font-size:10px;color:var(--gold);letter-spacing:4px;text-transform:uppercase;margin-bottom:5px}
-.rsec-ttl{font-family:'Playfair Display',serif;font-size:22px;font-weight:400;color:var(--charcoal);margin-bottom:18px}
-.rsec-actions{font-size:11px;color:var(--muted);letter-spacing:1px;cursor:pointer;float:right;margin-top:4px;text-decoration:underline}
+.rsec-row{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:16px}
+.rsec-ttl{font-family:'Playfair Display',serif;font-size:22px;font-weight:400;color:var(--charcoal)}
+.rsec-link{font-size:11px;color:var(--muted);letter-spacing:.5px;cursor:pointer;text-decoration:underline}
 
-/* Match cards */
-.matches-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.mcard{background:rgba(255,255,255,.7);border:1.5px solid var(--border);border-radius:16px;overflow:hidden;transition:transform .3s,box-shadow .3s;backdrop-filter:blur(8px)}
-.mcard:hover{transform:translateY(-3px);box-shadow:0 12px 36px rgba(44,28,12,.1)}
-.mcard.hero{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold),0 6px 32px rgba(212,175,55,.12)}
-.mcard-badge{padding:8px 12px;display:flex;align-items:center;justify-content:space-between}
-.mcard-badge.dark{background:var(--charcoal)}
-.mbadge{font-size:9px;letter-spacing:1.5px;text-transform:uppercase}
-.mbadge.lt{color:var(--gold-lt)}
-.mbadge.mt{color:var(--muted)}
+/* Match cards - 2 column */
+.mcards{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.mcard{background:rgba(255,255,255,.75);border:1.5px solid var(--border);border-radius:16px;overflow:hidden;transition:transform .3s,box-shadow .3s}
+.mcard:hover{transform:translateY(-3px);box-shadow:0 10px 30px rgba(44,28,12,.08)}
+.mcard.top{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold),0 4px 24px rgba(212,175,55,.12)}
+.mbadge-bar{padding:9px 12px;display:flex;align-items:center;justify-content:space-between}
+.mbadge-bar.dk{background:var(--charcoal)}
+.mbadge-txt{font-size:9px;letter-spacing:1.5px;text-transform:uppercase}
+.mbadge-txt.lt{color:var(--gold3)}
+.mbadge-txt.mt{color:var(--muted)}
 .mprice{font-size:10px;color:var(--gold);letter-spacing:1.5px}
-.mcard-img{height:100px;display:flex;align-items:center;justify-content:center;overflow:hidden;background:linear-gradient(135deg,rgba(212,175,55,.06),rgba(245,230,218,.4))}
-.mcard-bottle{width:56px;height:80px;opacity:.7}
-.mcard-body{padding:14px 14px 16px}
-.m-brand{font-size:9px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:3px}
-.m-name{font-family:'Playfair Display',serif;font-size:17px;font-weight:400;color:var(--charcoal);margin-bottom:3px;line-height:1.2}
-.m-fam{font-size:10px;color:var(--gold);margin-bottom:10px}
-.m-why{font-size:11px;color:var(--muted);line-height:1.65;margin-bottom:10px;font-style:italic;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
-.m-notes{display:flex;gap:5px;flex-wrap:wrap}
-.ntag{background:rgba(212,175,55,.08);border:1px solid var(--gold-lt);border-radius:20px;padding:3px 9px;font-size:9px;color:var(--charcoal)}
+/* Bottle image zone */
+.mimg{height:90px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,rgba(212,175,55,.06),rgba(245,230,218,.35))}
+.mbody{padding:13px 13px 15px}
+.mbrand{font-size:9px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:3px}
+.mname{font-family:'Playfair Display',serif;font-size:17px;font-weight:400;color:var(--charcoal);margin-bottom:3px;line-height:1.2}
+.mfam{font-size:10px;color:var(--gold);margin-bottom:10px}
+.mwhy{font-size:11px;color:var(--muted);line-height:1.65;margin-bottom:10px;font-style:italic;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.mnotes{display:flex;gap:5px;flex-wrap:wrap}
+.ntag{background:rgba(212,175,55,.08);border:1px solid rgba(212,175,55,.3);border-radius:20px;padding:3px 9px;font-size:9px;color:var(--charcoal)}
 
 /* Layering Lab */
-.layer-card{background:rgba(255,255,255,.7);border:1.5px solid var(--border);border-radius:16px;padding:20px 18px;margin-bottom:12px;backdrop-filter:blur(8px)}
-.ltlbl{font-size:10px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:16px}
-.layer-visual{display:flex;align-items:center;gap:8px;margin-bottom:18px}
-.lbottle{flex:1;background:linear-gradient(135deg,rgba(212,175,55,.07),rgba(245,230,218,.3));border:1px solid var(--gold-lt);border-radius:12px;padding:14px 8px;text-align:center}
-.lbico{font-size:22px;display:block;margin-bottom:6px}
-.lname{font-size:11px;color:var(--charcoal);line-height:1.4;font-weight:500}
-.lsub{font-size:10px;color:var(--muted);margin-top:2px}
-.lop{font-size:20px;color:var(--gold);flex-shrink:0;font-weight:300}
-.layer-result{background:rgba(212,175,55,.06);border:1px solid rgba(212,175,55,.2);border-radius:10px;padding:14px}
-.lr-lbl{font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:6px}
-.lr-txt{font-family:'Playfair Display',serif;font-size:14px;font-style:italic;color:var(--charcoal);line-height:1.75;margin-bottom:8px}
-.lr-instr{font-size:11px;color:var(--muted);line-height:1.6}
+.lcard{background:rgba(255,255,255,.75);border:1.5px solid var(--border);border-radius:16px;padding:18px 16px;margin-bottom:12px}
+.ltop{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.ltlbl{font-size:10px;letter-spacing:3px;color:var(--gold);text-transform:uppercase}
+.lai-badge{background:rgba(212,175,55,.12);border:1px solid rgba(212,175,55,.3);border-radius:10px;padding:3px 10px;font-size:9px;color:var(--gold);letter-spacing:1px}
+.lvisual{display:flex;align-items:flex-end;gap:6px;margin-bottom:16px}
+.lbottle{flex:1;background:linear-gradient(135deg,rgba(212,175,55,.07),rgba(245,230,218,.3));border:1px solid rgba(212,175,55,.25);border-radius:12px;padding:14px 8px;text-align:center}
+.lbico{font-size:20px;display:block;margin-bottom:6px}
+.lbname{font-size:11px;color:var(--charcoal);font-weight:500;line-height:1.4}
+.lbsub{font-size:10px;color:var(--muted);margin-top:2px}
+.lop{font-size:18px;color:var(--gold);flex-shrink:0;padding:0 2px;line-height:1;padding-bottom:16px}
+.lresult-zone{background:rgba(212,175,55,.05);border:1px solid rgba(212,175,55,.15);border-radius:10px;padding:14px}
+.lrlbl{font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:6px}
+.lrtxt{font-family:'Playfair Display',serif;font-size:14px;font-style:italic;color:var(--charcoal);line-height:1.75;margin-bottom:8px}
+.lrinstr{font-size:11px;color:var(--muted);line-height:1.65}
+.btn-layering{display:inline-flex;align-items:center;gap:6px;margin-top:12px;background:transparent;border:1px solid var(--border);color:var(--charcoal);padding:8px 16px;font-size:11px;letter-spacing:1px;cursor:pointer;border-radius:4px;font-family:'Inter',sans-serif;transition:all .2s}
+.btn-layering:hover{border-color:var(--gold)}
 
 /* Strategic Guidance */
-.guidance-card{background:rgba(255,255,255,.7);border:1.5px solid var(--border);border-radius:16px;padding:20px 18px;margin-bottom:12px}
-.guidance-top{display:flex;gap:14px;align-items:flex-start;margin-bottom:14px}
-.guidance-img{width:64px;height:64px;border-radius:12px;background:linear-gradient(135deg,#d4eaf5,#c8d8e8);flex-shrink:0;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:28px}
-.guidance-txt{}
-.guidance-fam{font-family:'Playfair Display',serif;font-size:18px;color:var(--charcoal);margin-bottom:4px}
-.guidance-adv{font-size:12px;color:var(--muted);line-height:1.65;font-style:italic}
-.guidance-dirs{display:flex;gap:8px;margin-top:14px}
-.gdir{flex:1;background:rgba(212,175,55,.07);border:1px solid var(--gold-lt);border-radius:10px;padding:12px 8px;text-align:center}
+.gcard{background:rgba(255,255,255,.75);border:1.5px solid var(--border);border-radius:16px;padding:18px 16px;margin-bottom:12px}
+.gtop{display:flex;gap:14px;margin-bottom:14px}
+.gimg{width:64px;height:64px;border-radius:12px;overflow:hidden;flex-shrink:0;background:linear-gradient(135deg,#c8d8e4,#a8c4d4);display:flex;align-items:center;justify-content:center;font-size:26px}
+.gtext{}
+.gfam{font-family:'Playfair Display',serif;font-size:18px;font-weight:400;color:var(--charcoal);margin-bottom:4px;line-height:1.3}
+.gadv{font-size:12px;color:var(--muted);line-height:1.65;font-style:italic}
+.gbtn{display:inline-flex;align-items:center;gap:6px;margin-top:10px;background:transparent;border:1px solid var(--border);color:var(--charcoal);padding:7px 14px;font-size:11px;letter-spacing:1px;cursor:pointer;border-radius:4px;font-family:'Inter',sans-serif;transition:all .2s}
+.gbtn:hover{border-color:var(--gold)}
+.gdirs{display:flex;gap:8px;margin-top:14px}
+.gdir{flex:1;background:rgba(212,175,55,.06);border:1px solid rgba(212,175,55,.2);border-radius:10px;padding:12px 8px;text-align:center}
 .gdir-ico{font-size:20px;margin-bottom:6px}
 .gdir-name{font-size:11px;color:var(--charcoal);font-weight:500;margin-bottom:2px}
 .gdir-sub{font-size:10px;color:var(--muted)}
 
 /* Scent Recipe */
-.recipe{background:var(--charcoal);border-radius:18px;padding:24px 22px;margin:28px 20px 0;position:relative;overflow:hidden}
-.recipe::before{content:'';position:absolute;top:-50px;right:-50px;width:150px;height:150px;border-radius:50%;background:radial-gradient(circle,rgba(212,175,55,.12) 0%,transparent 70%);pointer-events:none}
+.recipe{background:#1a1208;border-radius:18px;padding:22px 20px;margin:24px 18px 0;position:relative;overflow:hidden}
+.recipe::before{content:'';position:absolute;top:-60px;right:-60px;width:160px;height:160px;border-radius:50%;background:radial-gradient(circle,rgba(212,175,55,.1) 0%,transparent 70%);pointer-events:none}
+.recipe::after{content:'';position:absolute;bottom:-40px;left:-40px;width:100px;height:100px;border-radius:50%;background:radial-gradient(circle,rgba(212,175,55,.07) 0%,transparent 70%);pointer-events:none}
 .recipe-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
-.recipe-ttl{font-family:'Playfair Display',serif;font-size:16px;color:var(--gold-lt);letter-spacing:2px}
-.recipe-acts-top{display:flex;gap:10px}
-.ract-sm{background:transparent;border:none;color:rgba(255,255,255,.45);cursor:pointer;font-size:11px;letter-spacing:1px;display:flex;align-items:center;gap:4px;font-family:'Inter',sans-serif;-webkit-tap-highlight-color:transparent}
-.ract-sm:hover{color:rgba(255,255,255,.8)}
-.recipe-cols{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
-.rcol{border-right:1px solid rgba(255,255,255,.08);padding-right:14px}
-.rcol:last-child{border-right:none;padding-right:0}
-.rcol-ico{width:30px;height:30px;border-radius:50%;background:rgba(212,175,55,.12);border:1px solid rgba(212,175,55,.25);display:flex;align-items:center;justify-content:center;font-size:13px;margin-bottom:8px}
+.recipe-ttl{font-family:'Playfair Display',serif;font-size:16px;color:var(--gold3);letter-spacing:2px}
+.recipe-top-acts{display:flex;gap:12px}
+.ract-sm{background:transparent;border:none;color:rgba(255,255,255,.4);cursor:pointer;font-size:11px;letter-spacing:1px;font-family:'Inter',sans-serif;display:flex;align-items:center;gap:4px;padding:0;transition:color .2s;-webkit-tap-highlight-color:transparent}
+.ract-sm:hover{color:rgba(255,255,255,.75)}
+.recipe-cols{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0}
+.rcol{padding:0 14px 0 0;border-right:1px solid rgba(255,255,255,.07)}
+.rcol:last-child{border-right:none;padding-right:0;padding-left:14px}
+.rcol:nth-child(2){padding:0 14px}
+.rcol-ico{width:28px;height:28px;border-radius:50%;background:rgba(212,175,55,.12);border:1px solid rgba(212,175,55,.22);display:flex;align-items:center;justify-content:center;font-size:12px;margin-bottom:8px}
 .rcol-lbl{font-size:8px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:5px}
-.rcol-val{font-family:'Playfair Display',serif;font-size:12px;color:rgba(255,255,255,.85);line-height:1.55;font-style:italic}
-.recipe-footer{margin-top:16px;padding-top:14px;border-top:1px solid rgba(255,255,255,.07);text-align:center;font-size:10px;color:rgba(255,255,255,.3);letter-spacing:1.5px}
+.rcol-val{font-family:'Playfair Display',serif;font-size:11px;color:rgba(255,255,255,.82);line-height:1.55;font-style:italic}
+.recipe-foot{margin-top:18px;padding-top:14px;border-top:1px solid rgba(255,255,255,.07);font-size:9px;color:rgba(255,255,255,.25);letter-spacing:2px;text-align:center}
 
-/* Bottom CTAs */
-.bctas{padding:24px 20px 0;display:flex;gap:10px}
-.btn-refine{flex:1;background:var(--charcoal);color:var(--white);border:none;padding:16px;font-family:'Playfair Display',serif;font-size:13px;letter-spacing:1.5px;cursor:pointer;border-radius:4px;transition:all .3s;-webkit-tap-highlight-color:transparent}
-.btn-explore{flex:1;background:transparent;border:1.5px solid var(--border);color:var(--charcoal);padding:16px;font-size:12px;letter-spacing:1.5px;cursor:pointer;border-radius:4px;transition:all .3s;font-family:'Inter',sans-serif;-webkit-tap-highlight-color:transparent}
+/* Discover more */
+.discover-txt{text-align:center;font-size:12px;color:var(--muted);margin:20px 0 12px;letter-spacing:.5px}
+.bctas{padding:0 18px;display:flex;gap:10px}
+.btn-refine{flex:1;background:var(--charcoal);color:var(--white);border:none;padding:16px;font-family:'Playfair Display',serif;font-size:13px;letter-spacing:1.5px;cursor:pointer;border-radius:4px;transition:all .3s;-webkit-tap-highlight-color:transparent;display:flex;align-items:center;justify-content:center;gap:6px}
+.btn-refine:hover{background:var(--dark)}
+.btn-explore{flex:1;background:transparent;border:1.5px solid var(--border);color:var(--charcoal);padding:16px;font-size:12px;letter-spacing:1px;cursor:pointer;border-radius:4px;transition:all .3s;font-family:'Inter',sans-serif;-webkit-tap-highlight-color:transparent}
 .btn-explore:hover{border-color:var(--gold)}
-.divln{height:1px;background:var(--border);margin:28px 20px 0}
+.divln{height:1px;background:var(--border);margin:24px 18px 0}
+
+/* Dynamic bg color */
+body.scent-marine{background:linear-gradient(180deg,#e8eff5 0%,#ddeaf3 100%)}
+body.scent-floral{background:linear-gradient(180deg,#f7e8ee 0%,#f0d8e4 100%)}
+body.scent-woody{background:linear-gradient(180deg,#ede0d0 0%,#e0ccb8 100%)}
+body.scent-warm{background:linear-gradient(180deg,#f5e0c4 0%,#eecba0 100%)}
 
 ::-webkit-scrollbar{width:3px}
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
@@ -257,40 +294,33 @@ const NOTES=[
   {id:'incense',l:'Tamjan',i:'🕯️'},{id:'coconut',l:'Kokos',i:'🥥'}
 ];
 const QUIZ=[
-  {id:'family',q:'Koji mirisi ti se najviše odgovaraju?',sub:'Odaberi jedan smjer',t:'s',opts:[
+  {id:'family',q:'Koji mirisi ti se najviše odgovaraju?',sub:'Odaberi jedan smjer',t:'s',layout:'grid',opts:[
     {v:'sweet',l:'Slatko',i:'🍯',d:'Vanilija, karamel, mošus'},
     {v:'fresh',l:'Svježe',i:'🌿',d:'Citrus, aqua, zeleno'},
     {v:'woody',l:'Drvenasto',i:'🪵',d:'Sandalovina, cedar, pačuli'},
     {v:'spicy',l:'Začinjeno',i:'🌶️',d:'Oud, crni papar, kardamom'}
   ]},
-  {id:'season',q:'Koje godišnje doba opisuje tvoj idealni miris?',sub:'Svako doba nosi svoju energiju',t:'s',opts:[
+  {id:'season',q:'Koje godišnje doba opisuje tvoj idealni miris?',sub:'Svako doba nosi svoju energiju',t:'s',layout:'grid',opts:[
     {v:'spring',l:'Proljeće',i:'🌸',d:'Cvjetno, svježe, nježno'},
     {v:'summer',l:'Ljeto',i:'☀️',d:'Morsko, lagano, citrus'},
     {v:'autumn',l:'Jesen',i:'🍂',d:'Toplo, začinjeno, amber'},
     {v:'winter',l:'Zima',i:'❄️',d:'Duboko, kožno, dimno'}
   ]},
-  {id:'occasion',q:'Kada ga nosiš?',sub:'Možeš odabrati više',t:'m',opts:[
-    {v:'daily',l:'Svakodnevno',i:'☕',d:'Casual, lagan, svjež'},
-    {v:'evening',l:'Večernji',i:'🌙',d:'Taman, bogat, intrigantan'},
-    {v:'work',l:'Posao',i:'💼',d:'Profesionalan, nenametljiv'},
-    {v:'special',l:'Posebne prilike',i:'✨',d:'Upečatljiv, nezaboravan'}
+  {id:'occasion',q:'Kada ga nosiš?',sub:'Možeš odabrati više',t:'m',layout:'row',opts:[
+    {v:'daily',l:'Svakodnevno',i:'☕',d:'Casual, lagan'},
+    {v:'evening',l:'Večernji',i:'🌙',d:'Taman, bogat'},
+    {v:'work',l:'Posao',i:'💼',d:'Profesionalan'},
+    {v:'special',l:'Posebne prilike',i:'✨',d:'Upečatljiv'}
   ]},
-  {id:'intensity',q:'Koji intenzitet preferiraš?',sub:'Koliko daleko ide tvoj sillage?',t:'s',opts:[
+  {id:'intensity',q:'Koji intenzitet preferiraš?',sub:'Koliko daleko ide tvoj sillage?',t:'s',layout:'grid',opts:[
     {v:'light',l:'Nježan',i:'🪷',d:'Blizak, intiman'},
     {v:'medium',l:'Umjeren',i:'🌺',d:'Prisutan, ugodan'},
     {v:'strong',l:'Jak',i:'💥',d:'Upečatljiv, dalekosežan'},
-    {v:'varies',l:'Ovisi',i:'🎭',d:'Prilagodljiv, kontekstualan'}
+    {v:'varies',l:'Ovisi',i:'🎭',d:'Prilagodljiv'}
   ]}
 ];
 const HINTS=["Kiša na toplom asfaltu","Stara biblioteka i koža","Jutarnja kava i drvo","Ljetna noć na moru","Cvijeće nakon grmljavine"];
-
-// Bottle SVG for cards
-const BOTTLE_SVG=`<svg viewBox="0 0 56 80" fill="none" xmlns="http://www.w3.org/2000/svg" class="mcard-bottle">
-  <rect x="16" y="28" width="24" height="44" rx="5" fill="#D4AF37" fill-opacity="0.15" stroke="#D4AF37" stroke-width="1"/>
-  <rect x="20" y="18" width="16" height="13" rx="3" fill="#D4AF37" fill-opacity="0.18" stroke="#D4AF37" stroke-width="1"/>
-  <rect x="22" y="13" width="12" height="8" rx="2" fill="#D4AF37" stroke="#D4AF37" stroke-width="1"/>
-  <text x="28" y="57" text-anchor="middle" font-family="Playfair Display,serif" font-size="10" fill="#D4AF37" opacity="0.8">S</text>
-</svg>`;
+const BOTTLE=`<svg viewBox="0 0 56 80" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:44px;height:64px;opacity:.6"><rect x="12" y="26" width="32" height="48" rx="5" fill="#D4AF37" fill-opacity=".12" stroke="#D4AF37" stroke-width="1"/><rect x="16" y="16" width="24" height="13" rx="3" fill="#D4AF37" fill-opacity=".15" stroke="#D4AF37" stroke-width="1"/><rect x="18" y="9" width="20" height="9" rx="2.5" fill="#D4AF37" stroke="#D4AF37" stroke-width="1"/><text x="28" y="55" text-anchor="middle" font-family="Playfair Display,serif" font-size="11" fill="#D4AF37" opacity=".8">S</text></svg>`;
 
 let S={sc:'landing',qi:0,ans:{},vibe:'',notes:[],notesX:false,coll:[],cin:'',res:null,lmsg:'',_iv:null};
 const ss=p=>{Object.assign(S,p);render()};
@@ -311,37 +341,23 @@ function render(){
   if(fn)app.appendChild(fn());
 }
 
-/* LANDING */
+/* ── LANDING ── */
 function landing(){
-  const d=document.createElement('div');d.className='landing';
+  const d=document.createElement('div');d.className='land';
   d.innerHTML=`
-    <div class="land-top">
-      <span class="land-logo-txt serif">SILLAGE</span>
-      <span class="land-logo-tag">AI Perfume Expert</span>
-    </div>
-    <div class="land-mid">
-      <div class="land-bottle-wrap">
-        <div class="land-s-line"></div>
-        <svg class="land-bottle-svg" viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect x="32" y="60" width="56" height="88" rx="8" fill="#D4AF37" fill-opacity="0.12" stroke="#D4AF37" stroke-width="1.5"/>
-          <rect x="40" y="40" width="40" height="24" rx="5" fill="#D4AF37" fill-opacity="0.15" stroke="#D4AF37" stroke-width="1.5"/>
-          <rect x="44" y="28" width="32" height="16" rx="4" fill="#D4AF37" fill-opacity="0.2" stroke="#D4AF37" stroke-width="1.5"/>
-          <rect x="48" y="20" width="24" height="12" rx="3" fill="#D4AF37" stroke="#D4AF37" stroke-width="1.5"/>
-          <text x="60" y="112" text-anchor="middle" font-family="Playfair Display,serif" font-size="22" fill="#D4AF37" fill-opacity="0.85">S</text>
-          <path d="M88 72 Q102 66 99 54 Q96 42 106 36" stroke="#D4AF37" stroke-width="1" fill="none" stroke-linecap="round" opacity="0.4"/>
-          <path d="M91 82 Q107 74 104 60" stroke="#D4AF37" stroke-width=".8" fill="none" stroke-linecap="round" opacity="0.25"/>
-          <circle cx="108" cy="34" r="2" fill="#D4AF37" opacity="0.3"/>
-          <circle cx="104" cy="28" r="1.2" fill="#D4AF37" opacity="0.2"/>
-          <ellipse cx="60" cy="152" rx="28" ry="4" fill="#D4AF37" fill-opacity="0.08"/>
-        </svg>
-        <div class="land-s-line"></div>
+    <div class="land-photo">
+      <div class="land-photo-bg"></div>
+      <div class="land-photo-fade"></div>
+      <div class="land-logo-zone">
+        <span class="land-logo sf">SILLAGE</span>
+        <span class="land-logo-sub">AI Perfume Expert</span>
       </div>
     </div>
-    <div class="land-body">
-      <h1 class="land-headline serif">Your scent,<br><em>decoded.</em></h1>
-      <div class="land-rule"></div>
+    <div class="land-content">
+      <h1 class="land-headline sf">Your scent,<br><em>decoded.</em></h1>
+      <div class="land-line"></div>
       <p class="land-sub">AI-crafted fragrance profile tailored to your emotions, memories and desires.</p>
-      <button class="btn-cta" id="s0">Saznaj svoj recept <span class="btn-spark">✦</span></button>
+      <button class="btn-land" id="s0">Saznaj svoj recept <span class="btn-spark">✦</span></button>
       <div class="land-lang">HR | EN</div>
     </div>
   `;
@@ -349,24 +365,35 @@ function landing(){
   return d;
 }
 
-/* QUIZ */
+/* ── QUIZ ── */
 function quiz(){
   const step=QUIZ[S.qi],ans=S.ans[step.id],isMul=step.t==='m';
   const ok=isMul?(ans&&ans.length>0):!!ans;
+  const isRow=step.layout==='row';
   const d=document.createElement('div');
   d.innerHTML=`
-    <div class="hdr"><button class="hdr-back" id="bk">← Natrag</button><div class="hdr-logo serif">SILLAGE</div></div>
+    <div class="silk-bg"></div>
+    <div class="hdr"><button class="hdr-back" id="bk">← Natrag</button><div class="hdr-logo sf">SILLAGE</div></div>
     <div class="prog">
-      <div class="prog-lbl">Korak ${S.qi+1} od ${QUIZ.length}</div>
+      <div class="prog-txt">Korak ${S.qi+1} od ${QUIZ.length}</div>
       <div class="prog-bar"><div class="prog-fill" style="width:${((S.qi+1)/QUIZ.length)*100}%"></div></div>
-      <div class="prog-dots">${QUIZ.map((_,i)=>`<div class="dot${i<S.qi?' done':i===S.qi?' on':''}"></div>`).join('')}</div>
+      <div class="prog-dots">${QUIZ.map((_,i)=>`<div class="pdot${i<S.qi?' done':i===S.qi?' on':''}"></div>`).join('')}</div>
     </div>
     <div class="qbody">
       <div class="qlbl">Korak ${S.qi+1}</div>
-      <div class="qq serif">${step.q}</div>
+      <div class="qtitle sf">${step.q}</div>
       <div class="qsub">${step.sub}</div>
-      <div class="opts">${step.opts.map(o=>{const s=isMul?(ans&&ans.includes(o.v)):(ans===o.v);return`<div class="opt${s?' sel':''}" data-v="${o.v}"><div class="opt-ico">${o.i}</div><div class="opt-lbl serif">${o.l}</div><div class="opt-dsc">${o.d}</div></div>`}).join('')}</div>
-      <button class="btn-nxt" id="nx" ${ok?'':'disabled'}>Dalje →</button>
+      <div class="${isRow?'opts-row':'opts-grid'}">
+        ${step.opts.map(o=>{
+          const sel=isMul?(ans&&ans.includes(o.v)):(ans===o.v);
+          return`<div class="opt${isRow?' sm':''}${sel?' sel':''}" data-v="${o.v}">
+            <div class="opt-ico">${o.i}</div>
+            <div class="opt-lbl sf">${o.l}</div>
+            <div class="opt-dsc">${o.d}</div>
+          </div>`;
+        }).join('')}
+      </div>
+      <button class="btn-next" id="nx" ${ok?'':'disabled'}>Dalje →</button>
     </div>
   `;
   d.querySelectorAll('.opt').forEach(c=>{c.onclick=()=>{const v=c.dataset.v;if(isMul){const cur=S.ans[step.id]||[];ss({ans:{...S.ans,[step.id]:cur.includes(v)?cur.filter(x=>x!==v):[...cur,v]}})}else ss({ans:{...S.ans,[step.id]:v}})}});
@@ -375,20 +402,21 @@ function quiz(){
   return d;
 }
 
-/* VIBE */
+/* ── VIBE ── */
 function vibe(){
   const d=document.createElement('div');
   d.innerHTML=`
-    <div class="hdr"><button class="hdr-back" id="bk">← Natrag</button><div class="hdr-logo serif">SILLAGE</div></div>
+    <div class="silk-bg"></div>
+    <div class="hdr"><button class="hdr-back" id="bk">← Natrag</button><div class="hdr-logo sf">SILLAGE</div></div>
     <div class="vbody">
       <div class="slbl">The Vibe Box</div>
-      <div class="stitle serif">Opiši svoj vibe</div>
+      <div class="stitle sf">Opiši svoj vibe</div>
       <div class="sdesc">Napiši što želiš da tvoj idealni miris opisuje, osjeća se, podsjeća na...</div>
       <textarea class="vtxt" id="vt" maxlength="300" placeholder='"Tražim nešto što miriše na staru knjižnicu i kišu, ali da ima malo citrusa."'>${S.vibe}</textarea>
       <div class="vctr" id="vc">${S.vibe.length}/300</div>
       <div class="hlbl">Inspiracija</div>
       <div class="hints">${HINTS.map(h=>`<div class="hchip" data-h="${h}">${h}</div>`).join('')}</div>
-      <button class="btn-nxt" id="nx">Dalje →</button>
+      <button class="btn-next" id="nx">Dalje →</button>
     </div>
   `;
   const ta=d.querySelector('#vt'),vc=d.querySelector('#vc');
@@ -399,19 +427,22 @@ function vibe(){
   return d;
 }
 
-/* NOTES */
+/* ── NOTES ── */
 function notes(){
   const sel=S.notes,sx=S.notesX;
   const d=document.createElement('div');
   d.innerHTML=`
-    <div class="hdr"><button class="hdr-back" id="bk">← Natrag</button><div class="hdr-logo serif">SILLAGE</div></div>
+    <div class="silk-bg"></div>
+    <div class="hdr"><button class="hdr-back" id="bk">← Natrag</button><div class="hdr-logo sf">SILLAGE</div></div>
     <div class="nbody">
       <div class="slbl">Note Picker</div>
-      <div class="stitle serif">Odaberi note koje te privlače</div>
+      <div class="stitle sf">Odaberi note koje te privlače</div>
       <div class="sdesc">Možeš odabrati više — ili preskočiti.</div>
-      <div class="ngrid">${NOTES.map((n,i)=>`<div class="nchip${sel.includes(n.id)?' sel':''}${(!sx&&i>=12)?' hide':''}" data-id="${n.id}"><div class="nchip-ico">${n.i}</div><div class="nchip-lbl">${n.l}</div></div>`).join('')}</div>
+      <div class="ngrid">
+        ${NOTES.map((n,i)=>`<div class="nchip${sel.includes(n.id)?' sel':''}${(!sx&&i>=12)?' hide':''}" data-id="${n.id}"><div class="nchip-ico">${n.i}</div><div class="nchip-lbl">${n.l}</div></div>`).join('')}
+      </div>
       ${!sx?`<button class="btn-more" id="sm">+ Prikaži sve note (${NOTES.length-12} više)</button>`:''}
-      <button class="btn-nxt" id="nx">Dalje →</button>
+      <button class="btn-next" id="nx">Dalje →</button>
       <button class="btn-skip" id="sk">Preskoči</button>
     </div>
   `;
@@ -423,33 +454,35 @@ function notes(){
   return d;
 }
 
-/* COLLECTION */
+/* ── COLLECTION ── */
 function collection(){
   const d=document.createElement('div');
   d.innerHTML=`
-    <div class="hdr"><button class="hdr-back" id="bk">← Natrag</button><div class="hdr-logo serif">SILLAGE</div></div>
+    <div class="hdr"><button class="hdr-back" id="bk">← Natrag</button><div class="hdr-logo sf">SILLAGE</div></div>
     <div class="cbody">
       <div class="slbl">Digitalna Polica</div>
-      <div class="stitle serif">Što već imaš?</div>
+      <div class="stitle sf">Što već imaš?</div>
       <div class="sdesc">Dodaj parfeme koje posjeduješ — AI će maksimizirati tvoju kolekciju kroz layering.</div>
       <div class="cwrap">
         <div class="cleft">
-          <div class="cinrow">
+          <div class="cinwrap">
             <input class="cin" id="ci" placeholder='npr. "Dior Sauvage EDT"' value="${S.cin||''}">
             <button class="cadd" id="ca">+</button>
           </div>
-          <div class="clist">${S.coll.length===0?'<div class="cempty">Još nisi dodao/la ništa.</div>':S.coll.map((x,i)=>`<div class="citem"><span>🫙 ${x}</span><button class="crem" data-i="${i}">✕</button></div>`).join('')}</div>
+          <div class="clist">
+            ${S.coll.length===0?'<div class="cempty">Još nisi dodao/la ništa.</div>':S.coll.map((x,i)=>`<div class="citem"><span>🫙 ${x}</span><button class="crem" data-i="${i}">✕</button></div>`).join('')}
+          </div>
         </div>
         <div class="cright">
-          <svg class="cbottle" viewBox="0 0 70 90" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect x="18" y="32" width="34" height="50" rx="6" fill="#D4AF37" fill-opacity="0.15" stroke="#D4AF37" stroke-width="1.5"/>
-            <rect x="22" y="20" width="26" height="15" rx="4" fill="#D4AF37" fill-opacity="0.18" stroke="#D4AF37" stroke-width="1.5"/>
-            <rect x="25" y="12" width="20" height="11" rx="3" fill="#D4AF37" stroke="#D4AF37" stroke-width="1.5"/>
-            <text x="35" y="62" text-anchor="middle" font-family="Playfair Display,serif" font-size="16" fill="#D4AF37" opacity="0.7">S</text>
+          <svg class="cbottle-svg" viewBox="0 0 60 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="14" y="28" width="32" height="46" rx="6" fill="#D4AF37" fill-opacity=".12" stroke="#D4AF37" stroke-width="1.5"/>
+            <rect x="18" y="17" width="24" height="14" rx="4" fill="#D4AF37" fill-opacity=".15" stroke="#D4AF37" stroke-width="1.5"/>
+            <rect x="20" y="9" width="20" height="10" rx="3" fill="#D4AF37" stroke="#D4AF37" stroke-width="1.5"/>
+            <text x="30" y="56" text-anchor="middle" font-family="Playfair Display,serif" font-size="14" fill="#D4AF37" opacity=".75">S</text>
           </svg>
         </div>
       </div>
-      <button class="btn-nxt" id="an">Analiziraj moj profil ✦</button>
+      <button class="btn-next" id="an">Analiziraj moj profil ✦</button>
       <button class="btn-skip" id="sk">Preskoči i analiziraj</button>
     </div>
   `;
@@ -465,14 +498,19 @@ function collection(){
   return d;
 }
 
-/* LOADING */
+/* ── LOADING ── */
 function loading(){
   const d=document.createElement('div');d.className='lscreen';
-  d.innerHTML=`<div class="llogo serif">SILLAGE</div><div class="lsub">Crafting your scent profile</div><div class="lanim"><div class="ring r1"></div><div class="ring r2"></div><div class="ring r3"></div><div class="rdot"></div></div><div class="lmsg serif" id="lm">${S.lmsg||'Analiziram tvoj mirisni profil...'}</div>`;
+  d.innerHTML=`
+    <div class="llogo sf">SILLAGE</div>
+    <div class="lsub">Crafting your scent profile</div>
+    <div class="lanim"><div class="ring r1"></div><div class="ring r2"></div><div class="ring r3"></div><div class="rdot"></div></div>
+    <div class="lmsg sf" id="lm">${S.lmsg||'Analiziram tvoj mirisni profil...'}</div>
+  `;
   return d;
 }
 
-/* ANALYZE */
+/* ── ANALYZE ── */
 async function analyze(){
   const msgs=['Analiziram tvoj mirisni profil...','Pronalazim savršene kombinacije...','Gradim tvoj Scent Recipe...','Još trenutak...'];
   let mi=0;
@@ -483,8 +521,8 @@ async function analyze(){
   const sd={user_context:{collection:S.coll,vibe_description:S.vibe||'not provided',preferences:{intensity:S.ans.intensity,preferred_notes:S.notes,season:S.ans.season,family:S.ans.family,occasion:S.ans.occasion}}};
   const h2=S.coll.length>=2;
 
-  const sys=`You are SILLAGE — a world-class luxury AI perfume expert. Write with the sensibility of a master perfumer and the voice of a luxury brand. Return ONLY valid JSON, no markdown:
-{"match_score":92,"ai_insight":"2-3 poetic sentences about their scent personality — write like Vogue, evocative and personal","scent_keywords":["keyword1","keyword2","keyword3","keyword4","keyword5"],"profile_summary":{"intensity":"${S.ans.intensity||'medium'}","season":"${S.ans.season||'summer'}","occasion":"${(S.ans.occasion||['evening']).join(', ')}","top_notes":"2-3 dominant note families they prefer"},"recommendations":{"top_match":{"brand":"","name":"","concentration":"","scent_family":"","price_range":"$/$$/$$$/$$$$","reasoning":"1-2 evocative sentences like a perfumer","key_notes":["n1","n2","n3","n4"]},"second_match":{"brand":"","name":"","concentration":"","scent_family":"","price_range":"","reasoning":"1-2 evocative sentences","key_notes":["n1","n2","n3"]}},"layering_lab":{"internal":${h2?`{"a":"${S.coll[0]}","b":"${S.coll[1]}","a_sub":"","b_sub":"","result":"poetic blend description opening with X settling into Y","instruction":"practical steps"}`:'null'},"upsell":{"existing":"${S.coll[0]||'your signature scent'}","add":"Brand Name","add_sub":"brief descriptor","result":"poetic blend description","instruction":"practical tip"}},"strategic_guidance":{"family":"Family Name","headline":"catchy direction headline","advice":"2 evocative sentences","emoji":"🌊","directions":[{"name":"","sub":"","emoji":""},{"name":"","sub":"","emoji":""},{"name":"","sub":"","emoji":""}]},"final_recipe":{"nosi":"","nosi_desc":"short poetic description","slozi":"","slozi_desc":"short poetic description","istrazi":"","istrazi_desc":"short direction"}}`;
+  const sys=`You are SILLAGE — a world-class luxury AI perfume expert with the voice of a master perfumer. Return ONLY valid JSON, no markdown:
+{"match_score":92,"ai_insight":"2-3 poetic sentences about their scent personality — write like Vogue, evocative and personal","scent_keywords":["keyword1","keyword2","keyword3","keyword4","keyword5"],"profile":{"intensity_label":"","season_label":"","occasion_label":"","notes_label":""},"top_match":{"brand":"","name":"","concentration":"","scent_family":"","price_range":"$/$$/$$$/$$$$","reasoning":"1-2 evocative sentences like a perfumer","key_notes":["n1","n2","n3","n4"]},"second_match":{"brand":"","name":"","concentration":"","scent_family":"","price_range":"","reasoning":"evocative","key_notes":["n1","n2","n3"]},"layering":{"internal":${h2?`{"a":"${S.coll[0]}","a_sub":"","b":"${S.coll[1]}","b_sub":"","result":"poetic: opens with X, settles into Y","instruction":"practical steps"}`:'null'},"upsell":{"a":"${S.coll[0]||'your signature style'}","a_sub":"","b":"Brand Name","b_sub":"short descriptor","result":"poetic blend description","instruction":"practical tip"}},"guidance":{"emoji":"🌊","headline":"Family Name","text":"2 evocative sentences","directions":[{"name":"","sub":"","emoji":""},{"name":"","sub":"","emoji":""},{"name":"","sub":"","emoji":""}]},"recipe":{"nosi":"","nosi_desc":"short poetic","slozi":"","slozi_desc":"short poetic","istrazi":"","istrazi_desc":"short direction"}}`;
 
   try{
     const r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1400,system:sys,messages:[{role:'user',content:JSON.stringify(sd)}]})});
@@ -496,83 +534,73 @@ async function analyze(){
     ss({res:p,sc:'results'});
   }catch(e){
     clearInterval(S._iv);
-    const fb={match_score:92,ai_insight:"You are drawn to the ephemeral magic of Mediterranean summers, where salt-kissed skin meets jasmine-heavy night air. Your fragrance soul craves the intoxicating sweetness that dances between ocean breeze and moonlit romance — a siren call to summer's most precious moments.",scent_keywords:["mediterranean nights","ocean breeze","jasmine intoxication","summer romance","seaside"],profile_summary:{intensity:"medium",season:"summer",occasion:"evening, special",top_notes:"Floral, Marine, Vanilla"},recommendations:{top_match:{brand:"Dolce & Gabbana",name:"Light Blue Forever",concentration:"EDP",scent_family:"Fresh Floral",price_range:"$$$",reasoning:"Like liquid moonlight on warm skin, this captures your vision perfectly — coconut milk sweetness wrapped in ylang-ylang and jasmine, with that crucial marine breeze that whispers of Adriatic summers.",key_notes:["coconut","ylang-ylang","jasmine","sea salt"]},second_match:{brand:"Escada",name:"Island Kiss",concentration:"EDT",scent_family:"Fruity Floral",price_range:"$$",reasoning:"Your gateway to that seaside sweetness — tropical passion fruit and coconut create the perfect summer night reverie.",key_notes:["passion fruit","coconut","frangipani"]}},layering_lab:{internal:h2?{a:S.coll[0],b:S.coll[1],a_sub:"your signature",b_sub:"depth booster",result:"Opens with pure oceanic freshness, then your sweet florals bloom like night-blooming jasmine against driftwood and sand.",instruction:"Spray first on chest as base, wait 60 seconds, add 1 spray of second on pulse points."}:null,upsell:{existing:S.coll[0]||"sweet summer romance",add:"Maison Margiela Beach Walk",add_sub:"marine depth booster",result:"Opens with pure oceanic freshness, then your sweet florals bloom like night-blooming jasmine against driftwood and sand.",instruction:"Spray Beach Walk on chest, your signature on wrists — let them meet on skin."}},strategic_guidance:{family:"Solar Florals & Aquatic Gourmands",headline:"Fresh Floral with Vanilla Base",advice:"Begin with lighter tropical sweetness, then evolve toward more sophisticated marine florals — your next chapter should embrace white flowers kissed by sea spray.",emoji:"🌊",directions:[{name:"Citrus Marine",sub:"Fresh & Energizing",emoji:"🍋"},{name:"White Florals",sub:"Light & Elegant",emoji:"🌸"},{name:"Soft Woods",sub:"Warm & Comforting",emoji:"🪵"}]},final_recipe:{nosi:"Light Blue Forever",nosi_desc:"Lagane, svježe note koje evociraju ljetne noći uz more",slozi:"Light Blue + Maison Margiela Beach Walk",slozi_desc:"Kombinacija morskih i cvjetnih nota s vanilijom za posebne prilike",istrazi:"Solar Florals & Aquatic Gourmands",istrazi_desc:"Istražite svježi cvjetni profil s vanilla bazom"}};
+    const fb={match_score:92,ai_insight:"You are drawn to the ephemeral magic of Mediterranean summers, where salt-kissed skin meets jasmine-heavy night air. Your fragrance soul craves the intoxicating sweetness that dances between ocean breeze and moonlit romance — a siren call to summer's most precious moments.",scent_keywords:["mediterranean nights","ocean breeze","jasmine intoxication","summer romance","seaside"],profile:{intensity_label:"Umjeren",season_label:"Ljeto",occasion_label:"Večernji",notes_label:"Vanilija, Jasmin, Mošus, Amber"},top_match:{brand:"Dolce & Gabbana",name:"Light Blue Forever",concentration:"EDP",scent_family:"Fresh Floral",price_range:"$$$",reasoning:"Like liquid moonlight on warm skin — coconut milk sweetness wrapped in ylang-ylang and jasmine, with a marine breeze that whispers of Adriatic summers.",key_notes:["coconut","ylang-ylang","jasmine","sea salt"]},second_match:{brand:"Marc Jacobs",name:"Daisy Love Eau So Sweet",concentration:"EDT",scent_family:"Fruity Floral",price_range:"$$",reasoning:"Your gateway to seaside sweetness — passion fruit and coconut create the perfect summer night reverie.",key_notes:["cloudberry","jasmine","vanilla","driftwood"]},layering:{internal:h2?{a:S.coll[0],a_sub:"Fresh floral vanilla preference",b:S.coll[1],b_sub:"Marine depth booster",result:"Ocean breeze opening that settles into your signature floral vanilla.",instruction:"Spray first on chest as base, add 1 spray of second on wrists."}:null,upsell:{a:S.coll[0]||"sweet summer romance",a_sub:"Fresh floral vanilla preference",b:"Parma Blu Mediterraneo",b_sub:"Marine depth booster",result:"Ocean breeze opening that settles into your signature floral vanilla.",instruction:"Spray Parma Blu on chest, your signature on wrists — let them meet on skin."}},guidance:{emoji:"🌊",headline:"Fresh Floral with Vanilla Base",text:"Focus on marine-inspired fresh florals with vanilla undertones that won't overwhelm in summer heat but still create presence for special moments.",directions:[{name:"Citrus Marine",sub:"Fresh & Energizing",emoji:"🍋"},{name:"White Florals",sub:"Light & Elegant",emoji:"🌸"},{name:"Soft Woods",sub:"Warm & Comforting",emoji:"🪵"}]},recipe:{nosi:"Light Blue Forever",nosi_desc:"Lagane, svježe note koje evociraju ljetne noći uz more",slozi:"Light Blue + Parma Blu Mediterraneo",slozi_desc:"Kombinacija morskih i cvjetnih nota s vanilijom za posebne prilike",istrazi:"Solar Florals & Aquatic Gourmands",istrazi_desc:"Istražite svježi cvjetni profil s vanilla bazom"}};
     applyBg(fb.scent_keywords);
     ss({res:fb,sc:'results'});
   }
 }
 
-/* RESULTS */
+/* ── RESULTS ── */
 function results(){
   const r=S.res;if(!r)return document.createElement('div');
   const d=document.createElement('div');d.className='rpage';
-  const ic=r.layering_lab?.internal;
-  const up=r.layering_lab?.upsell;
-  const sg=r.strategic_guidance;
-  const ps=r.profile_summary||{};
+  const ic=r.layering?.internal;
+  const up=r.layering?.upsell;
+  const prof=r.profile||{};
 
   d.innerHTML=`
-    <!-- AI Insight Card -->
-    <div class="ai-card">
-      <div class="ai-card-top">
-        <div class="ai-ico">✦</div>
-        <div>
-          <div class="ai-lbl">AI Insight · ${r.match_score||89}% Match</div>
-          <div class="ai-quote serif">"${r.ai_insight}"</div>
+    <!-- AI Insight -->
+    <div class="ai-wrap">
+      <div class="ai-card">
+        <div class="ai-badge"><div class="ai-badge-dot"></div><div class="ai-badge-txt">✦ ${r.match_score||89}% Match · AI Profil</div></div>
+        <div class="ai-top">
+          <div class="ai-ico-wrap">✦</div>
+          <div class="ai-content">
+            <div class="ai-label">AI Insight</div>
+            <div class="ai-quote sf">"${r.ai_insight}"</div>
+          </div>
         </div>
+        <div class="ai-bottom">
+          <div class="spills">${(r.scent_keywords||[]).map((k,i)=>`<span class="spill" style="animation-delay:${i*.1}s">${k}</span>`).join('')}</div>
+          <div class="ai-score"><span class="score-pct sf">${r.match_score||89}%</span><span class="score-lbl">Profile<br>match</span></div>
+        </div>
+        <button class="btn-analysis" id="vBtn">Pogledaj preporuke →</button>
       </div>
-      <div class="ai-card-bottom">
-        <div class="scent-pills">
-          ${(r.scent_keywords||[]).map((k,i)=>`<span class="spill" style="animation-delay:${i*.1}s">${k}</span>`).join('')}
-        </div>
-        <div class="match-score">
-          <span class="score-num serif">${r.match_score||89}%</span>
-          <span class="score-lbl">Profile<br>match</span>
-        </div>
-      </div>
-      <button class="btn-view" id="viewBtn">Pogledaj preporuke →</button>
     </div>
 
-    <!-- Profile summary tags -->
-    <div class="profile-row">
-      ${ps.intensity?`<div class="profile-tag"><span class="profile-tag-ico">💫</span>${ps.intensity}</div>`:''}
-      ${ps.season?`<div class="profile-tag"><span class="profile-tag-ico">☀️</span>${ps.season}</div>`:''}
-      ${ps.occasion?`<div class="profile-tag"><span class="profile-tag-ico">🌙</span>${ps.occasion.split(',')[0]}</div>`:''}
+    <!-- Profile Summary -->
+    <div class="profile-summary">
+      ${prof.intensity_label?`<div class="ptag"><div class="ptag-ico">💫</div><div class="ptag-info"><div class="ptag-label">Intenzitet</div><div class="ptag-val">${prof.intensity_label}</div></div></div>`:''}
+      ${prof.season_label?`<div class="ptag"><div class="ptag-ico">☀️</div><div class="ptag-info"><div class="ptag-label">Sezona</div><div class="ptag-val">${prof.season_label}</div></div></div>`:''}
+      ${prof.occasion_label?`<div class="ptag"><div class="ptag-ico">🌙</div><div class="ptag-info"><div class="ptag-label">Prigoda</div><div class="ptag-val">${prof.occasion_label}</div></div></div>`:''}
+      ${prof.notes_label?`<div class="ptag"><div class="ptag-ico">🌸</div><div class="ptag-info"><div class="ptag-label">Note</div><div class="ptag-val">${prof.notes_label}</div></div></div>`:''}
     </div>
 
     <!-- Matches -->
-    <div class="rsec">
+    <div class="rsec" id="matches">
       <div class="rsec-lbl">The Matches</div>
-      <div class="rsec-ttl serif" style="margin-bottom:16px">Specifične preporuke</div>
-      <div class="matches-grid">
-        <!-- Top Match -->
-        <div class="mcard hero">
-          <div class="mcard-badge dark">
-            <span class="mbadge lt">✦ Tvoj top match</span>
-            <span class="mprice">${r.recommendations.top_match.price_range}</span>
-          </div>
-          <div class="mcard-img">${BOTTLE_SVG}</div>
-          <div class="mcard-body">
-            <div class="m-brand">${r.recommendations.top_match.brand}</div>
-            <div class="m-name serif">${r.recommendations.top_match.name}</div>
-            <div class="m-fam">${r.recommendations.top_match.scent_family} · ${r.recommendations.top_match.concentration}</div>
-            <div class="m-why">${r.recommendations.top_match.reasoning}</div>
-            <div class="m-notes">${(r.recommendations.top_match.key_notes||[]).map(n=>`<span class="ntag">${n}</span>`).join('')}</div>
+      <div class="rsec-row"><div class="rsec-ttl sf">Specifične preporuke</div><span class="rsec-link">View all →</span></div>
+      <div class="mcards">
+        <div class="mcard top">
+          <div class="mbadge-bar dk"><span class="mbadge-txt lt">✦ Tvoj top match</span><span class="mprice">${r.top_match.price_range}</span></div>
+          <div class="mimg">${BOTTLE}</div>
+          <div class="mbody">
+            <div class="mbrand">${r.top_match.brand}</div>
+            <div class="mname sf">${r.top_match.name}</div>
+            <div class="mfam">${r.top_match.scent_family} · ${r.top_match.concentration}</div>
+            <div class="mwhy">${r.top_match.reasoning}</div>
+            <div class="mnotes">${(r.top_match.key_notes||[]).map(n=>`<span class="ntag">${n}</span>`).join('')}</div>
           </div>
         </div>
-        <!-- Alternative -->
         <div class="mcard">
-          <div class="mcard-badge">
-            <span class="mbadge mt">Alternativa</span>
-            <span class="mprice">${r.recommendations.second_match.price_range}</span>
-          </div>
-          <div class="mcard-img">${BOTTLE_SVG}</div>
-          <div class="mcard-body">
-            <div class="m-brand">${r.recommendations.second_match.brand}</div>
-            <div class="m-name serif">${r.recommendations.second_match.name}</div>
-            <div class="m-fam">${r.recommendations.second_match.scent_family} · ${r.recommendations.second_match.concentration}</div>
-            <div class="m-why">${r.recommendations.second_match.reasoning}</div>
-            <div class="m-notes">${(r.recommendations.second_match.key_notes||[]).map(n=>`<span class="ntag">${n}</span>`).join('')}</div>
+          <div class="mbadge-bar"><span class="mbadge-txt mt">Alternativa</span><span class="mprice">${r.second_match.price_range}</span></div>
+          <div class="mimg">${BOTTLE}</div>
+          <div class="mbody">
+            <div class="mbrand">${r.second_match.brand}</div>
+            <div class="mname sf">${r.second_match.name}</div>
+            <div class="mfam">${r.second_match.scent_family} · ${r.second_match.concentration}</div>
+            <div class="mwhy">${r.second_match.reasoning}</div>
+            <div class="mnotes">${(r.second_match.key_notes||[]).map(n=>`<span class="ntag">${n}</span>`).join('')}</div>
           </div>
         </div>
       </div>
@@ -583,54 +611,59 @@ function results(){
     <!-- Layering Lab -->
     <div class="rsec">
       <div class="rsec-lbl">Layering Lab</div>
-      <div class="rsec-ttl serif">Umjetnost slojevitosti</div>
-      ${ic?`<div class="layer-card">
-        <div class="ltlbl">Internal · Iz tvoje kolekcije</div>
-        <div class="layer-visual">
-          <div class="lbottle"><span class="lbico">🫙</span><div class="lname">${ic.a}</div>${ic.a_sub?`<div class="lsub">${ic.a_sub}</div>`:''}</div>
+      <div class="rsec-row"><div class="rsec-ttl sf">Umjetnost slojevitosti</div><span class="ai-badge" style="font-size:9px;padding:3px 10px;background:rgba(212,175,55,.12);border:1px solid rgba(212,175,55,.3);border-radius:10px;color:var(--gold);letter-spacing:1px">AI PREPORUKA ✦</span></div>
+
+      ${ic?`<div class="lcard">
+        <div class="ltop"><div class="ltlbl">Internal · Iz tvoje kolekcije</div></div>
+        <div class="lvisual">
+          <div class="lbottle"><span class="lbico">🫙</span><div class="lbname">${ic.a}</div><div class="lbsub">${ic.a_sub||''}</div></div>
           <div class="lop">+</div>
-          <div class="lbottle"><span class="lbico">🫙</span><div class="lname">${ic.b}</div>${ic.b_sub?`<div class="lsub">${ic.b_sub}</div>`:''}</div>
+          <div class="lbottle"><span class="lbico">🫙</span><div class="lbname">${ic.b}</div><div class="lbsub">${ic.b_sub||''}</div></div>
           <div class="lop">=</div>
-          <div class="lbottle" style="background:linear-gradient(135deg,rgba(212,175,55,.12),rgba(245,230,218,.5));border-color:rgba(212,175,55,.4)"><span class="lbico">✨</span><div class="lname" style="font-size:10px;color:var(--gold)">Blend</div></div>
+          <div class="lbottle" style="background:linear-gradient(135deg,rgba(212,175,55,.1),rgba(245,230,218,.4));border-color:rgba(212,175,55,.35)"><span class="lbico">✨</span><div class="lbname" style="font-size:10px;color:var(--gold)">Blend</div></div>
         </div>
-        <div class="layer-result">
-          <div class="lr-lbl">Dobivaš</div>
-          <div class="lr-txt">"${ic.result}"</div>
-          <div class="lr-instr">${ic.instruction}</div>
+        <div class="lresult-zone">
+          <div class="lrlbl">Dobivaš</div>
+          <div class="lrtxt">"${ic.result}"</div>
+          <div class="lrinstr">${ic.instruction}</div>
         </div>
+        <button class="btn-layering">Explore layering tips →</button>
       </div>`:''}
-      ${up?`<div class="layer-card">
-        <div class="ltlbl">Upsell Layering · Nadogradnja kolekcije <span style="background:rgba(212,175,55,.15);border:1px solid rgba(212,175,55,.3);border-radius:10px;padding:2px 8px;font-size:9px;color:var(--gold);letter-spacing:1px;float:right">AI PREPORUKA ✦</span></div>
-        <div class="layer-visual">
-          <div class="lbottle"><span class="lbico">🫙</span><div class="lname">${up.existing}</div></div>
+
+      ${up?`<div class="lcard">
+        <div class="ltop"><div class="ltlbl">Upsell Layering · Nadogradnja kolekcije</div></div>
+        <div class="lvisual">
+          <div class="lbottle"><span class="lbico">🫙</span><div class="lbname">${up.a}</div><div class="lbsub">${up.a_sub||''}</div></div>
           <div class="lop">+</div>
-          <div class="lbottle" style="border-color:rgba(212,175,55,.5);background:rgba(212,175,55,.08)"><span class="lbico">✨</span><div class="lname">${up.add}</div>${up.add_sub?`<div class="lsub">${up.add_sub}</div>`:''}</div>
+          <div class="lbottle" style="border-color:rgba(212,175,55,.4);background:rgba(212,175,55,.07)"><span class="lbico">✨</span><div class="lbname">${up.b}</div><div class="lbsub">${up.b_sub||''}</div></div>
           <div class="lop">=</div>
-          <div class="lbottle" style="background:linear-gradient(135deg,rgba(212,175,55,.12),rgba(245,230,218,.5));border-color:rgba(212,175,55,.4)"><span class="lbico">🌸</span><div class="lname" style="font-size:10px;color:var(--gold)">Result</div></div>
+          <div class="lbottle" style="background:linear-gradient(135deg,rgba(212,175,55,.1),rgba(245,230,218,.4));border-color:rgba(212,175,55,.35)"><span class="lbico">🌸</span><div class="lbname" style="font-size:10px;color:var(--gold)">Result</div></div>
         </div>
-        <div class="layer-result">
-          <div class="lr-lbl">Efekt</div>
-          <div class="lr-txt">"${up.result}"</div>
-          <div class="lr-instr">${up.instruction}</div>
+        <div class="lresult-zone">
+          <div class="lrlbl">Efekt</div>
+          <div class="lrtxt">"${up.result}"</div>
+          <div class="lrinstr">${up.instruction}</div>
         </div>
+        <button class="btn-layering">Explore layering tips →</button>
       </div>`:''}
     </div>
 
     <div class="divln"></div>
 
     <!-- Strategic Guidance -->
-    ${sg?`<div class="rsec">
+    ${r.guidance?`<div class="rsec">
       <div class="rsec-lbl">Strategic Guidance</div>
-      <div class="rsec-ttl serif">Tvoj sljedeći smjer</div>
-      <div class="guidance-card">
-        <div class="guidance-top">
-          <div class="guidance-img">${sg.emoji||'🌊'}</div>
-          <div class="guidance-txt">
-            <div class="guidance-fam serif">${sg.headline||sg.family}</div>
-            <div class="guidance-adv">${sg.advice}</div>
+      <div class="rsec-ttl sf" style="margin-bottom:16px">Tvoj sljedeći smjer</div>
+      <div class="gcard">
+        <div class="gtop">
+          <div class="gimg">${r.guidance.emoji||'🌊'}</div>
+          <div class="gtext">
+            <div class="gfam sf">${r.guidance.headline}</div>
+            <div class="gadv">${r.guidance.text}</div>
+            <button class="gbtn">Explore this direction →</button>
           </div>
         </div>
-        ${sg.directions&&sg.directions.length?`<div class="guidance-dirs">${sg.directions.map(dir=>`<div class="gdir"><div class="gdir-ico">${dir.emoji||'✦'}</div><div class="gdir-name">${dir.name}</div><div class="gdir-sub">${dir.sub}</div></div>`).join('')}</div>`:''}
+        ${r.guidance.directions?.length?`<div style="font-size:10px;color:var(--muted);margin-bottom:8px;letter-spacing:1px">Try exploring</div><div class="gdirs">${r.guidance.directions.map(dir=>`<div class="gdir"><div class="gdir-ico">${dir.emoji||'✦'}</div><div class="gdir-name">${dir.name}</div><div class="gdir-sub">${dir.sub}</div></div>`).join('')}</div>`:``}
       </div>
     </div>`:''}
 
@@ -639,44 +672,33 @@ function results(){
     <!-- Scent Recipe -->
     <div class="recipe">
       <div class="recipe-hdr">
-        <div class="recipe-ttl serif">✦ Tvoj Scent Recipe</div>
-        <div class="recipe-acts-top">
+        <div class="recipe-ttl sf">✦ Tvoj Scent Recipe</div>
+        <div class="recipe-top-acts">
           <button class="ract-sm" id="saveBtn">💾 Save recipe</button>
           <button class="ract-sm" id="shareBtn">↗ Share</button>
         </div>
       </div>
       <div class="recipe-cols">
-        <div class="rcol">
-          <div class="rcol-ico">👃</div>
-          <div class="rcol-lbl">NOSI</div>
-          <div class="rcol-val">${r.final_recipe.nosi}</div>
-        </div>
-        <div class="rcol">
-          <div class="rcol-ico">🫙</div>
-          <div class="rcol-lbl">SLOŽI</div>
-          <div class="rcol-val">${r.final_recipe.slozi}</div>
-        </div>
-        <div class="rcol">
-          <div class="rcol-ico">🧭</div>
-          <div class="rcol-lbl">ISTRAŽI</div>
-          <div class="rcol-val">${r.final_recipe.istrazi}</div>
-        </div>
+        <div class="rcol"><div class="rcol-ico">👃</div><div class="rcol-lbl">NOTES</div><div class="rcol-val">${r.recipe.nosi_desc||r.recipe.nosi}</div></div>
+        <div class="rcol"><div class="rcol-ico">🫙</div><div class="rcol-lbl">SLOŽI</div><div class="rcol-val">${r.recipe.slozi_desc||r.recipe.slozi}</div></div>
+        <div class="rcol"><div class="rcol-ico">🧭</div><div class="rcol-lbl">ISTRAŽI</div><div class="rcol-val">${r.recipe.istrazi_desc||r.recipe.istrazi}</div></div>
       </div>
-      <div class="recipe-footer">Synthesized by the collective intelligence.</div>
+      <div class="recipe-foot">Synthesized by the collective intelligence.</div>
     </div>
 
-    <!-- Bottom CTAs -->
+    <!-- CTAs -->
+    <div class="discover-txt">Ready to discover more?</div>
     <div class="bctas">
       <button class="btn-refine" id="rfBtn">Refine your scent +</button>
       <button class="btn-explore" id="exBtn">Explore another vibe</button>
     </div>
   `;
 
-  d.querySelector('#viewBtn').onclick=()=>d.querySelector('.rsec').scrollIntoView({behavior:'smooth'});
+  d.querySelector('#vBtn').onclick=()=>d.querySelector('#matches').scrollIntoView({behavior:'smooth'});
   d.querySelector('#rfBtn').onclick=()=>ss({sc:'vibe'});
   d.querySelector('#exBtn').onclick=()=>ss({sc:'vibe'});
-  d.querySelector('#shareBtn').onclick=()=>{if(navigator.share)navigator.share({title:'Moj SILLAGE Scent Recipe',text:r.final_recipe.nosi,url:location.href});else{navigator.clipboard?.writeText(location.href);alert('Link kopiran!')}};
-  d.querySelector('#saveBtn').onclick=()=>{if(navigator.share)navigator.share({title:'SILLAGE — Moj Scent Recipe',text:`NOSI: ${r.final_recipe.nosi}\nSLOŽI: ${r.final_recipe.slozi}\nISTRAŽI: ${r.final_recipe.istrazi}`,url:location.href});else alert('Profil kopiran!')};
+  d.querySelector('#shareBtn').onclick=()=>{if(navigator.share)navigator.share({title:'Moj SILLAGE Scent Recipe',text:r.recipe.nosi,url:location.href});else{navigator.clipboard?.writeText(location.href);alert('Link kopiran!')}};
+  d.querySelector('#saveBtn').onclick=()=>{if(navigator.share)navigator.share({title:'SILLAGE Scent Recipe',text:`NOSI: ${r.recipe.nosi}\nSLOŽI: ${r.recipe.slozi}\nISTRAŽI: ${r.recipe.istrazi}`,url:location.href});else alert('Kopirano!')};
   return d;
 }
 
