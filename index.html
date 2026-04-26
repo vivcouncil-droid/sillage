@@ -398,7 +398,11 @@ img{display:block;max-width:100%}
 .loading-ring{
   width:110px;height:110px;
   margin:0 auto 48px;
-  animation:spin 5s linear infinite;
+  border-radius:50%;
+  border:1px solid rgba(201,161,94,.25);
+  border-top-color:#C9A15E;
+  box-shadow:0 0 30px rgba(201,161,94,.15),inset 0 0 20px rgba(201,161,94,.05);
+  animation:spin 2s linear infinite;
 }
 @keyframes spin{to{transform:rotate(360deg)}}
 .loading-msg{
@@ -987,8 +991,9 @@ function renderLoading() {
     <div class="loading-content">
       <span class="loading-logo s">SILLAGE</span>
       <div class="loading-subtitle">Crafting your scent profile</div>
-      <img class="loading-ring" src="./icon-ring.png" alt=""
-        onerror="this.outerHTML='<div class=\'loading-ring\' style=\'border:1px solid #C9A15E;border-top-color:transparent;border-radius:50%;\'></div>'">
+      <div class="loading-ring"></div>
+
+
       <div class="loading-msg" id="loading-msg">${state.loadingMsg || 'Analiziram tvoj mirisni profil...'}</div>
     </div>
   `;
