@@ -22,8 +22,8 @@ html,body{min-height:100%;background:var(--cream);color:var(--ink);font-family:'
 .shell-inner{position:relative;z-index:1;max-width:1280px;margin:0 auto;padding:32px}
 .shell-inner.compact{max-width:1024px}
 /* Per-page backgrounds */
-.page-landing .shell-bg{background-image:url('./landing-bg.jpg')}
-.page-landing .shell-bg::after{background:rgba(244,227,209,.35)}
+.page-landing .shell-bg{background-image:none}
+.page-landing{background:linear-gradient(135deg,#fff8f2 0%,#F4E3D1 60%,#EDD9C4 100%)}
 .page-shelf .shell-bg{background-image:url('./shelf-bg.jpg')}
 .page-notes .shell-bg{background-image:url('./notes-bg.jpg')}
 .page-vibe .shell-bg{background-image:url('./vibe-bg.jpg')}
@@ -54,17 +54,10 @@ html,body{min-height:100%;background:var(--cream);color:var(--ink);font-family:'
 .btn-land:hover{transform:scale(1.02)}
 .land-lang{margin-top:28px;font-size:13px;letter-spacing:.3em;color:var(--muted)}
 
-/* BOTTLE HERO — real photo */
-.bottle-hero{position:relative;margin:0 auto;width:clamp(280px,45vw,520px);height:clamp(280px,45vw,520px);flex-shrink:0}
-.bottle-photo{width:100%;height:100%;object-fit:contain;animation:float 6s ease-in-out infinite;filter:drop-shadow(0 20px 40px rgba(0,0,0,.15))}
-@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
-.icon-petal{position:absolute;pointer-events:none}
-.icon-petal.p1{right:20px;top:80px;width:clamp(32px,5vw,56px);animation:drift1 8s ease-in-out infinite}
-.icon-petal.p2{left:30px;top:140px;width:clamp(24px,3.5vw,40px);animation:drift2 10s ease-in-out infinite}
-.icon-stars{position:absolute;top:40px;right:60px;width:clamp(40px,6vw,72px);animation:twinkle 3s ease-in-out infinite;pointer-events:none}
-@keyframes drift1{0%,100%{transform:rotate(-5deg) translateY(0)}50%{transform:rotate(5deg) translateY(-8px)}}
-@keyframes drift2{0%,100%{transform:rotate(8deg) translateY(0)}50%{transform:rotate(-8deg) translateY(-6px)}}
-@keyframes twinkle{0%,100%{opacity:.6;transform:scale(1)}50%{opacity:1;transform:scale(1.1)}}
+/* BOTTLE HERO — CSS animated (reliable fallback) */
+.bottle-hero{position:relative;margin:0 auto;width:clamp(280px,45vw,520px);height:clamp(280px,45vw,520px);flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.bottle-hero-img{width:clamp(200px,35vw,380px);height:auto;object-fit:contain;animation:float 6s ease-in-out infinite;filter:drop-shadow(0 24px 48px rgba(180,120,80,.2));border-radius:24px}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
 
 /* SHARED BUTTONS */
 .btn-primary{width:100%;border-radius:12px;background:var(--ink);padding:clamp(18px,2.5vw,28px);font-family:'Playfair Display',serif;font-size:clamp(16px,2vw,22px);letter-spacing:.12em;color:#fff;border:none;cursor:pointer;transition:opacity .2s;-webkit-tap-highlight-color:transparent}
@@ -285,10 +278,8 @@ function landingPage(){
         <div class="land-lang">HR | EN</div>
       </div>
       <div class="bottle-hero">
-        <img src="./bottle-hero.jpg" class="bottle-photo" alt="SILLAGE">
-        <img src="./icon-petal.png" class="icon-petal p1" alt="">
-        <img src="./icon-petal.png" class="icon-petal p2" alt="" style="transform:scaleX(-1)">
-        <img src="./icon-stars.png" class="icon-stars" alt="">
+        <img class="bottle-hero-img" src="./bottle-hero.jpg" alt=""
+          onerror="this.style.display='none';this.parentNode.innerHTML+='<div style=\'width:clamp(160px,28vw,300px);height:clamp(240px,40vw,420px);border-radius:clamp(20px,3vw,40px);border:1px solid #E8CFAF;background:linear-gradient(to bottom,rgba(255,255,255,.7),rgba(247,201,186,.5));box-shadow:0 20px 40px rgba(0,0,0,.15);display:flex;align-items:center;justify-content:center;animation:float 6s ease-in-out infinite\'><span style=\'font-family:Playfair Display,serif;font-size:clamp(48px,8vw,80px);color:#C9A15E\'>S</span></div>'">
       </div>
     </div>`;
   const d=document.createElement('div');
@@ -318,7 +309,8 @@ function shelfPage(){
         <button class="btn-secondary" id="skipNotes">PRESKOČI I ANALIZIRAJ</button>
       </div>
       <div class="shelf-bottle">
-        <img src="./bottle-hero.jpg" style="width:200px;height:auto;object-fit:contain;filter:drop-shadow(0 12px 24px rgba(0,0,0,.1))" alt="SILLAGE">
+        <img src="./bottle-hero.jpg" style="width:180px;height:auto;object-fit:contain;filter:drop-shadow(0 12px 24px rgba(180,120,80,.18));animation:float 6s ease-in-out infinite" alt=""
+          onerror="this.style.display='none'">
       </div>
     </div>`;
   const d=document.createElement('div');d.innerHTML=Shell(html,true,'shelf');
