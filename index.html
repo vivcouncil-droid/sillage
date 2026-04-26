@@ -390,32 +390,19 @@ img{display:block;max-width:100%}
   display:flex;
   flex-direction:column;
   align-items:center;
-  justify-content:space-between;
-  padding:72px 28px 80px;
+  justify-content:center;
   text-align:center;
-  background:url('./loading-bg.png') center/cover no-repeat;
-  position:relative;
+  padding:40px 28px;
+  background:linear-gradient(160deg,#fff8f4 0%,#F4E3D1 55%,#ecdbc7 100%);
 }
-#pg-loading::before{
-  content:'';
-  position:absolute;
-  inset:0;
-  background:rgba(244,227,209,.15);
-}
-.loading-content{position:relative;z-index:1}
-.loading-content{position:relative;z-index:1}
 .loading-logo{font-family:'Playfair Display',serif;font-size:28px;letter-spacing:.2em;color:#2B2928;display:block;margin-bottom:6px}
 .loading-subtitle{font-size:9px;letter-spacing:.5em;text-transform:uppercase;color:#C9A15E;margin-bottom:56px}
-.loading-ring{display:none;
-  width:110px;height:110px;
-  margin:0 auto 48px;
-  border-radius:50%;
-  border:1px solid rgba(201,161,94,.25);
-  border-top-color:#C9A15E;
-  box-shadow:0 0 30px rgba(201,161,94,.15),inset 0 0 20px rgba(201,161,94,.05);
-  animation:spin 2s linear infinite;
-}
-@keyframes spin{to{transform:rotate(360deg)}}
+/* Elegant pulsing dots */
+.loading-dots{display:flex;gap:10px;align-items:center;justify-content:center;margin-bottom:56px}
+.loading-dot{width:6px;height:6px;border-radius:50%;background:#C9A15E;animation:dotpulse 1.4s ease-in-out infinite}
+.loading-dot:nth-child(2){animation-delay:.2s}
+.loading-dot:nth-child(3){animation-delay:.4s}
+@keyframes dotpulse{0%,100%{opacity:.25;transform:scale(1)}50%{opacity:1;transform:scale(1.4)}}
 .loading-msg{
   font-family:'Playfair Display',serif;
   font-size:18px;
@@ -997,13 +984,14 @@ function renderLoading() {
   const el = document.createElement('div');
   el.id = 'pg-loading';
   el.innerHTML = `
-    <div class="loading-top" style="position:relative;z-index:1;text-align:center">
-      <span class="loading-logo s">SILLAGE</span>
-      <div class="loading-subtitle">Crafting your scent profile</div>
+    <span class="loading-logo s">SILLAGE</span>
+    <div class="loading-subtitle">Crafting your scent profile</div>
+    <div class="loading-dots">
+      <div class="loading-dot"></div>
+      <div class="loading-dot"></div>
+      <div class="loading-dot"></div>
     </div>
-    <div class="loading-bottom" style="position:relative;z-index:1;text-align:center">
-      <div class="loading-msg s" id="loading-msg">${state.loadingMsg || 'Analiziram tvoj mirisni profil...'}</div>
-    </div>
+    <div class="loading-msg s" id="loading-msg">${state.loadingMsg || 'Analiziram tvoj mirisni profil...'}</div>
   `;
   return el;
 }
