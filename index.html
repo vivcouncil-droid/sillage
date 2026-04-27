@@ -1128,7 +1128,7 @@ async function analyze() {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
+        model: 'claude-haiku-4-5-20251001',
         max_tokens: 1500,
         system: systemPrompt,
         messages: [{ role: 'user', content: JSON.stringify(data) }]
@@ -1411,7 +1411,7 @@ async function openLayeringModal(mainPerfume, mainBrand) {
   try {
     const res = await fetch('/api/chat', {
       method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({model:'claude-sonnet-4-20250514', max_tokens:1000, system:sys,
+      body: JSON.stringify({model:'claude-haiku-4-5-20251001', max_tokens:1000, system:sys,
         messages:[{role:'user', content:`Glavni parfem za layering: ${mainBrand} ${mainPerfume}. Predloži 3 konkretna prava parfema koji se dobro slažu s njim, svaki za drugačiji ugođaj.`}]})
     });
     const data = await res.json();
@@ -1488,7 +1488,7 @@ async function openPerfumeModal(perfume) {
   try {
     const res = await fetch('/api/chat', {
       method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({model:'claude-sonnet-4-20250514', max_tokens:600,
+      body: JSON.stringify({model:'claude-haiku-4-5-20251001', max_tokens:600,
         system:`Predloži 3 slična parfema za zadani parfem. SAMO JSON na HR: {"similar":[{"brand":"","name":"","price":"$/$$/$$$/$$$$","why":"kratki razlog","diff":"ključna razlika"}]}`,
         messages:[{role:'user', content:`${perfume.brand} ${perfume.name} (${perfume.family})`}]})
     });
@@ -1531,7 +1531,7 @@ async function openDirectionModal(dir, profile) {
   try {
     const res = await fetch('/api/chat', {
       method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({model:'claude-sonnet-4-20250514', max_tokens:800,
+      body: JSON.stringify({model:'claude-haiku-4-5-20251001', max_tokens:800,
         system:`Predloži 3 konkretna prava parfema za zadani mirisni smjer i profil. SAMO JSON na HR: {"picks":[{"brand":"","name":"","conc":"","price":"$/$$/$$$/$$$$","why":"zašto odgovara (1-2 rečenice)","notes":["n1","n2","n3"]}]}`,
         messages:[{role:'user', content:`Smjer: ${dir.name} (${dir.sub}). Profil: intenzitet ${profile?.intenzitet||'umjeren'}, sezona ${profile?.sezona||'ljeto'}, prigoda ${profile?.prigoda||'večernji'}.`}]})
     });
