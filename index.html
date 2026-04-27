@@ -1201,7 +1201,7 @@ function renderResults() {
       <div class="section-label">The Matches</div>
       <div class="section-title s">Specifične preporuke</div>
       <div class="match-grid">
-        <div class="match-card top">
+        <div class="match-card top" id="open-top" style="cursor:pointer">
           <div class="match-card-header dark">
             <span class="match-badge gold">✦ Top match</span>
             <span class="match-price">${r.top?.price||''}</span>
@@ -1213,9 +1213,10 @@ function renderResults() {
             <div class="match-family">${r.top?.family||''} · ${r.top?.conc||''}</div>
             <div class="match-why">${r.top?.why||''}</div>
             <div class="match-notes">${(r.top?.notes||[]).map(n=>`<span class="match-note">${n}</span>`).join('')}</div>
+            <div style="margin-top:12px;font-size:11px;color:#C9A15E;letter-spacing:.1em">Saznaj više →</div>
           </div>
         </div>
-        <div class="match-card">
+        <div class="match-card" id="open-alt" style="cursor:pointer">
           <div class="match-card-header">
             <span class="match-badge gray">Alternativa</span>
             <span class="match-price">${r.alt?.price||''}</span>
@@ -1227,6 +1228,7 @@ function renderResults() {
             <div class="match-family">${r.alt?.family||''} · ${r.alt?.conc||''}</div>
             <div class="match-why">${r.alt?.why||''}</div>
             <div class="match-notes">${(r.alt?.notes||[]).map(n=>`<span class="match-note">${n}</span>`).join('')}</div>
+            <div style="margin-top:12px;font-size:11px;color:#C9A15E;letter-spacing:.1em">Saznaj više →</div>
           </div>
         </div>
       </div>
@@ -1279,11 +1281,12 @@ function renderResults() {
         <div class="guidance-title s">${r.guidance?.emoji||''} ${r.guidance?.title||''}</div>
         <div class="guidance-text">${r.guidance?.text||''}</div>
         <div class="guidance-dirs">
-          ${(r.guidance?.dirs||[]).map(d=>`
-            <div class="guidance-dir">
+          ${(r.guidance?.dirs||[]).map((d,i)=>`
+            <div class="guidance-dir" data-dir-i="${i}" style="cursor:pointer;transition:all .2s">
               <div class="guidance-dir-ico">${d.ico}</div>
               <div class="guidance-dir-name">${d.name}</div>
               <div class="guidance-dir-sub">${d.sub}</div>
+              <div style="margin-top:8px;font-size:10px;color:#C9A15E">Istraži →</div>
             </div>
           `).join('')}
         </div>
@@ -1329,10 +1332,19 @@ function renderResults() {
   el.querySelector('#refine-btn').onclick = () => goTo('vibe');
   el.querySelector('#explore-btn').onclick = () => setState({ page: 'quiz', quizStep: 0, answers: {} });
   const layerBtn = el.querySelector('#layer-tips-btn');
-  if (layerBtn) layerBtn.onclick = () => openLayeringModal(
-    r.top?.name || r.layering?.b || '',
-    r.top?.brand || ''
-  );
+  if (layerBtn) layerBtn.onclick = () => openLayeringModal(r.top?.name||'', r.top?.brand||'');
+
+  // Match card clicks
+  el.querySelector('#open-top')?.addEventListener('click', () => openPerfumeModal(r.top));
+  el.querySelector('#open-alt')?.addEventListener('click', () => openPerfumeModal(r.alt));
+
+  // Guidance dir clicks
+  el.querySelectorAll('[data-dir-i]').forEach(dirEl => {
+    const i = parseInt(dirEl.dataset.dirI);
+    const dir = (r.guidance?.dirs||[])[i];
+    if (dir) dirEl.onclick = () => openDirectionModal(dir, r.profile);
+  });
+
   return el;
 }
 
@@ -1434,6 +1446,110 @@ function renderPairings(overlay, mainPerfume, pairings) {
       </div>
     `).join('')}
   `;
+}
+
+/* ─────────────── PERFUME DETAIL MODAL ─────────────── */
+async function openPerfumeModal(perfume) {
+  if (!perfume) return;
+  const notino = `https://www.notino.hr/search/?phrase=${encodeURIComponent(perfume.brand+' '+perfume.name)}`;
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay';
+  overlay.innerHTML = `
+    <div class="modal">
+      <div class="modal-handle"></div>
+      <div class="modal-header">
+        <div>
+          <div style="font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:#9C8F86;margin-bottom:3px">${perfume.brand}</div>
+          <div class="modal-title s">${perfume.name}</div>
+        </div>
+        <button class="modal-close" id="modal-close">✕</button>
+      </div>
+      <div class="modal-subtitle">${perfume.family||''} · ${perfume.conc||''} · ${perfume.price||''}</div>
+      <div class="modal-body">
+        <div style="background:linear-gradient(135deg,rgba(201,161,94,.08),rgba(244,227,209,.4));border-radius:14px;padding:18px;margin-bottom:20px;font-family:'Playfair Display',serif;font-size:14px;font-style:italic;color:#2B2928;line-height:1.75">"${perfume.why||''}"</div>
+        <div style="margin-bottom:20px">
+          <div style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#9C8F86;margin-bottom:10px">Note</div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px">${(perfume.notes||[]).map(n=>`<span style="border:1px solid rgba(201,161,94,.3);border-radius:20px;padding:5px 12px;font-size:12px;color:#2B2928">${n}</span>`).join('')}</div>
+        </div>
+        <div class="modal-loading"><div class="modal-loading-ring"></div><div class="modal-loading-text s">Tražim slične parfeme...</div></div>
+      </div>
+      <div style="padding:0 20px 20px">
+        <a href="${notino}" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:8px;background:#2B2928;color:#fff;padding:15px;border-radius:6px;font-family:'Playfair Display',serif;font-size:13px;letter-spacing:.08em;text-decoration:none">🛒 Kupi na Notinu</a>
+      </div>
+    </div>`;
+  document.body.appendChild(overlay);
+  overlay.querySelector('#modal-close').onclick = () => overlay.remove();
+  overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
+
+  try {
+    const res = await fetch('/api/chat', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({model:'claude-sonnet-4-20250514', max_tokens:600,
+        system:`Predloži 3 slična parfema za zadani parfem. SAMO JSON na HR: {"similar":[{"brand":"","name":"","price":"$/$$/$$$/$$$$","why":"kratki razlog","diff":"ključna razlika"}]}`,
+        messages:[{role:'user', content:`${perfume.brand} ${perfume.name} (${perfume.family})`}]})
+    });
+    const data = await res.json();
+    const result = JSON.parse(data.content[0].text.replace(/```json|```/g,'').trim());
+    overlay.querySelector('.modal-body').innerHTML = `
+      <div style="background:linear-gradient(135deg,rgba(201,161,94,.08),rgba(244,227,209,.4));border-radius:14px;padding:18px;margin-bottom:20px;font-family:'Playfair Display',serif;font-size:14px;font-style:italic;color:#2B2928;line-height:1.75">"${perfume.why||''}"</div>
+      <div style="margin-bottom:16px"><div style="display:flex;flex-wrap:wrap;gap:6px">${(perfume.notes||[]).map(n=>`<span style="border:1px solid rgba(201,161,94,.3);border-radius:20px;padding:5px 12px;font-size:12px;color:#2B2928">${n}</span>`).join('')}</div></div>
+      <div style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#9C8F86;margin-bottom:12px">Slični parfemi koji bi ti se svidjeli</div>
+      ${result.similar.map(s=>`
+        <div style="background:rgba(255,255,255,.8);border:1px solid #E3C9A9;border-radius:12px;padding:14px;margin-bottom:10px">
+          <div style="font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:#9C8F86;margin-bottom:2px">${s.brand}</div>
+          <div style="font-family:'Playfair Display',serif;font-size:15px;color:#2B2928;margin-bottom:5px">${s.name} <span style="font-size:11px;color:#C9A15E">${s.price}</span></div>
+          <div style="font-size:12px;color:#6B5E54;font-style:italic;margin-bottom:3px">${s.why}</div>
+          <div style="font-size:11px;color:#C9A15E">↳ ${s.diff}</div>
+        </div>`).join('')}`;
+  } catch(e) {}
+}
+
+/* ─────────────── DIRECTION MODAL ─────────────── */
+async function openDirectionModal(dir, profile) {
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay';
+  overlay.innerHTML = `
+    <div class="modal">
+      <div class="modal-handle"></div>
+      <div class="modal-header">
+        <div class="modal-title s">${dir.ico} ${dir.name}</div>
+        <button class="modal-close" id="modal-close">✕</button>
+      </div>
+      <div class="modal-subtitle">${dir.sub} · Prilagođeno tvom profilu</div>
+      <div class="modal-body">
+        <div class="modal-loading"><div class="modal-loading-ring"></div><div class="modal-loading-text s">Tražim parfeme za tebe...</div></div>
+      </div>
+    </div>`;
+  document.body.appendChild(overlay);
+  overlay.querySelector('#modal-close').onclick = () => overlay.remove();
+  overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
+
+  try {
+    const res = await fetch('/api/chat', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({model:'claude-sonnet-4-20250514', max_tokens:800,
+        system:`Predloži 3 konkretna prava parfema za zadani mirisni smjer i profil. SAMO JSON na HR: {"picks":[{"brand":"","name":"","conc":"","price":"$/$$/$$$/$$$$","why":"zašto odgovara (1-2 rečenice)","notes":["n1","n2","n3"]}]}`,
+        messages:[{role:'user', content:`Smjer: ${dir.name} (${dir.sub}). Profil: intenzitet ${profile?.intenzitet||'umjeren'}, sezona ${profile?.sezona||'ljeto'}, prigoda ${profile?.prigoda||'večernji'}.`}]})
+    });
+    const data = await res.json();
+    const result = JSON.parse(data.content[0].text.replace(/```json|```/g,'').trim());
+    overlay.querySelector('.modal-body').innerHTML = `
+      <p style="font-size:12px;color:#9C8F86;margin-bottom:18px;line-height:1.6">Parfemi za smjer <strong style="color:#2B2928">${dir.name}</strong>, odabrani prema tvom profilu:</p>
+      ${result.picks.map(p=>`
+        <div style="background:rgba(255,255,255,.8);border:1.5px solid #E3C9A9;border-radius:16px;padding:18px;margin-bottom:12px">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px">
+            <div>
+              <div style="font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:#9C8F86;margin-bottom:3px">${p.brand}</div>
+              <div style="font-family:'Playfair Display',serif;font-size:18px;color:#2B2928">${p.name}</div>
+              <div style="font-size:11px;color:#C9A15E;margin-top:2px">${p.conc} · ${p.price}</div>
+            </div>
+            <a href="https://www.notino.hr/search/?phrase=${encodeURIComponent(p.brand+' '+p.name)}" target="_blank"
+               style="background:#2B2928;color:#fff;padding:8px 12px;border-radius:6px;font-size:11px;text-decoration:none;flex-shrink:0">🛒 Kupi</a>
+          </div>
+          <div style="font-size:13px;color:#6B5E54;font-style:italic;line-height:1.65;margin-bottom:10px">${p.why}</div>
+          <div style="display:flex;flex-wrap:wrap;gap:5px">${(p.notes||[]).map(n=>`<span style="border:1px solid rgba(201,161,94,.3);border-radius:20px;padding:3px 9px;font-size:10px;color:#2B2928">${n}</span>`).join('')}</div>
+        </div>`).join('')}`;
+  } catch(e) { overlay.querySelector('.modal-body').innerHTML = '<p style="padding:20px;color:#9C8F86;text-align:center">Pokušaj ponovo.</p>'; }
 }
 
 render();
