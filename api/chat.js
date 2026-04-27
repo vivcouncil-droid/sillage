@@ -26,9 +26,16 @@ export default async function handler(req, res) {
     return res.status(429).json({ error: 'Previše zahtjeva. Pokušaj ponovo za sat vremena.' });
   }
 
+  // Main analysis = Sonnet (better quality)
+  // Modals (layering, perfume detail, direction) = Haiku (cheaper)
+  const isMainAnalysis = req.body.max_tokens >= 1400;
+  const model = isMainAnalysis
+    ? 'claude-sonnet-4-6'
+    : 'claude-haiku-4-5-20251001';
+
   const body = {
     ...req.body,
-    model: 'claude-haiku-4-5-20251001',
+    model,
     max_tokens: Math.min(req.body.max_tokens || 1000, 1500)
   };
 
