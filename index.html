@@ -804,7 +804,7 @@ async function saveToWishlist(perfume) {
     price_range: perfume.price || perfume.price_range,
     notes: perfume.notes,
     why: perfume.why,
-    notino_url: `https://www.notino.hr/search/?phrase=${encodeURIComponent((perfume.brand||'')+' '+(perfume.name||''))}`
+    notino_url: `https://www.google.com/search?q=${encodeURIComponent((perfume.brand||'')+' '+(perfume.name||''))}`
   });
   return !error;
 }
@@ -1667,7 +1667,7 @@ function renderPairings(overlay, mainPerfume, pairings) {
 /* ─────────────── PERFUME DETAIL MODAL ─────────────── */
 async function openPerfumeModal(perfume) {
   if (!perfume) return;
-  const notino = `https://www.notino.hr/search/?phrase=${encodeURIComponent(perfume.brand+' '+perfume.name)}`;
+  const notino = `https://www.google.com/search?q=${encodeURIComponent(perfume.brand+' '+perfume.name+' parfem kupi')}`;
   const overlay = document.createElement('div');
   overlay.className = 'modal-overlay';
   overlay.innerHTML = `
@@ -1690,7 +1690,7 @@ async function openPerfumeModal(perfume) {
         <div class="modal-loading"><div class="modal-loading-ring"></div><div class="modal-loading-text s">Tražim slične parfeme...</div></div>
       </div>
       <div style="padding:0 20px 20px">
-        <a href="${notino}" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:8px;background:#2B2928;color:#fff;padding:15px;border-radius:6px;font-family:'Playfair Display',serif;font-size:13px;letter-spacing:.08em;text-decoration:none">🛒 Kupi na Notinu</a>
+        <a href="${notino}" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:8px;background:#2B2928;color:#fff;padding:15px;border-radius:6px;font-family:'Playfair Display',serif;font-size:13px;letter-spacing:.08em;text-decoration:none">🔍 Pronađi online</a>
       </div>
     </div>`;
   document.body.appendChild(overlay);
@@ -1759,8 +1759,8 @@ async function openDirectionModal(dir, profile) {
               <div style="font-family:'Playfair Display',serif;font-size:18px;color:#2B2928">${p.name}</div>
               <div style="font-size:11px;color:#C9A15E;margin-top:2px">${p.conc} · ${p.price}</div>
             </div>
-            <a href="https://www.notino.hr/search/?phrase=${encodeURIComponent(p.brand+' '+p.name)}" target="_blank"
-               style="background:#2B2928;color:#fff;padding:8px 12px;border-radius:6px;font-size:11px;text-decoration:none;flex-shrink:0">🛒 Kupi</a>
+            <a href="https://www.google.com/search?q=${encodeURIComponent(p.brand+' '+p.name+' parfem kupi')}" target="_blank"
+               style="background:#2B2928;color:#fff;padding:8px 12px;border-radius:6px;font-size:11px;text-decoration:none;flex-shrink:0">🔍 Traži</a>
           </div>
           <div style="font-size:13px;color:#6B5E54;font-style:italic;line-height:1.65;margin-bottom:10px">${p.why}</div>
           <div style="display:flex;flex-wrap:wrap;gap:5px">${(p.notes||[]).map(n=>`<span style="border:1px solid rgba(201,161,94,.3);border-radius:20px;padding:3px 9px;font-size:10px;color:#2B2928">${n}</span>`).join('')}</div>
@@ -1943,7 +1943,7 @@ async function renderProfile() {
               <div class="wishlist-fam">${w.family||''} ${w.price_range?'· '+w.price_range:''}</div>
             </div>
             <div class="wishlist-actions">
-              <a href="${w.notino_url||'#'}" target="_blank" class="btn-notino">🛒 Kupi</a>
+              <a href="${w.notino_url||'#'}" target="_blank" class="btn-notino">🔍 Traži</a>
               <button class="btn-remove" data-wid="${w.id}">✕</button>
             </div>
           </div>`).join('')}
