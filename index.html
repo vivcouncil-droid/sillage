@@ -1280,13 +1280,14 @@ function renderResults() {
       <div class="guidance-card">
         <div class="guidance-title s">${r.guidance?.emoji||''} ${r.guidance?.title||''}</div>
         <div class="guidance-text">${r.guidance?.text||''}</div>
+        <div style="font-size:11px;color:#9C8F86;margin-bottom:12px;line-height:1.5">Klikni smjer koji te zanima — dobit ćeš prave parfeme prilagođene tvom profilu.</div>
         <div class="guidance-dirs">
           ${(r.guidance?.dirs||[]).map((d,i)=>`
-            <div class="guidance-dir" data-dir-i="${i}" style="cursor:pointer;transition:all .2s">
+            <div class="guidance-dir" id="dir-${i}" style="cursor:pointer;transition:all .15s;active:transform:scale(.97)">
               <div class="guidance-dir-ico">${d.ico}</div>
               <div class="guidance-dir-name">${d.name}</div>
               <div class="guidance-dir-sub">${d.sub}</div>
-              <div style="margin-top:8px;font-size:10px;color:#C9A15E">Istraži →</div>
+              <div style="margin-top:8px;font-size:10px;color:#C9A15E;font-weight:500">Istraži →</div>
             </div>
           `).join('')}
         </div>
@@ -1338,11 +1339,14 @@ function renderResults() {
   el.querySelector('#open-top')?.addEventListener('click', () => openPerfumeModal(r.top));
   el.querySelector('#open-alt')?.addEventListener('click', () => openPerfumeModal(r.alt));
 
-  // Guidance dir clicks
-  el.querySelectorAll('[data-dir-i]').forEach(dirEl => {
-    const i = parseInt(dirEl.dataset.dirI);
-    const dir = (r.guidance?.dirs||[])[i];
-    if (dir) dirEl.onclick = () => openDirectionModal(dir, r.profile);
+  // Guidance dir clicks — wire after element exists
+  (r.guidance?.dirs||[]).forEach((dir, i) => {
+    const dirEl = el.querySelector(`#dir-${i}`);
+    if (dirEl) {
+      dirEl.addEventListener('click', () => openDirectionModal(dir, r.profile));
+      dirEl.addEventListener('touchstart', () => dirEl.style.transform = 'scale(.96)');
+      dirEl.addEventListener('touchend', () => dirEl.style.transform = '');
+    }
   });
 
   return el;
