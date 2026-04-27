@@ -1245,7 +1245,7 @@ async function analyze() {
     "name": "Ime Parfema",
     "conc": "EDP",
     "family": "Fresh Floral",
-    "price": "$$$",
+    "price": "~90€ (procijeni stvarnu cijenu u EUR za 50-100ml)",
     "why": "1-2 poetske rečenice zašto ovaj miris",
     "notes": ["nota1","nota2","nota3","nota4"]
   },
@@ -1254,7 +1254,7 @@ async function analyze() {
     "name": "Ime Parfema",
     "conc": "EDT",
     "family": "Floral",
-    "price": "$$",
+    "price": "~45€ (procijeni stvarnu cijenu u EUR za 50-100ml)",
     "why": "kratka poetska rečenica",
     "notes": ["nota1","nota2","nota3"]
   },
@@ -1306,8 +1306,8 @@ async function analyze() {
         ai_insight: 'Privlači te efemerna magija mediteranskih ljeta, gdje slani zrak sreće noćni jasmin. Tvoja mirisna duša čezne za opojem slatkoćom koja pleše između oceana i zvjezdane romanike.',
         keywords: ['mediteranske noći','ocean','jasmin','romanika'],
         profile: { intenzitet:'Umjeren 🌺', sezona:'Ljeto ☀️', prigoda:'Večernji 🌙', note:'Vanilija, Jasmin, Mošus' },
-        top: { brand:'TOM FORD', name:'Soleil Blanc', conc:'EDP', family:'Solar Floral', price:'$$$$', why:'Kao tekući mjesečev sjaj — kremasta slatkoća kokosa omotana u jasmin i ylang-ylang s morskim povjetarcem.', notes:['kokos','ylang-ylang','jasmin','morska sol'] },
-        alt: { brand:'ESCADA', name:'Island Kiss', conc:'EDT', family:'Fruity Floral', price:'$$', why:'Tropski voćni buket savršen za ljetne noći uz more.', notes:['passion fruit','kokos','frangipani'] },
+        top: { brand:'TOM FORD', name:'Soleil Blanc', conc:'EDP', family:'Solar Floral', price:'~280€', why:'Kao tekući mjesečev sjaj — kremasta slatkoća kokosa omotana u jasmin i ylang-ylang s morskim povjetarcem.', notes:['kokos','ylang-ylang','jasmin','morska sol'] },
+        alt: { brand:'ESCADA', name:'Island Kiss', conc:'EDT', family:'Fruity Floral', price:'~55€', why:'Tropski voćni buket savršen za ljetne noći uz more.', notes:['passion fruit','kokos','frangipani'] },
         layering: { a: data.collection[0]||'tvoj omiljeni miris', a_sub:'svježe cvjetne note', b:'Acqua di Parma Blu Mediterraneo', b_sub:'morski pojačivač dubine', result:'Oceanski povjetarac koji se sleđe u mekanu cvjetnu vaniliju.', tip:'Prskaj morski sprej na prsa, a tvoj potpis na zapešća — neka se spoje na koži.' },
         guidance: { emoji:'🌊', title:'Solar Florals & Aquatic Gourmands', text:'Kreni s laganom tropskom slatkoćom, zatim evoluiraj prema sofisticiranijim morskim cvjetovima koji cvatu u noći.', dirs:[{ico:'🍋',name:'Citrus Marine',sub:'Svjež & Energičan'},{ico:'🌸',name:'White Florals',sub:'Lagan & Elegantan'},{ico:'🌿',name:'Soft Woods',sub:'Topao & Utješan'}] },
         recipe: { nosi:'Lagane, svježe note koje evociraju ljetne noći uz more', slozi:'Kombinacija morskih i cvjetnih nota s vanilijom za posebne prilike', istrazi:'Istražite svježi cvjetni profil s vanilla bazom' }
@@ -1612,7 +1612,7 @@ async function openLayeringModal(mainPerfume, mainBrand) {
       "mood_emoji": "🌊",
       "brand": "Naziv brenda",
       "name": "Naziv parfema",
-      "price": "$/$$/$$$/$$$$",
+      "price": "~XX€ (stvarna okvirna cijena)",
       "effect": "Što nastaje kombinacijom - kratki poetski opis (1 rečenica)",
       "how": "Kratki praktični savjet kako ih nanijeti (1 rečenica)",
       "notes": ["nota1","nota2","nota3"]
@@ -1631,9 +1631,9 @@ async function openLayeringModal(mainPerfume, mainBrand) {
     renderPairings(overlay, mainPerfume, result.pairings);
   } catch(e) {
     renderPairings(overlay, mainPerfume, [
-      {mood:'Svježe & Morsko', mood_emoji:'🌊', brand:'Acqua di Parma', name:'Blu Mediterraneo Arancia di Capri', price:'$$$', effect:'Vanilijska slatkoća susreće mediteranski citrus — ljeto u bočici.', how:'2 prska Acqua di Parma na prsa, 1 prsk glavnog na vrat.', notes:['naranča','bergamot','morska sol']},
-      {mood:'Duboko & Tajnovito', mood_emoji:'🌑', brand:'Maison Margiela', name:'Replica Jazz Club', price:'$$$', effect:'Toplina vanilije dobiva dimnu, jazzističku dušu — savršeno za večer.', how:'Glavni parfem prvo, Jazz Club kao završni sloj na zapešća.', notes:['duhan','rum','vanilija']},
-      {mood:'Romantično & Cvjetno', mood_emoji:'🌸', brand:'Jo Malone', name:'Peony & Blush Suede', price:'$$$$', effect:'Slatkoća se transformira u mekani cvjetni šapat — nježna, sofisticirana romanika.', how:'Jo Malone na kosu i dekolte, glavni na pulse točke.', notes:['božur','jabuka','suede']}
+      {mood:'Svježe & Morsko', mood_emoji:'🌊', brand:'Acqua di Parma', name:'Blu Mediterraneo Arancia di Capri', price:'~95€', effect:'Vanilijska slatkoća susreće mediteranski citrus — ljeto u bočici.', how:'2 prska Acqua di Parma na prsa, 1 prsk glavnog na vrat.', notes:['naranča','bergamot','morska sol']},
+      {mood:'Duboko & Tajnovito', mood_emoji:'🌑', brand:'Maison Margiela', name:'Replica Jazz Club', price:'~120€', effect:'Toplina vanilije dobiva dimnu, jazzističku dušu — savršeno za večer.', how:'Glavni parfem prvo, Jazz Club kao završni sloj na zapešća.', notes:['duhan','rum','vanilija']},
+      {mood:'Romantično & Cvjetno', mood_emoji:'🌸', brand:'Jo Malone', name:'Peony & Blush Suede', price:'~180€', effect:'Slatkoća se transformira u mekani cvjetni šapat — nježna, sofisticirana romanika.', how:'Jo Malone na kosu i dekolte, glavni na pulse točke.', notes:['božur','jabuka','suede']}
     ]);
   }
 }
@@ -1701,7 +1701,7 @@ async function openPerfumeModal(perfume) {
     const res = await fetch('/api/chat', {
       method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({model:'claude-haiku-4-5-20251001', max_tokens:600,
-        system:`Predloži 3 slična parfema za zadani parfem. SAMO JSON na HR: {"similar":[{"brand":"","name":"","price":"$/$$/$$$/$$$$","why":"kratki razlog","diff":"ključna razlika"}]}`,
+        system:`Predloži 3 slična parfema za zadani parfem. SAMO JSON na HR: {"similar":[{"brand":"","name":"","price":"~XX€","why":"kratki razlog","diff":"ključna razlika"}]}`,
         messages:[{role:'user', content:`${perfume.brand} ${perfume.name} (${perfume.family})`}]})
     });
     const data = await res.json();
@@ -1744,7 +1744,7 @@ async function openDirectionModal(dir, profile) {
     const res = await fetch('/api/chat', {
       method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({model:'claude-haiku-4-5-20251001', max_tokens:800,
-        system:`Predloži 3 konkretna prava parfema za zadani mirisni smjer i profil. SAMO JSON na HR: {"picks":[{"brand":"","name":"","conc":"","price":"$/$$/$$$/$$$$","why":"zašto odgovara (1-2 rečenice)","notes":["n1","n2","n3"]}]}`,
+        system:`Predloži 3 konkretna prava parfema za zadani mirisni smjer i profil. SAMO JSON na HR: {"picks":[{"brand":"","name":"","conc":"","price":"~XX€ (stvarna okvirna cijena 50ml)","why":"zašto odgovara (1-2 rečenice)","notes":["n1","n2","n3"]}]}`,
         messages:[{role:'user', content:`Smjer: ${dir.name} (${dir.sub}). Profil: intenzitet ${profile?.intenzitet||'umjeren'}, sezona ${profile?.sezona||'ljeto'}, prigoda ${profile?.prigoda||'večernji'}.`}]})
     });
     const data = await res.json();
