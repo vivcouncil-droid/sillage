@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>SILLAGE</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 /* BASE */
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;-webkit-font-smoothing:antialiased}
@@ -679,12 +680,145 @@ img{display:block;max-width:100%}
 .tip-title{font-size:13px;font-weight:600;color:#2B2928;margin-bottom:4px}
 .tip-desc{font-size:13px;color:#6B5E54;line-height:1.65}
 .tip-note{display:inline-block;margin-top:6px;background:rgba(201,161,94,.1);border:1px solid rgba(201,161,94,.25);border-radius:20px;padding:3px 10px;font-size:10px;color:#C9A15E;font-style:italic}
+/* ══════════════════════════════
+   AUTH
+══════════════════════════════ */
+.auth-btn{
+  display:flex;align-items:center;gap:7px;
+  background:rgba(255,255,255,.85);
+  border:1px solid #E3C9A9;
+  border-radius:8px;
+  padding:7px 14px;
+  font-size:12px;color:#2B2928;
+  cursor:pointer;transition:all .2s;
+}
+.auth-btn:hover{border-color:#C9A15E}
+.auth-avatar{
+  width:28px;height:28px;border-radius:50%;
+  background:linear-gradient(135deg,#C9A15E,#e8c87a);
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;color:#fff;font-weight:600;
+  flex-shrink:0;
+}
+/* Auth modal */
+.auth-modal-body{padding:24px 20px}
+.auth-tabs{display:flex;border-bottom:1px solid #E3C9A9;margin-bottom:24px}
+.auth-tab{flex:1;padding:10px;font-size:13px;text-align:center;cursor:pointer;color:#9C8F86;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .2s}
+.auth-tab.on{color:#2B2928;border-bottom-color:#C9A15E}
+.auth-field{margin-bottom:14px}
+.auth-label{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#9C8F86;margin-bottom:6px}
+.auth-input{width:100%;background:rgba(255,255,255,.9);border:1.5px solid #E3C9A9;border-radius:10px;padding:13px 16px;font-size:14px;color:#2B2928;outline:none;-webkit-appearance:none}
+.auth-input:focus{border-color:#C9A15E}
+.auth-err{font-size:12px;color:#c0392b;margin-bottom:12px;padding:10px 14px;background:rgba(192,57,43,.07);border-radius:8px;display:none}
+.auth-err.show{display:block}
+.auth-ok{font-size:12px;color:#27ae60;margin-bottom:12px;padding:10px 14px;background:rgba(39,174,96,.07);border-radius:8px;display:none}
+.auth-ok.show{display:block}
+/* My profile page */
+.profile-page{min-height:100vh;background:#F4E3D1;padding-bottom:80px}
+.profile-section{padding:20px 16px 0}
+.profile-sec-title{font-family:'Playfair Display',serif;font-size:18px;color:#2B2928;margin-bottom:14px}
+.saved-card{background:rgba(255,255,255,.82);border:1.5px solid #E3C9A9;border-radius:14px;padding:16px;margin-bottom:10px;cursor:pointer;transition:all .2s}
+.saved-card:hover{border-color:#C9A15E;transform:translateY(-1px)}
+.saved-card-date{font-size:10px;color:#9C8F86;letter-spacing:.1em;margin-bottom:5px}
+.saved-card-title{font-family:'Playfair Display',serif;font-size:16px;color:#2B2928;margin-bottom:5px}
+.saved-card-sub{font-size:12px;color:#9C8F86}
+.saved-card-pills{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px}
+.saved-pill{border:1px solid rgba(201,161,94,.3);border-radius:20px;padding:3px 9px;font-size:10px;color:#2B2928}
+.wishlist-item{background:rgba(255,255,255,.82);border:1.5px solid #E3C9A9;border-radius:14px;padding:14px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.wishlist-item-info{}
+.wishlist-brand{font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:#9C8F86;margin-bottom:2px}
+.wishlist-name{font-family:'Playfair Display',serif;font-size:15px;color:#2B2928}
+.wishlist-fam{font-size:11px;color:#C9A15E;margin-top:2px}
+.wishlist-actions{display:flex;gap:8px;flex-shrink:0}
+.btn-notino{background:#2B2928;color:#fff;padding:8px 12px;border-radius:6px;font-size:11px;text-decoration:none;white-space:nowrap}
+.btn-remove{background:transparent;border:1px solid #E3C9A9;color:#9C8F86;padding:8px 10px;border-radius:6px;font-size:12px;cursor:pointer}
+.empty-state{text-align:center;padding:40px 20px;color:#9C8F86;font-style:italic;font-size:14px}
 </style>
 </head>
 <body>
 <div id="app"></div>
 
 <script>
+/* ─────────────── SUPABASE ─────────────── */
+const { createClient } = supabase;
+const sb = createClient(
+  'https://faidjhjqeecgboymknbw.supabase.co',
+  'sb_publishable_DDsy_5b9VW_IjqM6HhYDjw_UgZZ2opO'
+);
+
+let currentUser = null;
+
+// Listen for auth changes
+sb.auth.onAuthStateChange((event, session) => {
+  currentUser = session?.user || null;
+  render();
+});
+
+// Init — check if already logged in
+sb.auth.getSession().then(({ data }) => {
+  currentUser = data.session?.user || null;
+  render();
+});
+
+/* ─────────────── DB HELPERS ─────────────── */
+async function saveAnalysis(result, answers, vibe, notes, collection) {
+  if (!currentUser) return null;
+  const title = `${result.top?.name || 'Moj miris'} · ${new Date().toLocaleDateString('hr')}`;
+  const { data, error } = await sb.from('analyses').insert({
+    user_id: currentUser.id,
+    title,
+    result,
+    answers,
+    vibe,
+    notes,
+    collection
+  }).select().single();
+  return error ? null : data;
+}
+
+async function loadAnalyses() {
+  if (!currentUser) return [];
+  const { data } = await sb.from('analyses')
+    .select('*').eq('user_id', currentUser.id)
+    .order('created_at', { ascending: false });
+  return data || [];
+}
+
+async function saveToWishlist(perfume) {
+  if (!currentUser) { openAuthModal(); return; }
+  const { error } = await sb.from('wishlist').insert({
+    user_id: currentUser.id,
+    brand: perfume.brand,
+    name: perfume.name,
+    family: perfume.family || perfume.scent_family,
+    price_range: perfume.price || perfume.price_range,
+    notes: perfume.notes,
+    why: perfume.why,
+    notino_url: `https://www.notino.hr/search/?phrase=${encodeURIComponent((perfume.brand||'')+' '+(perfume.name||''))}`
+  });
+  return !error;
+}
+
+async function loadWishlist() {
+  if (!currentUser) return [];
+  const { data } = await sb.from('wishlist')
+    .select('*').eq('user_id', currentUser.id)
+    .order('created_at', { ascending: false });
+  return data || [];
+}
+
+async function removeFromWishlist(id) {
+  await sb.from('wishlist').delete().eq('id', id).eq('user_id', currentUser.id);
+}
+
+async function saveLayering(a, b, mood, result_desc, tip) {
+  if (!currentUser) return;
+  await sb.from('layering_combos').insert({
+    user_id: currentUser.id,
+    perfume_a: a, perfume_b: b,
+    mood, result_desc, tip
+  });
+}
 /* ─────────────── DATA ─────────────── */
 const NOTES = [
   ['🪵','Oud'],['🟡','Amber'],['🍋','Bergamot'],['🌸','Jasmin'],
@@ -786,15 +920,25 @@ function goTo(page) {
 function nav(onBack) {
   const el = document.createElement('div');
   el.className = 'nav';
+  const avatarHtml = currentUser
+    ? `<button class="auth-btn" id="nav-profile">
+        <div class="auth-avatar">${currentUser.email[0].toUpperCase()}</div>
+        <span>Moj profil</span>
+       </button>`
+    : `<button class="auth-btn" id="nav-login">
+        <span>👤</span><span>Prijava</span>
+       </button>`;
   el.innerHTML = `
     <button class="nav-back">
       <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
       Natrag
     </button>
     <div class="nav-logo s">SILLAGE</div>
-    <div class="nav-space"></div>
+    ${avatarHtml}
   `;
   el.querySelector('.nav-back').onclick = onBack;
+  el.querySelector('#nav-profile')?.addEventListener('click', () => goTo('profile'));
+  el.querySelector('#nav-login')?.addEventListener('click', () => openAuthModal());
   return el;
 }
 
@@ -1169,6 +1313,22 @@ function renderResults() {
   n.style.zIndex = '10';
   el.appendChild(n);
 
+  // Save analysis banner
+  const saveBanner = document.createElement('div');
+  saveBanner.style.cssText = 'padding:12px 16px 0;position:relative;z-index:1';
+  if (!currentUser) {
+    saveBanner.innerHTML = `<div style="background:rgba(201,161,94,.1);border:1px solid rgba(201,161,94,.3);border-radius:12px;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px">
+      <div style="font-size:12px;color:#6B5E54">💾 Prijavi se da spremiš svoje rezultate i wishliste</div>
+      <button id="save-login-btn" style="background:#2B2928;color:#fff;border:none;padding:8px 14px;border-radius:6px;font-size:11px;cursor:pointer;white-space:nowrap">Prijava</button>
+    </div>`;
+  } else {
+    saveBanner.innerHTML = `<div style="background:rgba(201,161,94,.1);border:1px solid rgba(201,161,94,.3);border-radius:12px;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px">
+      <div style="font-size:12px;color:#6B5E54">Spremi ovu analizu u svoj profil</div>
+      <button id="save-analysis-btn" style="background:#2B2928;color:#fff;border:none;padding:8px 14px;border-radius:6px;font-size:11px;cursor:pointer;white-space:nowrap">💾 Spremi</button>
+    </div>`;
+  }
+  el.appendChild(saveBanner);
+
   el.innerHTML += `
     <!-- AI Insight -->
     <div class="insight-card">
@@ -1213,7 +1373,10 @@ function renderResults() {
             <div class="match-family">${r.top?.family||''} · ${r.top?.conc||''}</div>
             <div class="match-why">${r.top?.why||''}</div>
             <div class="match-notes">${(r.top?.notes||[]).map(n=>`<span class="match-note">${n}</span>`).join('')}</div>
-            <div style="margin-top:12px;font-size:11px;color:#C9A15E;letter-spacing:.1em">Saznaj više →</div>
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px">
+              <div style="font-size:11px;color:#C9A15E;letter-spacing:.1em">Saznaj više →</div>
+              <button id="wishlist-top" style="background:none;border:none;font-size:16px;cursor:pointer" title="Dodaj u wishlist">🤍</button>
+            </div>
           </div>
         </div>
         <div class="match-card" id="open-alt" style="cursor:pointer">
@@ -1228,7 +1391,10 @@ function renderResults() {
             <div class="match-family">${r.alt?.family||''} · ${r.alt?.conc||''}</div>
             <div class="match-why">${r.alt?.why||''}</div>
             <div class="match-notes">${(r.alt?.notes||[]).map(n=>`<span class="match-note">${n}</span>`).join('')}</div>
-            <div style="margin-top:12px;font-size:11px;color:#C9A15E;letter-spacing:.1em">Saznaj više →</div>
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px">
+              <div style="font-size:11px;color:#C9A15E;letter-spacing:.1em">Saznaj više →</div>
+              <button id="wishlist-alt" style="background:none;border:none;font-size:16px;cursor:pointer" title="Dodaj u wishlist">🤍</button>
+            </div>
           </div>
         </div>
       </div>
@@ -1332,14 +1498,39 @@ function renderResults() {
   };
   el.querySelector('#refine-btn').onclick = () => goTo('vibe');
   el.querySelector('#explore-btn').onclick = () => setState({ page: 'quiz', quizStep: 0, answers: {} });
+
+  // Save analysis
+  el.querySelector('#save-login-btn')?.addEventListener('click', () => openAuthModal());
+  el.querySelector('#save-analysis-btn')?.addEventListener('click', async (e) => {
+    const btn = e.target;
+    btn.textContent = 'Sprema...';
+    btn.disabled = true;
+    const saved = await saveAnalysis(r, state.answers, state.vibe, state.notes, state.collection);
+    if (saved) {
+      btn.textContent = '✓ Spremljeno!';
+      btn.style.background = '#27ae60';
+    } else {
+      btn.textContent = 'Greška, pokušaj ponovo';
+      btn.disabled = false;
+    }
+  });
+
+  // Wishlist buttons
+  el.querySelector('#wishlist-top')?.addEventListener('click', async (e) => {
+    const ok = await saveToWishlist(r.top);
+    if (ok) { e.target.textContent = '✓ Dodano'; e.target.style.color = '#27ae60'; }
+  });
+  el.querySelector('#wishlist-alt')?.addEventListener('click', async (e) => {
+    const ok = await saveToWishlist(r.alt);
+    if (ok) { e.target.textContent = '✓ Dodano'; e.target.style.color = '#27ae60'; }
+  });
+
   const layerBtn = el.querySelector('#layer-tips-btn');
   if (layerBtn) layerBtn.onclick = () => openLayeringModal(r.top?.name||'', r.top?.brand||'');
 
-  // Match card clicks
   el.querySelector('#open-top')?.addEventListener('click', () => openPerfumeModal(r.top));
   el.querySelector('#open-alt')?.addEventListener('click', () => openPerfumeModal(r.alt));
 
-  // Guidance dir clicks — wire after element exists
   (r.guidance?.dirs||[]).forEach((dir, i) => {
     const dirEl = el.querySelector(`#dir-${i}`);
     if (dirEl) {
@@ -1363,10 +1554,15 @@ function render() {
     vibe: renderVibe,
     quiz: renderQuiz,
     loading: renderLoading,
-    results: renderResults
+    results: renderResults,
+    profile: renderProfile
   };
   const fn = pages[state.page];
-  if (fn) app.appendChild(fn());
+  if (fn) {
+    const result = fn();
+    if (result instanceof Promise) result.then(el => { app.innerHTML=''; app.appendChild(el); });
+    else app.appendChild(result);
+  }
 }
 
 /* ─────────────── LAYERING MODAL ─────────────── */
@@ -1554,6 +1750,181 @@ async function openDirectionModal(dir, profile) {
           <div style="display:flex;flex-wrap:wrap;gap:5px">${(p.notes||[]).map(n=>`<span style="border:1px solid rgba(201,161,94,.3);border-radius:20px;padding:3px 9px;font-size:10px;color:#2B2928">${n}</span>`).join('')}</div>
         </div>`).join('')}`;
   } catch(e) { overlay.querySelector('.modal-body').innerHTML = '<p style="padding:20px;color:#9C8F86;text-align:center">Pokušaj ponovo.</p>'; }
+}
+
+/* ─────────────── AUTH MODAL ─────────────── */
+function openAuthModal() {
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay';
+  overlay.innerHTML = `
+    <div class="modal">
+      <div class="modal-handle"></div>
+      <div class="modal-header">
+        <div class="modal-title s">Dobrodošla u SILLAGE ✦</div>
+        <button class="modal-close" id="modal-close">✕</button>
+      </div>
+      <div class="auth-modal-body">
+        <div class="auth-tabs">
+          <div class="auth-tab on" id="tab-login">Prijava</div>
+          <div class="auth-tab" id="tab-register">Registracija</div>
+        </div>
+        <div id="auth-err" class="auth-err"></div>
+        <div id="auth-ok" class="auth-ok"></div>
+        <div class="auth-field">
+          <div class="auth-label">Email</div>
+          <input class="auth-input" id="auth-email" type="email" placeholder="tvoj@email.com">
+        </div>
+        <div class="auth-field">
+          <div class="auth-label">Lozinka</div>
+          <input class="auth-input" id="auth-pass" type="password" placeholder="••••••••">
+        </div>
+        <button class="btn-primary" id="auth-submit" style="margin-top:8px">Prijava</button>
+        <div style="margin-top:16px;padding-top:16px;border-top:1px solid #E3C9A9;text-align:center">
+          <div style="font-size:11px;color:#9C8F86;margin-bottom:12px">ili nastavi s</div>
+          <button id="auth-google" style="width:100%;background:white;border:1.5px solid #E3C9A9;border-radius:8px;padding:13px;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px">
+            <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+            Google
+          </button>
+        </div>
+      </div>
+    </div>`;
+  document.body.appendChild(overlay);
+
+  let isLogin = true;
+  const emailEl = overlay.querySelector('#auth-email');
+  const passEl = overlay.querySelector('#auth-pass');
+  const submitBtn = overlay.querySelector('#auth-submit');
+  const errEl = overlay.querySelector('#auth-err');
+  const okEl = overlay.querySelector('#auth-ok');
+
+  overlay.querySelector('#modal-close').onclick = () => overlay.remove();
+  overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
+
+  overlay.querySelector('#tab-login').onclick = () => {
+    isLogin = true;
+    overlay.querySelector('#tab-login').classList.add('on');
+    overlay.querySelector('#tab-register').classList.remove('on');
+    submitBtn.textContent = 'Prijava';
+  };
+  overlay.querySelector('#tab-register').onclick = () => {
+    isLogin = false;
+    overlay.querySelector('#tab-register').classList.add('on');
+    overlay.querySelector('#tab-login').classList.remove('on');
+    submitBtn.textContent = 'Registracija';
+  };
+
+  submitBtn.onclick = async () => {
+    const email = emailEl.value.trim();
+    const pass = passEl.value;
+    if (!email || !pass) { showErr('Upiši email i lozinku.'); return; }
+    submitBtn.textContent = '...';
+    submitBtn.disabled = true;
+    errEl.classList.remove('show');
+    let error;
+    if (isLogin) {
+      ({ error } = await sb.auth.signInWithPassword({ email, password: pass }));
+    } else {
+      ({ error } = await sb.auth.signUp({ email, password: pass }));
+      if (!error) {
+        okEl.textContent = 'Provjeri email za potvrdu registracije!';
+        okEl.classList.add('show');
+        submitBtn.textContent = isLogin ? 'Prijava' : 'Registracija';
+        submitBtn.disabled = false;
+        return;
+      }
+    }
+    if (error) {
+      showErr(error.message);
+      submitBtn.textContent = isLogin ? 'Prijava' : 'Registracija';
+      submitBtn.disabled = false;
+    } else {
+      overlay.remove();
+    }
+  };
+
+  overlay.querySelector('#auth-google').onclick = async () => {
+    await sb.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: window.location.href } });
+  };
+
+  function showErr(msg) { errEl.textContent = msg; errEl.classList.add('show'); }
+}
+
+/* ─────────────── PROFILE PAGE ─────────────── */
+async function renderProfile() {
+  const el = document.createElement('div');
+  el.className = 'profile-page';
+  el.appendChild(nav(() => goTo('landing')));
+
+  const header = document.createElement('div');
+  header.style.cssText = 'padding:20px 16px 0';
+  header.innerHTML = `
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+      <div>
+        <div class="section-label">Moj Profil</div>
+        <div style="font-family:Playfair Display,serif;font-size:22px;color:#2B2928">${currentUser?.email?.split('@')[0]||'Korisnik'}</div>
+        <div style="font-size:11px;color:#9C8F86;margin-top:2px">${currentUser?.email||''}</div>
+      </div>
+      <button id="logout-btn" style="background:transparent;border:1px solid #E3C9A9;color:#9C8F86;padding:8px 14px;border-radius:8px;font-size:12px;cursor:pointer">Odjava</button>
+    </div>`;
+  el.appendChild(header);
+
+  const loading = document.createElement('div');
+  loading.className = 'empty-state';
+  loading.innerHTML = '<div class="modal-loading-ring" style="margin:20px auto"></div>';
+  el.appendChild(loading);
+
+  const [analyses, wishlist] = await Promise.all([loadAnalyses(), loadWishlist()]);
+  loading.remove();
+
+  const content = document.createElement('div');
+  content.innerHTML = `
+    <div class="profile-section">
+      <div class="profile-sec-title s">Moje analize (${analyses.length})</div>
+      ${analyses.length === 0
+        ? '<div class="empty-state">Još nemaš spremljenih analiza.<br>Napravi analizu i spremi je!</div>'
+        : analyses.map(a => `<div class="saved-card" data-aid="${a.id}">
+            <div class="saved-card-date">${new Date(a.created_at).toLocaleDateString('hr')}</div>
+            <div class="saved-card-title s">${a.title}</div>
+            <div class="saved-card-sub">${(a.result?.ai_insight||'').substring(0,80)}...</div>
+            <div class="saved-card-pills">${(a.result?.keywords||[]).map(k=>`<span class="saved-pill">${k}</span>`).join('')}</div>
+          </div>`).join('')}
+    </div>
+    <div class="profile-section" style="margin-top:8px">
+      <div class="profile-sec-title s">Wishlist (${wishlist.length})</div>
+      ${wishlist.length === 0
+        ? '<div class="empty-state">Još nemaš parfema na wishlisti.<br>Klikni 🤍 na parfemu da ga dodaš!</div>'
+        : wishlist.map(w => `<div class="wishlist-item">
+            <div class="wishlist-item-info">
+              <div class="wishlist-brand">${w.brand}</div>
+              <div class="wishlist-name s">${w.name}</div>
+              <div class="wishlist-fam">${w.family||''} ${w.price_range?'· '+w.price_range:''}</div>
+            </div>
+            <div class="wishlist-actions">
+              <a href="${w.notino_url||'#'}" target="_blank" class="btn-notino">🛒 Kupi</a>
+              <button class="btn-remove" data-wid="${w.id}">✕</button>
+            </div>
+          </div>`).join('')}
+    </div>
+    <div style="height:60px"></div>`;
+  el.appendChild(content);
+
+  el.querySelector('#logout-btn')?.addEventListener('click', async () => {
+    await sb.auth.signOut();
+    goTo('landing');
+  });
+  el.querySelectorAll('.btn-remove').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      await removeFromWishlist(btn.dataset.wid);
+      btn.closest('.wishlist-item').remove();
+    });
+  });
+  el.querySelectorAll('.saved-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const a = analyses.find(x => x.id === card.dataset.aid);
+      if (a) setState({ res: a.result, page: 'results' });
+    });
+  });
+  return el;
 }
 
 render();
