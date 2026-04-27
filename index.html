@@ -363,25 +363,25 @@ img{display:block;max-width:100%}
 .quiz-options{
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:10px;
+  gap:8px;
   margin-bottom:24px;
 }
 .quiz-opt{
   background:rgba(255,255,255,.82);
   border:1.5px solid #E3C9A9;
-  border-radius:16px;
-  padding:18px 14px 16px;
+  border-radius:14px;
+  padding:14px 12px;
   text-align:left;
   transition:all .15s;
   display:flex;
   flex-direction:column;
-  gap:7px;
+  gap:5px;
 }
 .quiz-opt:active{transform:scale(.97)}
 .quiz-opt.chosen{border-color:#C9A15E;background:rgba(201,161,94,.1);box-shadow:0 0 0 1px #C9A15E}
-.quiz-opt-ico{font-size:24px;line-height:1}
-.quiz-opt-name{font-family:'Playfair Display',serif;font-size:16px;color:#2B2928}
-.quiz-opt-desc{font-size:11px;color:#9C8F86;line-height:1.4}
+.quiz-opt-ico{font-size:22px;line-height:1}
+.quiz-opt-name{font-family:'Playfair Display',serif;font-size:14px;color:#2B2928}
+.quiz-opt-desc{font-size:10px;color:#9C8F86;line-height:1.4}
 
 /* ══════════════════════════════
    PAGE: LOADING
@@ -843,13 +843,19 @@ const STEPS = [
     id: 'family',
     label: 'KORAK 1',
     question: 'Koji mirisi ti se najviše odgovaraju?',
-    hint: 'Odaberi jedan smjer',
-    multi: false,
+    hint: 'Odaberi sve koji ti se sviđaju',
+    multi: true,
     options: [
       ['🍯','Slatko','Vanilija, karamel, mošus'],
       ['🌿','Svježe','Citrus, aqua, zeleno'],
       ['🪵','Drvenasto','Sandalovina, cedar, pačuli'],
-      ['🌶️','Začinjeno','Oud, crni papar, kardamom']
+      ['🌶️','Začinjeno','Oud, crni papar, kardamom'],
+      ['🌸','Cvjetno','Ruža, jasmin, peony'],
+      ['🌊','Morsko','Ocean, morska sol, aqua'],
+      ['🍋','Citrus','Bergamot, limun, naranča'],
+      ['🤎','Kožnato','Koža, suede, dimljeno'],
+      ['🍂','Orijentalno','Amber, tamjan, smola'],
+      ['🥥','Gourmand','Kokos, čokolada, badem']
     ]
   },
   {
