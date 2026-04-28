@@ -635,6 +635,38 @@ img{display:block;max-width:100%}
   font-size:12px;letter-spacing:.08em;
 }
 
+
+/* Wishlist heart button */
+.wish-btn{
+  background:none;border:none;cursor:pointer;
+  font-size:18px;line-height:1;padding:2px;
+  filter:drop-shadow(0 0 0px rgba(212,175,55,0));
+  transition:all .3s;
+  -webkit-tap-highlight-color:transparent;
+}
+.wish-btn:hover{transform:scale(1.2)}
+.wish-btn.added{
+  animation:heartglow 1s ease forwards;
+}
+@keyframes heartglow{
+  0%{transform:scale(1)}
+  40%{transform:scale(1.35);filter:drop-shadow(0 0 6px rgba(212,175,55,.9))}
+  70%{transform:scale(1.15);filter:drop-shadow(0 0 10px rgba(212,175,55,.7))}
+  100%{transform:scale(1);filter:drop-shadow(0 0 5px rgba(212,175,55,.5))}
+}
+/* "Dodano" added state */
+.wish-added-txt{
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:11px;font-family:'Inter',sans-serif;
+  color:#C9A15E;letter-spacing:.08em;
+  text-shadow:0 0 8px rgba(212,175,55,.6);
+  animation:goldfadein .4s ease forwards;
+}
+@keyframes goldfadein{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:scale(1)}}
+.wish-added-txt .check-ico{
+  filter:drop-shadow(0 0 4px rgba(212,175,55,.8));
+}
+
 /* DIVIDER */
 .divider{height:1px;background:#E3C9A9;margin:24px 16px 0;position:relative;z-index:1}
 
@@ -1432,7 +1464,7 @@ function renderResults() {
             <div class="match-notes">${(r.top?.notes||[]).map(n=>`<span class="match-note">${n}</span>`).join('')}</div>
             <div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px">
               <div style="font-size:11px;color:#C9A15E;letter-spacing:.1em">Saznaj više →</div>
-              <button id="wishlist-top" style="background:none;border:none;font-size:16px;cursor:pointer" title="Dodaj u wishlist">🤍</button>
+              <button id="wishlist-top" class="wish-btn" title="Dodaj u wishlist">💛</button>
             </div>
           </div>
         </div>
@@ -1450,7 +1482,7 @@ function renderResults() {
             <div class="match-notes">${(r.alt?.notes||[]).map(n=>`<span class="match-note">${n}</span>`).join('')}</div>
             <div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px">
               <div style="font-size:11px;color:#C9A15E;letter-spacing:.1em">Saznaj više →</div>
-              <button id="wishlist-alt" style="background:none;border:none;font-size:16px;cursor:pointer" title="Dodaj u wishlist">🤍</button>
+              <button id="wishlist-alt" class="wish-btn" title="Dodaj u wishlist">💛</button>
             </div>
           </div>
         </div>
@@ -1575,11 +1607,11 @@ function renderResults() {
   // Wishlist buttons
   el.querySelector('#wishlist-top')?.addEventListener('click', async (e) => {
     const ok = await saveToWishlist(r.top);
-    if (ok) { e.target.textContent = '✓ Dodano'; e.target.style.color = '#27ae60'; }
+    if (ok) { e.target.classList.add('added'); e.target.innerHTML = '<span class="wish-added-txt"><span class="check-ico">✦</span> Dodano</span>'; e.target.style.fontSize = '12px'; }
   });
   el.querySelector('#wishlist-alt')?.addEventListener('click', async (e) => {
     const ok = await saveToWishlist(r.alt);
-    if (ok) { e.target.textContent = '✓ Dodano'; e.target.style.color = '#27ae60'; }
+    if (ok) { e.target.classList.add('added'); e.target.innerHTML = '<span class="wish-added-txt"><span class="check-ico">✦</span> Dodano</span>'; e.target.style.fontSize = '12px'; }
   });
 
   const layerBtn = el.querySelector('#layer-tips-btn');
@@ -1716,9 +1748,7 @@ function renderPairings(overlay, mainPerfume, pairings) {
       const p = pairings[i];
       const ok = await saveLayering(mainPerfume, p.name, p.mood, p.effect, p.how);
       if (ok !== false) {
-        btn.textContent = '✓ Spremljeno';
-        btn.style.color = '#27ae60';
-        btn.style.borderColor = '#27ae60';
+        btn.innerHTML = '<span class="wish-added-txt"><span class="check-ico">✦</span> Spremljeno</span>'; btn.style.borderColor = 'rgba(212,175,55,.5)'; btn.style.boxShadow = '0 0 10px rgba(212,175,55,.2)';
       } else {
         openAuthModal();
       }
@@ -1808,7 +1838,7 @@ function renderSimilar(overlay, perfume, similar) {
     btn.addEventListener('click', async () => {
       const s = similar[parseInt(btn.dataset.i)];
       const ok = await saveToWishlist({ brand: s.brand, name: s.name, price: s.price, why: s.why });
-      if (ok) { btn.textContent = '✓ Dodano'; btn.style.color = '#27ae60'; btn.style.borderColor = '#27ae60'; }
+      if (ok) { btn.innerHTML = '<span class="wish-added-txt"><span class="check-ico">✦</span> Dodano</span>'; btn.style.borderColor = 'rgba(212,175,55,.5)'; btn.style.boxShadow = '0 0 10px rgba(212,175,55,.2)'; }
       else openAuthModal();
     });
   });
