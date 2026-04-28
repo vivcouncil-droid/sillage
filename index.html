@@ -886,12 +886,19 @@ async function loadLayeringCombos() {
   return data || [];
 }
 /* ─────────────── DATA ─────────────── */
-const NOTES = [
+const NOTES_HR = [
   ['🪵','Oud'],['🟡','Amber'],['🍋','Bergamot'],['🌸','Jasmin'],
   ['🤍','Vanilija'],['🌿','Pačuli'],['🌹','Ruža'],['🌾','Vetiver'],
   ['🪨','Sandalovina'],['🌲','Cedar'],['🫧','Mošus'],['🍂','Duhan'],
   ['💜','Iris'],['🖤','Papar'],['🌼','Neroli'],['🤎','Koža'],
   ['🕯️','Tamjan'],['🥥','Kokos']
+];
+const NOTES_EN = [
+  ['🪵','Oud'],['🟡','Amber'],['🍋','Bergamot'],['🌸','Jasmine'],
+  ['🤍','Vanilla'],['🌿','Patchouli'],['🌹','Rose'],['🌾','Vetiver'],
+  ['🪨','Sandalwood'],['🌲','Cedar'],['🫧','Musk'],['🍂','Tobacco'],
+  ['💜','Iris'],['🖤','Pepper'],['🌼','Neroli'],['🤎','Leather'],
+  ['🕯️','Incense'],['🥥','Coconut']
 ];
 
 
@@ -1153,7 +1160,7 @@ function nav(onBack) {
     const avatarHtml = currentUser
       ? `<button class="auth-btn" id="nav-profile">
           <div class="auth-avatar">${currentUser.email[0].toUpperCase()}</div>
-          <span>Moj profil</span>
+          <span>${t('my_profile')}</span>
          </button>`
       : `<button class="auth-btn" id="nav-login">
           <span>👤</span><span>${t('login')}</span>
@@ -1274,6 +1281,7 @@ function renderNotes() {
   body.className = 'page-body';
 
   const showAll = state.notesExpanded;
+  const NOTES = state.lang==='en' ? NOTES_EN : NOTES_HR;
   const notesHTML = NOTES.map((n, i) => `
     <div class="note-chip${state.notes.includes(n[1]) ? ' picked' : ''}${!showAll && i >= 12 ? ' hidden' : ''}" data-note="${n[1]}">
       <div class="note-ico">${n[0]}</div>
