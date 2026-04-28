@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>Sillage | AI Perfume Expert — Discover Your Unique Scent Profile</title>
+<title>Sillage | AI Perfume Expert – Discover Your Unique Scent Profile</title>
 <meta name="description" content="Discover your unique scent profile with AI. Personalized perfume recommendations, layering tips and fragrance analysis tailored to your emotions and style.">
 <meta property="og:title" content="Sillage | AI Perfume Expert">
 <meta property="og:description" content="AI-crafted fragrance profile tailored to your emotions, memories and desires.">
@@ -1286,7 +1286,7 @@ function renderLanding() {
       <div class="land-logo s">SILLAGE</div>
       <div class="land-tagline">${t('tagline')}</div>
     </div>
-    <div class="land-bottle"><img src="./landing-bg.png" alt="AI perfume analysis bottle with flowers — Sillage scent profiling"></div>
+    <div class="land-bottle"><img src="./sillage-ai-perfume-analysis.png" alt="${state.lang==='en' ? 'AI-powered perfume analysis with cherry blossom and luxury bottle' : 'AI analiza parfema uz cvijet trešnje i luksuznu bočicu'}"></div>
     <div class="land-body">
       <h1 class="land-headline s">${t('headline1')}<br><em>${t('headline2')}</em></h1>
       <div class="land-divider"></div>
@@ -1904,7 +1904,7 @@ function render() {
   app.innerHTML = '';
   // Update page title per route
   const titles = {
-    landing: 'Sillage | AI Perfume Expert — Discover Your Unique Scent Profile',
+    landing: state.lang==='en' ? 'Sillage | AI Perfume Expert – Discover Your Unique Scent Profile' : 'Sillage | AI stručnjak za parfeme – Otkrijte svoj jedinstveni mirisni profil',
     shelf: state.lang==='en' ? 'Sillage | Your Fragrance Collection' : 'Sillage | Tvoja Kolekcija Mirisa',
     notes: state.lang==='en' ? 'Sillage | Select Your Perfume Notes' : 'Sillage | Odaberi Mirisne Note',
     vibe: state.lang==='en' ? 'Sillage | Describe Your Vibe' : 'Sillage | Opiši Svoj Vibe',
