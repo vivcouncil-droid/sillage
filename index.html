@@ -801,6 +801,20 @@ sb.auth.onAuthStateChange((event, session) => {
   }
 });
 
+// Parse URL on initial load
+(function() {
+  const path = window.location.pathname;
+  if (path !== '/' && path !== '') {
+    const route = parseRoute(path);
+    state.lang = route.lang;
+    state.page = route.page;
+    if (route.quizStep !== undefined) state.quizStep = route.quizStep;
+  } else {
+    // Redirect / to /hr
+    window.history.replaceState({}, '', '/hr');
+  }
+})();
+
 // Init — check session (handles OAuth redirect too)
 sb.auth.getSession().then(({ data }) => {
   currentUser = data.session?.user || null;
@@ -1038,6 +1052,81 @@ const HINTS_EN = [
   'Exotic fruit and sand','Clean skin after a shower','Incense in an old church'
 ];
 
+/* ─────────────── URL ROUTING ─────────────── */
+const ROUTES = {
+  hr: {
+    landing:  '/hr',
+    shelf:    '/hr/analiza-profila',
+    notes:    '/hr/parfemske-note',
+    vibe:     '/hr/vibe-box',
+    quiz_0:   '/hr/mirisne-obitelji',
+    quiz_1:   '/hr/parfem-godisnje-doba',
+    quiz_2:   '/hr/parfem-prigoda',
+    quiz_3:   '/hr/intenzitet',
+    results:  '/hr/moj-parfem-preporuka-layering',
+    profile:  '/hr/profil',
+    loading:  '/hr/analiza'
+  },
+  en: {
+    landing:  '/en',
+    shelf:    '/en/profile-analysis',
+    notes:    '/en/perfume-notes',
+    vibe:     '/en/vibe-box',
+    quiz_0:   '/en/fragrance-families',
+    quiz_1:   '/en/perfume-season',
+    quiz_2:   '/en/perfume-occasion',
+    quiz_3:   '/en/intensity',
+    results:  '/en/my-perfume-recommendation-layering',
+    profile:  '/en/profile',
+    loading:  '/en/analysis'
+  }
+};
+
+function getRouteUrl(page, lang, quizStep) {
+  const r = ROUTES[lang] || ROUTES.hr;
+  if (page === 'quiz') return r[`quiz_${quizStep}`] || r.quiz_0;
+  return r[page] || r.landing;
+}
+
+function parseRoute(path) {
+  // Detect language
+  const lang = path.startsWith('/en') ? 'en' : 'hr';
+  const r = ROUTES[lang];
+
+  // Match path to page
+  for (const [page, url] of Object.entries(r)) {
+    if (path === url || path === url + '/') {
+      if (page.startsWith('quiz_')) {
+        const step = parseInt(page.split('_')[1]);
+        return { lang, page: 'quiz', quizStep: step };
+      }
+      return { lang, page };
+    }
+  }
+  // Default: landing for that language
+  return { lang, page: 'landing' };
+}
+
+function pushRoute(page, lang, quizStep) {
+  const url = getRouteUrl(page, lang, quizStep ?? state.quizStep);
+  if (window.location.pathname !== url) {
+    window.history.pushState({ page, lang, quizStep }, '', url);
+  }
+}
+
+// Handle browser back/forward
+window.addEventListener('popstate', (e) => {
+  if (e.state) {
+    Object.assign(state, {
+      page: e.state.page,
+      lang: e.state.lang,
+      quizStep: e.state.quizStep ?? state.quizStep
+    });
+    render();
+  }
+});
+
+
 let state = {
   page: 'landing',
   lang: 'hr',
@@ -1142,11 +1231,15 @@ const STEPS = [
 
 function setState(patch) {
   Object.assign(state, patch);
+  if (patch.page || patch.quizStep !== undefined || patch.lang) {
+    pushRoute(state.page, state.lang, state.quizStep);
+  }
   render();
 }
 
 function goTo(page) {
   state.page = page;
+  pushRoute(page, state.lang, state.quizStep);
   window.scrollTo({ top: 0, behavior: 'smooth' });
   render();
 }
