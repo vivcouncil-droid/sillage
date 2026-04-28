@@ -898,10 +898,21 @@ const STEPS = [
   {
     id: 'family',
     label: 'KORAK 1',
-    question: 'Koji mirisi ti se najviše odgovaraju?',
-    hint: 'Odaberi sve koji ti se sviđaju',
+    get question(){ return state.lang==='en' ? 'Which scents appeal to you most?' : 'Koji mirisi ti se najviše odgovaraju?' },
+    get hint(){ return state.lang==='en' ? 'Select all that you like' : 'Odaberi sve koji ti se sviđaju' },
     multi: true,
-    options: [
+    get options(){ return state.lang==='en' ? [
+      ['🍯','Sweet','Vanilla, caramel, musk'],
+      ['🌿','Fresh','Citrus, aqua, green'],
+      ['🪵','Woody','Sandalwood, cedar, patchouli'],
+      ['🌶️','Spicy','Oud, black pepper, cardamom'],
+      ['🌸','Floral','Rose, jasmine, peony'],
+      ['🌊','Marine','Ocean, sea salt, aqua'],
+      ['🍋','Citrus','Bergamot, lemon, orange'],
+      ['🤎','Leather','Leather, suede, smoky'],
+      ['🍂','Oriental','Amber, incense, resin'],
+      ['🥥','Gourmand','Coconut, chocolate, almond']
+    ] : [
       ['🍯','Slatko','Vanilija, karamel, mošus'],
       ['🌿','Svježe','Citrus, aqua, zeleno'],
       ['🪵','Drvenasto','Sandalovina, cedar, pačuli'],
@@ -912,46 +923,61 @@ const STEPS = [
       ['🤎','Kožnato','Koža, suede, dimljeno'],
       ['🍂','Orijentalno','Amber, tamjan, smola'],
       ['🥥','Gourmand','Kokos, čokolada, badem']
-    ]
+    ]}
   },
   {
     id: 'season',
     label: 'KORAK 2',
-    question: 'Koje godišnje doba opisuje tvoj idealni miris?',
-    hint: 'Možeš odabrati više — ili sva četiri!',
+    get question(){ return state.lang==='en' ? 'Which season best describes your ideal scent?' : 'Koje godišnje doba opisuje tvoj idealni miris?' },
+    get hint(){ return state.lang==='en' ? 'You can select multiple — or all four!' : 'Možeš odabrati više — ili sva četiri!' },
     multi: true,
-    options: [
+    get options(){ return state.lang==='en' ? [
+      ['🌸','Spring','Floral, fresh, delicate'],
+      ['☀️','Summer','Marine, light, citrus'],
+      ['🍂','Autumn','Warm, spicy, amber'],
+      ['❄️','Winter','Deep, leathery, smoky']
+    ] : [
       ['🌸','Proljeće','Cvjetno, svježe, nježno'],
       ['☀️','Ljeto','Morsko, lagano, citrus'],
       ['🍂','Jesen','Toplo, začinjeno, amber'],
       ['❄️','Zima','Duboko, kožno, dimno']
-    ]
+    ]}
   },
   {
     id: 'occasion',
     label: 'KORAK 3',
-    question: 'Kada ga nosiš?',
-    hint: 'Možeš odabrati više',
+    get question(){ return state.lang==='en' ? 'When do you wear it?' : 'Kada ga nosiš?' },
+    get hint(){ return state.lang==='en' ? 'You can select multiple' : 'Možeš odabrati više' },
     multi: true,
-    options: [
+    get options(){ return state.lang==='en' ? [
+      ['☕','Everyday','Casual, light, fresh'],
+      ['🌙','Evening','Dark, rich, intriguing'],
+      ['💼','Work','Professional, subtle'],
+      ['✨','Special occasions','Striking, unforgettable']
+    ] : [
       ['☕','Svakodnevno','Casual, lagan, svjež'],
       ['🌙','Večernji','Taman, bogat, intrigantan'],
       ['💼','Posao','Profesionalan, nenametljiv'],
       ['✨','Posebne prilike','Upečatljiv, nezaboravan']
-    ]
+    ]}
   },
   {
     id: 'intensity',
     label: 'KORAK 4',
-    question: 'Koji intenzitet preferiraš?',
-    hint: 'Koliko daleko ide tvoj sillage?',
+    get question(){ return state.lang==='en' ? 'What intensity do you prefer?' : 'Koji intenzitet preferiraš?' },
+    get hint(){ return state.lang==='en' ? 'How far does your sillage trail?' : 'Koliko daleko ide tvoj sillage?' },
     multi: false,
-    options: [
+    get options(){ return state.lang==='en' ? [
+      ['🪷','Delicate','Close, intimate'],
+      ['🌺','Moderate','Present, pleasant'],
+      ['💥','Strong','Striking, long-range'],
+      ['🎭','Varies','Adaptable, contextual']
+    ] : [
       ['🪷','Nježan','Blizak, intiman'],
       ['🌺','Umjeren','Prisutan, ugodan'],
       ['💥','Jak','Upečatljiv, dalekosežan'],
       ['🎭','Ovisi','Prilagodljiv, kontekstualan']
-    ]
+    ]}
   }
 ];
 
@@ -974,8 +1000,155 @@ const HINTS = [
 ];
 
 /* ─────────────── STATE ─────────────── */
+/* ─────────────── TRANSLATIONS ─────────────── */
+const T = {
+  hr: {
+    tagline: 'AI Perfume Expert',
+    headline1: 'Your scent,', headline2: 'decoded.',
+    desc: 'AI-crafted fragrance profile prilagođen tvojim emocijama, uspomenama i željama.',
+    cta: 'Saznaj svoj recept',
+    lang_toggle: 'HR | EN',
+    back: 'Natrag',
+    my_profile: 'Moj profil',
+    login: 'Prijava',
+    // Shelf
+    shelf_label: t('shelf_label'), shelf_title: t('shelf_title'),
+    shelf_sub: t('shelf_sub'),
+    shelf_placeholder: 'npr. "Dior Sauvage EDT"',
+    shelf_analyze: t('shelf_analyze'), shelf_skip: t('shelf_skip'),
+    shelf_empty: t('shelf_empty'),
+    // Notes
+    notes_label: t('notes_label'), notes_title: t('notes_title'),
+    notes_sub: t('notes_sub'),
+    notes_more: '+ Prikaži sve note', notes_next: 'Dalje →', notes_skip: 'Preskoči',
+    // Vibe
+    vibe_label: t('vibe_label'), vibe_title: t('vibe_title'),
+    vibe_sub: t('vibe_sub'),
+    vibe_placeholder: '"Tražim nešto što miriše na staru knjižnicu i kišu, ali da ima malo citrusa."',
+    vibe_insp: 'Inspiracija', vibe_next: 'Dalje →',
+    vibe_more: '+ Prikaži sve inspiracije',
+    // Quiz
+    step_label: 'Korak', of: 'od', finish: 'Završi →', next: 'Dalje →',
+    // Loading
+    loading_sub: 'Crafting your scent profile',
+    loading_msgs: ['Analiziram tvoj mirisni profil...','Pronalazim savršene kombinacije...','Gradim tvoj Scent Recipe...','Još trenutak...'],
+    // Results
+    match_label: 'Match · AI Profil',
+    save_prompt: t('save_prompt'),
+    save_btn: 'Prijava', save_analysis: t('save_analysis'), saving: 'Sprema...', saved: '✓ Spremljeno!',
+    matches_label: 'The Matches', matches_title: 'Specifične preporuke',
+    top_badge: '✦ Top match', alt_badge: 'Alternativa', learn_more: 'Saznaj više →',
+    layering_label: 'Layering Lab', layering_title: 'Umjetnost slojevitosti',
+    layering_sub: 'Nadogradnja kolekcije', layering_tips: 'Explore layering tips →',
+    guidance_label: 'Strategic Guidance', guidance_title: 'Tvoj sljedeći smjer',
+    recipe_title: '✦ Tvoj Scent Recipe',
+    recipe_share: '↗ Podijeli',
+    recipe_col1: 'Nosi', recipe_col2: 'Složi', recipe_col3: 'Istraži',
+    recipe_footer: 'Synthesized by the collective intelligence.',
+    refine: 'Refine your scent ✦', explore: 'Explore another vibe',
+    // Profile
+    profile_label: 'Moj Profil', logout: 'Odjava',
+    analyses_title: 'Moje analize', wishlist_title: 'Wishlist', layering_saved: 'Layering kombinacije',
+    analyses_empty: 'Još nemaš spremljenih analiza.\nNapravi analizu i spremi je!',
+    wishlist_empty: 'Još nemaš parfema na wishlisti.\nKlikni 🤍 na parfemu da ga dodaš!',
+    layering_empty: 'Još nemaš spremljenih kombinacija.\nKlikni 🤍 Spremi kombinaciju u Layering Labu!',
+    find_online: '🔍 Pronađi online', remove: '✕',
+    // Auth
+    auth_title: '${t('auth_title')}',
+    auth_login_tab: 'Prijava', auth_register_tab: 'Registracija',
+    auth_email: 'Email', auth_pass: 'Lozinka',
+    auth_submit_login: 'Prijava', auth_submit_reg: 'Registracija',
+    auth_or: 'ili nastavi s',
+    auth_magic: '✉️ Magic link (bez lozinke)',
+    auth_magic_sending: 'Šaljem...',
+    auth_magic_sent: '✉️ Link poslan! Provjeri email.',
+    auth_err_empty: 'Upiši email i lozinku.',
+    auth_check_email: 'Provjeri email za potvrdu registracije!',
+    // System prompt language
+    ai_lang: 'HRVATSKOM',
+  },
+  en: {
+    tagline: 'AI Perfume Expert',
+    headline1: 'Your scent,', headline2: 'decoded.',
+    desc: 'AI-crafted fragrance profile tailored to your emotions, memories and desires.',
+    cta: 'Discover your recipe',
+    lang_toggle: 'EN | HR',
+    back: 'Back',
+    my_profile: 'My profile',
+    login: 'Login',
+    // Shelf
+    shelf_label: 'Digital Shelf', shelf_title: 'What do you already own?',
+    shelf_sub: 'Add perfumes you own — AI will maximize your collection through layering.',
+    shelf_placeholder: 'e.g. "Dior Sauvage EDT"',
+    shelf_analyze: 'Analyze my profile ✦', shelf_skip: 'Skip & analyze',
+    shelf_empty: 'You haven\'t added anything yet.',
+    // Notes
+    notes_label: t('notes_label'), notes_title: 'Select notes that attract you',
+    notes_sub: 'You can select multiple, or skip.',
+    notes_more: '+ Show all notes', notes_next: 'Next →', notes_skip: 'Skip',
+    // Vibe
+    vibe_label: t('vibe_label'), vibe_title: 'Describe your vibe',
+    vibe_sub: 'Write what you want your ideal fragrance to describe, feel like, remind you of...',
+    vibe_placeholder: '"Looking for something that smells like an old library and rain, but with a hint of citrus."',
+    vibe_insp: 'Inspiration', vibe_next: 'Next →',
+    vibe_more: '+ Show all inspirations',
+    // Quiz
+    step_label: 'Step', of: 'of', finish: 'Finish →', next: 'Next →',
+    // Loading
+    loading_sub: 'Crafting your scent profile',
+    loading_msgs: ['Analyzing your scent profile...','Finding perfect combinations...','Building your Scent Recipe...','Just a moment...'],
+    // Results
+    match_label: 'Match · AI Profile',
+    save_prompt: '💾 Sign in to save your results and wishlist',
+    save_btn: 'Sign in', save_analysis: 'Save this analysis to your profile', saving: 'Saving...', saved: '✓ Saved!',
+    matches_label: 'The Matches', matches_title: 'Specific recommendations',
+    top_badge: '✦ Top match', alt_badge: 'Alternative', learn_more: 'Learn more →',
+    layering_label: 'Layering Lab', layering_title: 'The art of layering',
+    layering_sub: 'Upgrade your collection', layering_tips: 'Explore layering tips →',
+    guidance_label: 'Strategic Guidance', guidance_title: 'Your next direction',
+    recipe_title: '✦ Your Scent Recipe',
+    recipe_share: '↗ Share',
+    recipe_col1: 'Wear', recipe_col2: 'Layer', recipe_col3: 'Explore',
+    recipe_footer: 'Synthesized by the collective intelligence.',
+    refine: 'Refine your scent ✦', explore: 'Explore another vibe',
+    // Profile
+    profile_label: 'My Profile', logout: 'Sign out',
+    analyses_title: 'My analyses', wishlist_title: 'Wishlist', layering_saved: 'Layering combos',
+    analyses_empty: 'No saved analyses yet.\nComplete an analysis and save it!',
+    wishlist_empty: 'No perfumes on your wishlist yet.\nTap 🤍 on a perfume to add it!',
+    layering_empty: 'No saved combos yet.\nTap 🤍 Save combo in the Layering Lab!',
+    find_online: '🔍 Find online', remove: '✕',
+    // Auth
+    auth_title: 'Welcome to SILLAGE ✦',
+    auth_login_tab: 'Sign in', auth_register_tab: 'Register',
+    auth_email: 'Email', auth_pass: 'Password',
+    auth_submit_login: 'Sign in', auth_submit_reg: 'Register',
+    auth_or: 'or continue with',
+    auth_magic: '✉️ Magic link (passwordless)',
+    auth_magic_sending: 'Sending...',
+    auth_magic_sent: '✉️ Link sent! Check your email.',
+    auth_err_empty: 'Please enter email and password.',
+    auth_check_email: 'Check your email to confirm registration!',
+    // System prompt language
+    ai_lang: 'ENGLISH',
+  }
+};
+
+// Helper
+const t = key => T[state.lang][key] || T.hr[key] || key;
+
+// English hints
+const HINTS_EN = [
+  'Rain on warm asphalt','Old library and leather','Morning coffee and wood',
+  'Summer night by the sea','Flowers after thunder','Fresh linen in the morning',
+  'Spice market in Marrakech','Walk through a pine forest','Parisian bakery at dawn',
+  'Adriatic sunset','Whisky smoke by the fireplace','Rose garden after rain',
+  'Exotic fruit and sand','Clean skin after a shower','Incense in an old church'
+];
+
 let state = {
   page: 'landing',
+  lang: 'hr',
   collection: [],
   collectionInput: '',
   notes: [],
@@ -1046,21 +1219,24 @@ function renderLanding() {
   el.innerHTML = `
     <div class="land-header">
       <div class="land-logo s">SILLAGE</div>
-      <div class="land-tagline">AI Perfume Expert</div>
+      <div class="land-tagline">${t('tagline')}</div>
     </div>
     <div class="land-bottle"></div>
     <div class="land-body">
-      <h1 class="land-headline s">Your scent,<br><em>decoded.</em></h1>
+      <h1 class="land-headline s">${t('headline1')}<br><em>${t('headline2')}</em></h1>
       <div class="land-divider"></div>
-      <p class="land-desc">AI-crafted fragrance profile prilagođen tvojim emocijama, uspomenama i željama.</p>
+      <p class="land-desc">${t('desc')}</p>
       <button class="land-cta">
         Saznaj svoj recept
         <span class="land-cta-star">✦</span>
       </button>
-      <div class="land-lang">HR | EN</div>
+      <div class="land-lang" id="lang-toggle" style="cursor:pointer;padding:4px 8px;border-radius:4px;transition:all .2s">${t('lang_toggle')}</div>
     </div>
   `;
   el.querySelector('.land-cta').onclick = () => goTo('shelf');
+  el.querySelector('#lang-toggle').onclick = () => {
+    setState({ lang: state.lang === 'hr' ? 'en' : 'hr' });
+  };
   return el;
 }
 
@@ -1086,7 +1262,7 @@ function renderShelf() {
     <h1 class="pg-title s">Što već imaš?</h1>
     <p class="pg-sub">Dodaj parfeme koje posjeduješ — AI će maksimizirati tvoju kolekciju kroz layering.</p>
     <div class="shelf-input-row">
-      <input class="shelf-input" id="shelf-in" placeholder='npr. "Dior Sauvage EDT"' value="${state.collectionInput}">
+      <input class="shelf-input" id="shelf-in" placeholder="${t('shelf_placeholder')}" value="${state.collectionInput}">
       <button class="shelf-add" id="shelf-add">+</button>
     </div>
     <div class="shelf-list" id="shelf-list">${itemsHTML}</div>
@@ -1175,9 +1351,9 @@ function renderVibe() {
     <p class="pg-sub">Napiši što želiš da tvoj idealni miris opisuje, osjeća se, podsjeća na...</p>
     <textarea class="vibe-textarea" id="vibe-text" maxlength="300" placeholder='"Tražim nešto što miriše na staru knjižnicu i kišu, ali da ima malo citrusa."'>${state.vibe}</textarea>
     <div class="vibe-counter" id="vibe-count">${state.vibe.length}/300</div>
-    <div class="vibe-hints-label">Inspiracija</div>
+    <div class="vibe-hints-label">${t('vibe_insp')}</div>
     <div class="vibe-hints" id="hints-wrap">
-      ${HINTS.map((h, i) => `<button class="hint-chip${i >= 6 ? ' hint-hidden' : ''}" data-hint="${h}">${h}</button>`).join('')}
+      ${(state.lang==='en'?HINTS_EN:HINTS).map((h, i) => `<button class="hint-chip${i >= 6 ? ' hint-hidden' : ''}" data-hint="${h}">${h}</button>`).join('')}
     </div>
     <button class="btn-more-notes" id="hints-more" style="margin-bottom:20px">+ Prikaži sve inspiracije (${HINTS.length - 6} više)</button>
     <button class="btn-primary" id="vibe-next">Dalje →</button>
@@ -1225,7 +1401,7 @@ function renderQuiz() {
   const prog = document.createElement('div');
   prog.className = 'progress';
   prog.innerHTML = `
-    <div class="progress-text">Korak ${state.quizStep + 1} od ${STEPS.length}</div>
+    <div class="progress-text">${t('step_label')} ${state.quizStep + 1} ${t('of')} ${STEPS.length}</div>
     <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
     <div class="progress-dots">
       ${STEPS.map((_, i) => `<div class="pdot${i < state.quizStep ? ' done' : i === state.quizStep ? ' active' : ''}"></div>`).join('')}
@@ -1236,7 +1412,7 @@ function renderQuiz() {
   const body = document.createElement('div');
   body.className = 'page-body';
   body.innerHTML = `
-    <div class="pg-label">${step.label}</div>
+    <div class="pg-label">${t('step_label')} ${state.quizStep + 1}</div>
     <h1 class="pg-title s">${step.question}</h1>
     <p class="pg-sub">${step.hint}</p>
     <div class="quiz-options">
@@ -1250,7 +1426,7 @@ function renderQuiz() {
       }).join('')}
     </div>
     <button class="btn-primary" id="quiz-next" ${isReady ? '' : 'disabled'}>
-      ${isLast ? 'Završi →' : 'Dalje →'}
+      ${isLast ? t('finish') : t('next')}
     </button>
   `;
   el.appendChild(body);
@@ -1282,9 +1458,9 @@ function renderLoading() {
   el.id = 'pg-loading';
   el.innerHTML = `
     <span class="loading-logo s">SILLAGE</span>
-    <div class="loading-subtitle">Crafting your scent profile</div>
+    <div class="loading-subtitle">${t('loading_sub')}</div>
     <div class="loading-ring"></div>
-    <div class="loading-msg s" id="loading-msg">${state.loadingMsg || 'Analiziram tvoj mirisni profil...'}</div>
+    <div class="loading-msg s" id="loading-msg">${state.loadingMsg || t('loading_msgs')[0]}</div>
   `;
   return el;
 }
@@ -1316,7 +1492,7 @@ async function analyze() {
     notes: state.notes
   };
 
-  const systemPrompt = `Ti si SILLAGE — vrhunski AI parfemski stručnjak. Piši poetski i elegantno. Svi opisi moraju biti na HRVATSKOM, osim naziva brendova i parfema koji ostaju u originalu. Vrati ISKLJUČIVO validan JSON bez ikakvih markdowna ili objašnjenja:
+  const systemPrompt = `Ti si SILLAGE — vrhunski AI parfemski stručnjak. Piši poetski i elegantno. All descriptions must be in ${t('ai_lang')} (language of the user), except brand names and perfume names which stay in their original language. Vrati ISKLJUČIVO validan JSON bez ikakvih markdowna ili objašnjenja:
 {
   "match_score": IZRAČUNAJ_STVARNI_BROJ_između_72_i_98_ovisno_o_podudaranju_profila,
   "ai_insight": "2-3 poetske rečenice o njihovoj mirisnoj osobnosti",
@@ -1435,7 +1611,7 @@ function renderResults() {
   if (!currentUser) {
     saveBanner.innerHTML = `<div style="background:rgba(201,161,94,.1);border:1px solid rgba(201,161,94,.3);border-radius:12px;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px">
       <div style="font-size:12px;color:#6B5E54">💾 Prijavi se da spremiš svoje rezultate i wishliste</div>
-      <button id="save-login-btn" style="background:#2B2928;color:#fff;border:none;padding:8px 14px;border-radius:6px;font-size:11px;cursor:pointer;white-space:nowrap">Prijava</button>
+      <button id="save-login-btn" style="background:#2B2928;color:#fff;border:none;padding:8px 14px;border-radius:6px;font-size:11px;cursor:pointer;white-space:nowrap">${t('save_btn')}</button>
     </div>`;
   } else {
     saveBanner.innerHTML = `<div style="background:rgba(201,161,94,.1);border:1px solid rgba(201,161,94,.3);border-radius:12px;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px">
@@ -1451,7 +1627,7 @@ function renderResults() {
     <div class="insight-card">
       <div class="insight-badge">
         <div class="insight-badge-dot"></div>
-        <div class="insight-badge-text">✦ ${r.match_score}% Match · AI Profil</div>
+        <div class="insight-badge-text">✦ ${r.match_score}% ${t('match_label')}</div>
       </div>
       <div class="insight-quote s">"${r.ai_insight}"</div>
       <div class="insight-row">
@@ -1475,12 +1651,12 @@ function renderResults() {
 
     <!-- Matches -->
     <div class="section">
-      <div class="section-label">The Matches</div>
-      <div class="section-title s">Specifične preporuke</div>
+      <div class="section-label">${t('matches_label')}</div>
+      <div class="section-title s">${t('matches_title')}</div>
       <div class="match-grid">
         <div class="match-card top" id="open-top" style="cursor:pointer">
           <div class="match-card-header dark">
-            <span class="match-badge gold">✦ Top match</span>
+            <span class="match-badge gold">${t('top_badge')}</span>
             <span class="match-price">${r.top?.price||''}</span>
           </div>
           <div class="match-img">🧴</div>
@@ -1498,7 +1674,7 @@ function renderResults() {
         </div>
         <div class="match-card" id="open-alt" style="cursor:pointer">
           <div class="match-card-header">
-            <span class="match-badge gray">Alternativa</span>
+            <span class="match-badge gray">${t('alt_badge')}</span>
             <span class="match-price">${r.alt?.price||''}</span>
           </div>
           <div class="match-img">🧴</div>
@@ -1521,10 +1697,10 @@ function renderResults() {
 
     <!-- Layering -->
     <div class="section">
-      <div class="section-label">Layering Lab</div>
-      <div class="section-title s">Umjetnost slojevitosti</div>
+      <div class="section-label">${t('layering_label')}</div>
+      <div class="section-title s">${t('layering_title')}</div>
       <div class="layer-card">
-        <div class="layer-label">Nadogradnja kolekcije</div>
+        <div class="layer-label">${t('layering_sub')}</div>
         <div class="layer-visual">
           <div class="layer-bottle">
             <span class="layer-bottle-icon">🫙</span>
@@ -1558,8 +1734,8 @@ function renderResults() {
 
     <!-- Guidance -->
     <div class="section">
-      <div class="section-label">Strategic Guidance</div>
-      <div class="section-title s">Tvoj sljedeći smjer</div>
+      <div class="section-label">${t('guidance_label')}</div>
+      <div class="section-title s">${t('guidance_title')}</div>
       <div class="guidance-card">
         <div class="guidance-title s">${r.guidance?.emoji||''} ${r.guidance?.title||''}</div>
         <div class="guidance-text">${r.guidance?.text||''}</div>
@@ -1582,8 +1758,8 @@ function renderResults() {
     <!-- Recipe -->
     <div class="recipe-card">
       <div class="recipe-header">
-        <div class="recipe-title s">✦ Tvoj Scent Recipe</div>
-        <button class="recipe-share" id="share-btn">↗ Podijeli</button>
+        <div class="recipe-title s">${t('recipe_title')}</div>
+        <button class="recipe-share" id="share-btn">${t('recipe_share')}</button>
       </div>
       <div class="recipe-cols">
         <div class="recipe-col">
@@ -1599,13 +1775,13 @@ function renderResults() {
           <div class="recipe-col-text">${r.recipe?.istrazi||''}</div>
         </div>
       </div>
-      <div class="recipe-footer">Synthesized by the collective intelligence.</div>
+      <div class="recipe-footer">${t('recipe_footer')}</div>
     </div>
 
     <!-- CTAs -->
     <div class="results-ctas">
-      <button class="cta-refine" id="refine-btn">Refine your scent ✦</button>
-      <button class="cta-explore" id="explore-btn">Explore another vibe</button>
+      <button class="cta-refine" id="refine-btn">${t('refine')}</button>
+      <button class="cta-explore" id="explore-btn">${t('explore')}</button>
     </div>
   `;
   el.appendChild(body);
@@ -1621,12 +1797,12 @@ function renderResults() {
   body.querySelector('#save-login-btn')?.addEventListener('click', () => openAuthModal());
   body.querySelector('#save-analysis-btn')?.addEventListener('click', async (e) => {
     const btn = e.target;
-    btn.textContent = 'Sprema...';
+    btn.textContent = t('saving');
     btn.disabled = true;
     const saved = await saveAnalysis(r, state.answers, state.vibe, state.notes, state.collection);
     if (saved) {
-      btn.textContent = '✓ Spremljeno!';
-      btn.style.background = '#27ae60';
+      btn.textContent = t('saved');
+      btn.style.background = '#27ae60'; btn.dataset.savedOk = '1';
     } else {
       btn.textContent = 'Greška, pokušaj ponovo';
       btn.disabled = false;
@@ -1926,7 +2102,7 @@ async function openDirectionModal(dir, profile) {
               <div style="font-size:11px;color:#C9A15E;margin-top:2px">${p.conc} · ${p.price}</div>
             </div>
             <a href="https://www.google.com/search?q=${encodeURIComponent(p.brand+' '+p.name+' parfem kupi')}" target="_blank"
-               style="background:#2B2928;color:#fff;padding:8px 12px;border-radius:6px;font-size:11px;text-decoration:none;flex-shrink:0">🔍 Traži</a>
+               style="background:#2B2928;color:#fff;padding:8px 12px;border-radius:6px;font-size:11px;text-decoration:none;flex-shrink:0">${t('find_online')}</a>
           </div>
           <div style="font-size:13px;color:#6B5E54;font-style:italic;line-height:1.65;margin-bottom:10px">${p.why}</div>
           <div style="display:flex;flex-wrap:wrap;gap:5px">${(p.notes||[]).map(n=>`<span style="border:1px solid rgba(201,161,94,.3);border-radius:20px;padding:3px 9px;font-size:10px;color:#2B2928">${n}</span>`).join('')}</div>
@@ -1942,22 +2118,22 @@ function openAuthModal() {
     <div class="modal">
       <div class="modal-handle"></div>
       <div class="modal-header">
-        <div class="modal-title s">Dobrodošla u SILLAGE ✦</div>
+        <div class="modal-title s">${t('auth_title')}</div>
         <button class="modal-close" id="modal-close">✕</button>
       </div>
       <div class="auth-modal-body">
         <div class="auth-tabs">
-          <div class="auth-tab on" id="tab-login">Prijava</div>
-          <div class="auth-tab" id="tab-register">Registracija</div>
+          <div class="auth-tab on" id="tab-login">${t('auth_login_tab')}</div>
+          <div class="auth-tab" id="tab-register">${t('auth_register_tab')}</div>
         </div>
         <div id="auth-err" class="auth-err"></div>
         <div id="auth-ok" class="auth-ok"></div>
         <div class="auth-field">
-          <div class="auth-label">Email</div>
+          <div class="auth-label">${t('auth_email')}</div>
           <input class="auth-input" id="auth-email" type="email" placeholder="tvoj@email.com">
         </div>
         <div class="auth-field">
-          <div class="auth-label">Lozinka</div>
+          <div class="auth-label">${t('auth_pass')}</div>
           <input class="auth-input" id="auth-pass" type="password" placeholder="••••••••">
         </div>
         <button class="btn-primary" id="auth-submit" style="margin-top:8px">Prijava</button>
@@ -1989,19 +2165,19 @@ function openAuthModal() {
     isLogin = true;
     overlay.querySelector('#tab-login').classList.add('on');
     overlay.querySelector('#tab-register').classList.remove('on');
-    submitBtn.textContent = 'Prijava';
+    submitBtn.textContent = t('auth_submit_login');
   };
   overlay.querySelector('#tab-register').onclick = () => {
     isLogin = false;
     overlay.querySelector('#tab-register').classList.add('on');
     overlay.querySelector('#tab-login').classList.remove('on');
-    submitBtn.textContent = 'Registracija';
+    submitBtn.textContent = t('auth_submit_reg');
   };
 
   submitBtn.onclick = async () => {
     const email = emailEl.value.trim();
     const pass = passEl.value;
-    if (!email || !pass) { showErr('Upiši email i lozinku.'); return; }
+    if (!email || !pass) { showErr(t('auth_err_empty')); return; }
     submitBtn.textContent = '...';
     submitBtn.disabled = true;
     errEl.classList.remove('show');
@@ -2038,7 +2214,7 @@ function openAuthModal() {
     const email = emailEl.value.trim();
     if (!email) { showErr('Upiši email adresu.'); return; }
     const btn = overlay.querySelector('#auth-magic');
-    btn.textContent = 'Šaljem...';
+    btn.textContent = t('auth_magic_sending');
     btn.disabled = true;
     const { error } = await sb.auth.signInWithOtp({
       email,
@@ -2046,10 +2222,10 @@ function openAuthModal() {
     });
     if (error) {
       showErr(error.message);
-      btn.textContent = '✉️ Pošalji magic link na email';
+      btn.textContent = '${t('auth_magic')}';
       btn.disabled = false;
     } else {
-      okEl.textContent = '✉️ Link poslan! Provjeri email i klikni link za prijavu.';
+      okEl.textContent = t('auth_magic_sent');
       okEl.classList.add('show');
       btn.textContent = '✓ Link poslan';
     }
@@ -2070,10 +2246,10 @@ async function renderProfile() {
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
       <div>
         <div class="section-label">Moj Profil</div>
-        <div style="font-family:Playfair Display,serif;font-size:22px;color:#2B2928">${currentUser?.email?.split('@')[0]||'Korisnik'}</div>
+        <div style="font-family:Playfair Display,serif;font-size:22px;color:#2B2928">${currentUser?.email?.split('@')[0]||'User'}</div>
         <div style="font-size:11px;color:#9C8F86;margin-top:2px">${currentUser?.email||''}</div>
       </div>
-      <button id="logout-btn" style="background:transparent;border:1px solid #E3C9A9;color:#9C8F86;padding:8px 14px;border-radius:8px;font-size:12px;cursor:pointer">Odjava</button>
+      <button id="logout-btn" style="background:transparent;border:1px solid #E3C9A9;color:#9C8F86;padding:8px 14px;border-radius:8px;font-size:12px;cursor:pointer">${t('logout')}</button>
     </div>`;
   el.appendChild(header);
 
@@ -2090,7 +2266,7 @@ async function renderProfile() {
     <div class="profile-section">
       <div class="profile-sec-title s">Moje analize (${analyses.length})</div>
       ${analyses.length === 0
-        ? '<div class="empty-state">Još nemaš spremljenih analiza.<br>Napravi analizu i spremi je!</div>'
+        ? `<div class="empty-state">${t('analyses_empty').replace('\n','<br>')}</div>`
         : analyses.map(a => `<div class="saved-card" data-aid="${a.id}">
             <div class="saved-card-date">${new Date(a.created_at).toLocaleDateString('hr')}</div>
             <div class="saved-card-title s">${a.title}</div>
@@ -2101,7 +2277,7 @@ async function renderProfile() {
     <div class="profile-section" style="margin-top:8px">
       <div class="profile-sec-title s">Wishlist (${wishlist.length})</div>
       ${wishlist.length === 0
-        ? '<div class="empty-state">Još nemaš parfema na wishlisti.<br>Klikni 🤍 na parfemu da ga dodaš!</div>'
+        ? `<div class="empty-state">${t('wishlist_empty').replace('\n','<br>')}</div>`
         : wishlist.map(w => `<div class="wishlist-item">
             <div class="wishlist-item-info">
               <div class="wishlist-brand">${w.brand}</div>
@@ -2109,7 +2285,7 @@ async function renderProfile() {
               <div class="wishlist-fam">${w.family||''} ${w.price_range?'· '+w.price_range:''}</div>
             </div>
             <div class="wishlist-actions">
-              <a href="${w.notino_url||'#'}" target="_blank" class="btn-notino">🔍 Traži</a>
+              <a href="${w.notino_url||'#'}" target="_blank" class="btn-notino">${t('find_online')}</a>
               <button class="btn-remove" data-wid="${w.id}">✕</button>
             </div>
           </div>`).join('')}
@@ -2117,7 +2293,7 @@ async function renderProfile() {
     <div class="profile-section" style="margin-top:8px">
       <div class="profile-sec-title s">Layering kombinacije (${layering.length})</div>
       ${layering.length === 0
-        ? '<div class="empty-state">Još nemaš spremljenih kombinacija.<br>Klikni 🤍 Spremi kombinaciju u Layering Labu!</div>'
+        ? `<div class="empty-state">${t('layering_empty').replace('\n','<br>')}</div>`
         : layering.map(l => `<div class="saved-card">
             <div class="saved-card-date">${new Date(l.created_at).toLocaleDateString('hr')} · <span style="color:#C9A15E">${l.mood||''}</span></div>
             <div class="saved-card-title s">🫙 ${l.perfume_a} + ✨ ${l.perfume_b}</div>
