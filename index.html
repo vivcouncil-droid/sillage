@@ -7,15 +7,30 @@
 <link rel="icon" type="image/png" href="./favicon.png">
 <link rel="apple-touch-icon" href="./favicon.png">
 <meta name="description" content="Discover your unique scent profile with AI. Personalized perfume recommendations, layering tips and fragrance analysis tailored to your emotions and style.">
-<meta property="og:title" content="Sillage | AI Perfume Expert">
-<meta property="og:description" content="AI-crafted fragrance profile tailored to your emotions, memories and desires.">
+<meta property="og:title" content="Sillage | AI stručnjak za parfeme – Otkrijte svoj jedinstveni mirisni profil">
+<meta property="og:description" content="AI mirisni profil prilagođen tvojim emocijama, uspomenama i željama.">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://sillage.to">
-<meta property="og:image" content="https://sillage.to/og-image.png">
+<meta property="og:url" content="https://sillage.to/hr">
+<meta property="og:image" content="https://sillage.to/og-image-hr.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://sillage.to/og-image.png">
+<meta name="twitter:image" content="https://sillage.to/og-image-hr.png">
+<script>
+// Crawlers read static HTML above (HR default)
+// For EN users visiting /en, update tags dynamically
+(function(){
+  if (!window.location.pathname.startsWith('/en')) return;
+  const enImg = 'https://sillage.to/og-image.png';
+  const enTitle = 'Sillage | AI Perfume Expert – Discover Your Unique Scent Profile';
+  const enDesc = 'AI-crafted fragrance profile tailored to your emotions, memories and desires.';
+  document.querySelector('meta[property="og:image"]').content = enImg;
+  document.querySelector('meta[name="twitter:image"]').content = enImg;
+  document.querySelector('meta[property="og:title"]').content = enTitle;
+  document.querySelector('meta[property="og:description"]').content = enDesc;
+  document.title = enTitle;
+})();
+</script>
 <meta name="robots" content="index, follow">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
