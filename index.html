@@ -1445,7 +1445,8 @@ function renderResults() {
   }
   el.appendChild(saveBanner);
 
-  el.innerHTML += `
+  const body = document.createElement('div');
+  body.innerHTML = `
     <!-- AI Insight -->
     <div class="insight-card">
       <div class="insight-badge">
@@ -1607,17 +1608,18 @@ function renderResults() {
       <button class="cta-explore" id="explore-btn">Explore another vibe</button>
     </div>
   `;
+  el.appendChild(body);
 
-  el.querySelector('#share-btn').onclick = () => {
+  body.querySelector('#share-btn').onclick = () => {
     if (navigator.share) navigator.share({ title: 'Moj SILLAGE Scent Recipe', url: location.href });
     else { navigator.clipboard?.writeText(location.href); alert('Link kopiran!'); }
   };
-  el.querySelector('#refine-btn').onclick = () => goTo('vibe');
-  el.querySelector('#explore-btn').onclick = () => setState({ page: 'quiz', quizStep: 0, answers: {} });
+  body.querySelector('#refine-btn').onclick = () => goTo('vibe');
+  body.querySelector('#explore-btn').onclick = () => setState({ page: 'quiz', quizStep: 0, answers: {} });
 
   // Save analysis
-  el.querySelector('#save-login-btn')?.addEventListener('click', () => openAuthModal());
-  el.querySelector('#save-analysis-btn')?.addEventListener('click', async (e) => {
+  body.querySelector('#save-login-btn')?.addEventListener('click', () => openAuthModal());
+  body.querySelector('#save-analysis-btn')?.addEventListener('click', async (e) => {
     const btn = e.target;
     btn.textContent = 'Sprema...';
     btn.disabled = true;
@@ -1632,23 +1634,23 @@ function renderResults() {
   });
 
   // Wishlist buttons
-  el.querySelector('#wishlist-top')?.addEventListener('click', async (e) => {
+  body.querySelector('#wishlist-top')?.addEventListener('click', async (e) => {
     const ok = await saveToWishlist(r.top);
     if (ok) { e.target.classList.add('added'); e.target.innerHTML = '<span class="wish-added-txt"><span class="check-ico">✦</span> Dodano</span>'; e.target.style.fontSize = '12px'; }
   });
-  el.querySelector('#wishlist-alt')?.addEventListener('click', async (e) => {
+  body.querySelector('#wishlist-alt')?.addEventListener('click', async (e) => {
     const ok = await saveToWishlist(r.alt);
     if (ok) { e.target.classList.add('added'); e.target.innerHTML = '<span class="wish-added-txt"><span class="check-ico">✦</span> Dodano</span>'; e.target.style.fontSize = '12px'; }
   });
 
-  const layerBtn = el.querySelector('#layer-tips-btn');
+  const layerBtn = body.querySelector('#layer-tips-btn');
   if (layerBtn) layerBtn.onclick = () => openLayeringModal(r.top?.name||'', r.top?.brand||'');
 
-  el.querySelector('#open-top')?.addEventListener('click', () => openPerfumeModal(r.top));
-  el.querySelector('#open-alt')?.addEventListener('click', () => openPerfumeModal(r.alt));
+  body.querySelector('#open-top')?.addEventListener('click', () => openPerfumeModal(r.top));
+  body.querySelector('#open-alt')?.addEventListener('click', () => openPerfumeModal(r.alt));
 
   (r.guidance?.dirs||[]).forEach((dir, i) => {
-    const dirEl = el.querySelector(`#dir-${i}`);
+    const dirEl = body.querySelector(`#dir-${i}`);
     if (dirEl) {
       dirEl.addEventListener('click', () => openDirectionModal(dir, r.profile));
       dirEl.addEventListener('touchstart', () => dirEl.style.transform = 'scale(.96)');
