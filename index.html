@@ -356,6 +356,7 @@ img{display:block;max-width:100%}
   transition:background .15s;
 }
 .hint-chip:active{background:rgba(201,161,94,.25)}
+.hint-hidden{display:none}
 
 /* ══════════════════════════════
    PAGE: QUIZ
@@ -1129,9 +1130,10 @@ function renderVibe() {
     <textarea class="vibe-textarea" id="vibe-text" maxlength="300" placeholder='"Tražim nešto što miriše na staru knjižnicu i kišu, ali da ima malo citrusa."'>${state.vibe}</textarea>
     <div class="vibe-counter" id="vibe-count">${state.vibe.length}/300</div>
     <div class="vibe-hints-label">Inspiracija</div>
-    <div class="vibe-hints">
-      ${HINTS.map(h => `<button class="hint-chip" data-hint="${h}">${h}</button>`).join('')}
+    <div class="vibe-hints" id="hints-wrap">
+      ${HINTS.map((h, i) => `<button class="hint-chip${i >= 6 ? ' hint-hidden' : ''}" data-hint="${h}">${h}</button>`).join('')}
     </div>
+    <button class="btn-more-notes" id="hints-more" style="margin-bottom:20px">+ Prikaži sve inspiracije (${HINTS.length - 6} više)</button>
     <button class="btn-primary" id="vibe-next">Dalje →</button>
   `;
   el.appendChild(body);
@@ -1149,6 +1151,11 @@ function renderVibe() {
       counter.textContent = `${chip.dataset.hint.length}/300`;
     };
   });
+  const hintsMore = el.querySelector('#hints-more');
+  if (hintsMore) hintsMore.onclick = () => {
+    el.querySelectorAll('.hint-hidden').forEach(h => h.classList.remove('hint-hidden'));
+    hintsMore.style.display = 'none';
+  };
   el.querySelector('#vibe-next').onclick = () => setState({ page: 'quiz', quizStep: 0, answers: {} });
   return el;
 }
