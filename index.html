@@ -794,7 +794,7 @@ sb.auth.onAuthStateChange((event, session) => {
       const newBtn = document.createElement('button');
       newBtn.className = 'auth-btn';
       newBtn.id = 'nav-profile';
-      newBtn.innerHTML = `<div class="auth-avatar">${currentUser.email[0].toUpperCase()}</div><span>Moj profil</span>`;
+      newBtn.innerHTML = `<div class="auth-avatar">${currentUser.email[0].toUpperCase()}</div><span>${t('my_profile')}</span>`;
       newBtn.addEventListener('click', () => goTo('profile'));
       btn.replaceWith(newBtn);
     });
@@ -1156,12 +1156,12 @@ function nav(onBack) {
           <span>Moj profil</span>
          </button>`
       : `<button class="auth-btn" id="nav-login">
-          <span>👤</span><span>Prijava</span>
+          <span>👤</span><span>${t('login')}</span>
          </button>`;
     el.innerHTML = `
       <button class="nav-back">
         <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
-        Natrag
+        ${t('back')}
       </button>
       <div class="nav-logo s">SILLAGE</div>
       ${avatarHtml}
@@ -1219,7 +1219,7 @@ function renderShelf() {
   el.className = 'inner-page bg-shelf';
 
   const itemsHTML = state.collection.length === 0
-    ? '<div class="shelf-empty">Još nisi dodao/la ništa.</div>'
+    ? `<div class="shelf-empty">${t('shelf_empty')}</div>`
     : state.collection.map((item, i) => `
         <div class="shelf-item">
           <span>🫙 ${item}</span>
@@ -1231,16 +1231,16 @@ function renderShelf() {
   const body = document.createElement('div');
   body.className = 'page-body';
   body.innerHTML = `
-    <div class="pg-label">Digitalna Polica</div>
-    <h1 class="pg-title s">Što već imaš?</h1>
-    <p class="pg-sub">Dodaj parfeme koje posjeduješ — AI će maksimizirati tvoju kolekciju kroz layering.</p>
+    <div class="pg-label">${t('shelf_label')}</div>
+    <h1 class="pg-title s">${t('shelf_title')}</h1>
+    <p class="pg-sub">${t('shelf_sub')}</p>
     <div class="shelf-input-row">
       <input class="shelf-input" id="shelf-in" placeholder="${t('shelf_placeholder')}" value="${state.collectionInput}">
       <button class="shelf-add" id="shelf-add">+</button>
     </div>
     <div class="shelf-list" id="shelf-list">${itemsHTML}</div>
-    <button class="btn-primary" id="shelf-go">Analiziraj moj profil ✦</button>
-    <button class="btn-outline" id="shelf-skip">Preskoči i analiziraj</button>
+    <button class="btn-primary" id="shelf-go">${t('shelf_analyze')}</button>
+    <button class="btn-outline" id="shelf-skip">${t('shelf_skip')}</button>
   `;
   el.appendChild(body);
 
@@ -1284,13 +1284,13 @@ function renderNotes() {
   const hiddenCount = NOTES.length - 12;
 
   body.innerHTML = `
-    <div class="pg-label">Note Picker</div>
-    <h1 class="pg-title s">Odaberi note koje te privlače</h1>
-    <p class="pg-sub">Možeš odabrati više, ili preskočiti.</p>
+    <div class="pg-label">${t('notes_label')}</div>
+    <h1 class="pg-title s">${t('notes_title')}</h1>
+    <p class="pg-sub">${t('notes_sub')}</p>
     <div class="notes-grid">${notesHTML}</div>
-    ${!showAll ? `<button class="btn-more-notes" id="notes-more">+ Prikaži sve note (${hiddenCount} više)</button>` : ''}
-    <button class="btn-primary" id="notes-next">Dalje →</button>
-    <button class="btn-outline" id="notes-skip">Preskoči</button>
+    ${!showAll ? `<button class="btn-more-notes" id="notes-more">${t('notes_more')} (${hiddenCount})</button>` : ''}
+    <button class="btn-primary" id="notes-next">${t('notes_next')}</button>
+    <button class="btn-outline" id="notes-skip">${t('notes_skip')}</button>
   `;
   el.appendChild(body);
 
@@ -1319,17 +1319,17 @@ function renderVibe() {
   const body = document.createElement('div');
   body.className = 'page-body';
   body.innerHTML = `
-    <div class="pg-label">The Vibe Box</div>
-    <h1 class="pg-title s">Opiši svoj vibe</h1>
-    <p class="pg-sub">Napiši što želiš da tvoj idealni miris opisuje, osjeća se, podsjeća na...</p>
-    <textarea class="vibe-textarea" id="vibe-text" maxlength="300" placeholder='"Tražim nešto što miriše na staru knjižnicu i kišu, ali da ima malo citrusa."'>${state.vibe}</textarea>
+    <div class="pg-label">${t('vibe_label')}</div>
+    <h1 class="pg-title s">${t('vibe_title')}</h1>
+    <p class="pg-sub">${t('vibe_sub')}</p>
+    <textarea class="vibe-textarea" id="vibe-text" maxlength="300" placeholder="${t('vibe_placeholder')}">${state.vibe}</textarea>
     <div class="vibe-counter" id="vibe-count">${state.vibe.length}/300</div>
     <div class="vibe-hints-label">${t('vibe_insp')}</div>
     <div class="vibe-hints" id="hints-wrap">
       ${(state.lang==='en'?HINTS_EN:HINTS).map((h, i) => `<button class="hint-chip${i >= 6 ? ' hint-hidden' : ''}" data-hint="${h}">${h}</button>`).join('')}
     </div>
-    <button class="btn-more-notes" id="hints-more" style="margin-bottom:20px">+ Prikaži sve inspiracije (${HINTS.length - 6} više)</button>
-    <button class="btn-primary" id="vibe-next">Dalje →</button>
+    <button class="btn-more-notes" id="hints-more" style="margin-bottom:20px">${t('vibe_more')} (${(state.lang==='en'?HINTS_EN:HINTS).length - 6})</button>
+    <button class="btn-primary" id="vibe-next">${t('vibe_next')}</button>
   `;
   el.appendChild(body);
 
@@ -1440,12 +1440,7 @@ function renderLoading() {
 
 /* ─────────────── ANALYZE ─────────────── */
 async function analyze() {
-  const messages = [
-    'Analiziram tvoj mirisni profil...',
-    'Pronalazim savršene kombinacije...',
-    'Gradim tvoj Scent Recipe...',
-    'Još trenutak...'
-  ];
+  const messages = t('loading_msgs');
   let mi = 0;
   setState({ page: 'loading', loadingMsg: messages[0] });
 
@@ -1583,13 +1578,13 @@ function renderResults() {
   saveBanner.style.cssText = 'padding:12px 16px 0;position:relative;z-index:1';
   if (!currentUser) {
     saveBanner.innerHTML = `<div style="background:rgba(201,161,94,.1);border:1px solid rgba(201,161,94,.3);border-radius:12px;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px">
-      <div style="font-size:12px;color:#6B5E54">💾 Prijavi se da spremiš svoje rezultate i wishliste</div>
+      <div style="font-size:12px;color:#6B5E54">${t('save_prompt')}</div>
       <button id="save-login-btn" style="background:#2B2928;color:#fff;border:none;padding:8px 14px;border-radius:6px;font-size:11px;cursor:pointer;white-space:nowrap">${t('save_btn')}</button>
     </div>`;
   } else {
     saveBanner.innerHTML = `<div style="background:rgba(201,161,94,.1);border:1px solid rgba(201,161,94,.3);border-radius:12px;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px">
-      <div style="font-size:12px;color:#6B5E54">Spremi ovu analizu u svoj profil</div>
-      <button id="save-analysis-btn" style="background:#2B2928;color:#fff;border:none;padding:8px 14px;border-radius:6px;font-size:11px;cursor:pointer;white-space:nowrap">💾 Spremi</button>
+      <div style="font-size:12px;color:#6B5E54">${t('save_analysis')}</div>
+      <button id="save-analysis-btn" style="background:#2B2928;color:#fff;border:none;padding:8px 14px;border-radius:6px;font-size:11px;cursor:pointer;white-space:nowrap">${t('saving').replace('...','').trim() === 'Sprema' ? '💾 ' + t('save_analysis').split(' ')[0] : '💾'} ${state.lang==='en'?'Save':'Spremi'}</button>
     </div>`;
   }
   el.appendChild(saveBanner);
@@ -1640,7 +1635,7 @@ function renderResults() {
             <div class="match-why">${r.top?.why||''}</div>
             <div class="match-notes">${(r.top?.notes||[]).map(n=>`<span class="match-note">${n}</span>`).join('')}</div>
             <div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px">
-              <div style="font-size:11px;color:#C9A15E;letter-spacing:.1em">Saznaj više →</div>
+              <div style="font-size:11px;color:#C9A15E;letter-spacing:.1em">${t('learn_more')}</div>
               <button id="wishlist-top" class="wish-btn" title="Dodaj u wishlist">💛</button>
             </div>
           </div>
@@ -1658,7 +1653,7 @@ function renderResults() {
             <div class="match-why">${r.alt?.why||''}</div>
             <div class="match-notes">${(r.alt?.notes||[]).map(n=>`<span class="match-note">${n}</span>`).join('')}</div>
             <div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px">
-              <div style="font-size:11px;color:#C9A15E;letter-spacing:.1em">Saznaj više →</div>
+              <div style="font-size:11px;color:#C9A15E;letter-spacing:.1em">${t('learn_more')}</div>
               <button id="wishlist-alt" class="wish-btn" title="Dodaj u wishlist">💛</button>
             </div>
           </div>
@@ -1693,7 +1688,7 @@ function renderResults() {
           </div>
         </div>
         <div class="layer-result-box">
-          <div class="layer-result-label">Dobivaš</div>
+          <div class="layer-result-label">${state.lang==='en'?'You get':'Dobivaš'}</div>
           <div class="layer-result-text s">"${r.layering?.result||''}"</div>
           <div class="layer-result-tip">${r.layering?.tip||''}</div>
         </div>
@@ -1712,7 +1707,7 @@ function renderResults() {
       <div class="guidance-card">
         <div class="guidance-title s">${r.guidance?.emoji||''} ${r.guidance?.title||''}</div>
         <div class="guidance-text">${r.guidance?.text||''}</div>
-        <div style="font-size:11px;color:#9C8F86;margin-bottom:12px;line-height:1.5">Klikni smjer koji te zanima — dobit ćeš prave parfeme prilagođene tvom profilu.</div>
+        <div style="font-size:11px;color:#9C8F86;margin-bottom:12px;line-height:1.5">${state.lang==='en'?'Click a direction to get real perfume recommendations tailored to your profile.':'Klikni smjer koji te zanima — dobit ćeš prave parfeme prilagođene tvom profilu.'}</div>
         <div class="guidance-dirs">
           ${(r.guidance?.dirs||[]).map((d,i)=>`
             <div class="guidance-dir" id="dir-${i}" style="cursor:pointer;transition:all .15s;active:transform:scale(.97)">
@@ -1736,15 +1731,15 @@ function renderResults() {
       </div>
       <div class="recipe-cols">
         <div class="recipe-col">
-          <div class="recipe-col-label">Nosi</div>
+          <div class="recipe-col-label">${t('recipe_col1')}</div>
           <div class="recipe-col-text">${r.recipe?.nosi||''}</div>
         </div>
         <div class="recipe-col">
-          <div class="recipe-col-label">Složi</div>
+          <div class="recipe-col-label">${t('recipe_col2')}</div>
           <div class="recipe-col-text">${r.recipe?.slozi||''}</div>
         </div>
         <div class="recipe-col">
-          <div class="recipe-col-label">Istraži</div>
+          <div class="recipe-col-label">${t('recipe_col3')}</div>
           <div class="recipe-col-text">${r.recipe?.istrazi||''}</div>
         </div>
       </div>
@@ -2218,7 +2213,7 @@ async function renderProfile() {
   header.innerHTML = `
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
       <div>
-        <div class="section-label">Moj Profil</div>
+        <div class="section-label">${t('profile_label')}</div>
         <div style="font-family:Playfair Display,serif;font-size:22px;color:#2B2928">${currentUser?.email?.split('@')[0]||'User'}</div>
         <div style="font-size:11px;color:#9C8F86;margin-top:2px">${currentUser?.email||''}</div>
       </div>
@@ -2237,7 +2232,7 @@ async function renderProfile() {
   const content = document.createElement('div');
   content.innerHTML = `
     <div class="profile-section">
-      <div class="profile-sec-title s">Moje analize (${analyses.length})</div>
+      <div class="profile-sec-title s">${t('analyses_title')} (${analyses.length})</div>
       ${analyses.length === 0
         ? `<div class="empty-state">${t('analyses_empty').replace('\n','<br>')}</div>`
         : analyses.map(a => `<div class="saved-card" data-aid="${a.id}">
@@ -2248,7 +2243,7 @@ async function renderProfile() {
           </div>`).join('')}
     </div>
     <div class="profile-section" style="margin-top:8px">
-      <div class="profile-sec-title s">Wishlist (${wishlist.length})</div>
+      <div class="profile-sec-title s">${t('wishlist_title')} (${wishlist.length})</div>
       ${wishlist.length === 0
         ? `<div class="empty-state">${t('wishlist_empty').replace('\n','<br>')}</div>`
         : wishlist.map(w => `<div class="wishlist-item">
@@ -2264,7 +2259,7 @@ async function renderProfile() {
           </div>`).join('')}
     </div>
     <div class="profile-section" style="margin-top:8px">
-      <div class="profile-sec-title s">Layering kombinacije (${layering.length})</div>
+      <div class="profile-sec-title s">${t('layering_saved')} (${layering.length})</div>
       ${layering.length === 0
         ? `<div class="empty-state">${t('layering_empty').replace('\n','<br>')}</div>`
         : layering.map(l => `<div class="saved-card">
