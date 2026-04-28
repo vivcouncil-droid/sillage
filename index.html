@@ -822,12 +822,21 @@ async function removeFromWishlist(id) {
 }
 
 async function saveLayering(a, b, mood, result_desc, tip) {
-  if (!currentUser) return;
-  await sb.from('layering_combos').insert({
+  if (!currentUser) return false;
+  const { error } = await sb.from('layering_combos').insert({
     user_id: currentUser.id,
     perfume_a: a, perfume_b: b,
     mood, result_desc, tip
   });
+  return !error;
+}
+
+async function loadLayeringCombos() {
+  if (!currentUser) return [];
+  const { data } = await sb.from('layering_combos')
+    .select('*').eq('user_id', currentUser.id)
+    .order('created_at', { ascending: false });
+  return data || [];
 }
 /* ─────────────── DATA ─────────────── */
 const NOTES = [
@@ -904,7 +913,17 @@ const HINTS = [
   'Stara biblioteka i koža',
   'Jutarnja kava i drvo',
   'Ljetna noć na moru',
-  'Cvijeće nakon grmljavine'
+  'Cvijeće nakon grmljavine',
+  'Svježe posteljine ujutro',
+  'Tržnica začina u Maroku',
+  'Šetnja borovom šumom',
+  'Pariška pekara u zoru',
+  'Zalazak sunca na Jadranu',
+  'Dim i whisky kraj kamina',
+  'Vrt ruža nakon kiše',
+  'Egzotično voće i pijesak',
+  'Čista koža nakon tuša',
+  'Tamjan u staroj crkvi'
 ];
 
 /* ─────────────── STATE ─────────────── */
@@ -936,25 +955,40 @@ function goTo(page) {
 function nav(onBack) {
   const el = document.createElement('div');
   el.className = 'nav';
-  const avatarHtml = currentUser
-    ? `<button class="auth-btn" id="nav-profile">
-        <div class="auth-avatar">${currentUser.email[0].toUpperCase()}</div>
-        <span>Moj profil</span>
-       </button>`
-    : `<button class="auth-btn" id="nav-login">
-        <span>👤</span><span>Prijava</span>
-       </button>`;
-  el.innerHTML = `
-    <button class="nav-back">
-      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
-      Natrag
-    </button>
-    <div class="nav-logo s">SILLAGE</div>
-    ${avatarHtml}
-  `;
-  el.querySelector('.nav-back').onclick = onBack;
-  el.querySelector('#nav-profile')?.addEventListener('click', () => goTo('profile'));
-  el.querySelector('#nav-login')?.addEventListener('click', () => openAuthModal());
+
+  function buildNav() {
+    const avatarHtml = currentUser
+      ? `<button class="auth-btn" id="nav-profile">
+          <div class="auth-avatar">${currentUser.email[0].toUpperCase()}</div>
+          <span>Moj profil</span>
+         </button>`
+      : `<button class="auth-btn" id="nav-login">
+          <span>👤</span><span>Prijava</span>
+         </button>`;
+    el.innerHTML = `
+      <button class="nav-back">
+        <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+        Natrag
+      </button>
+      <div class="nav-logo s">SILLAGE</div>
+      ${avatarHtml}
+    `;
+    el.querySelector('.nav-back').onclick = onBack;
+    el.querySelector('#nav-profile')?.addEventListener('click', () => goTo('profile'));
+    el.querySelector('#nav-login')?.addEventListener('click', () => openAuthModal());
+  }
+
+  buildNav();
+
+  // Re-render nav when auth state resolves (in case it loads async)
+  sb.auth.getSession().then(({ data }) => {
+    const user = data.session?.user || null;
+    if (!!user !== !!currentUser) {
+      currentUser = user;
+      buildNav();
+    }
+  });
+
   return el;
 }
 
@@ -1643,7 +1677,7 @@ function renderPairings(overlay, mainPerfume, pairings) {
     <p style="font-size:12px;color:#9C8F86;margin-bottom:18px;line-height:1.6">
       Odaberi ugođaj koji želiš postići miješanjem s <strong style="color:#2B2928">${mainPerfume}</strong>:
     </p>
-    ${pairings.map(p => `
+    ${pairings.map((p,i) => `
       <div style="background:rgba(255,255,255,.8);border:1.5px solid #E3C9A9;border-radius:16px;padding:18px;margin-bottom:12px">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
           <div style="display:flex;align-items:center;gap:8px">
@@ -1656,12 +1690,33 @@ function renderPairings(overlay, mainPerfume, pairings) {
         <div style="font-family:'Playfair Display',serif;font-size:18px;color:#2B2928;margin-bottom:8px">${p.name}</div>
         <div style="font-size:13px;color:#6B5E54;font-style:italic;line-height:1.6;margin-bottom:10px">"${p.effect}"</div>
         <div style="font-size:11px;color:#9C8F86;margin-bottom:10px">→ ${p.how}</div>
-        <div style="display:flex;gap:5px;flex-wrap:wrap">
-          ${(p.notes||[]).map(n=>`<span style="border:1px solid rgba(201,161,94,.3);border-radius:20px;padding:3px 10px;font-size:10px;color:#2B2928">${n}</span>`).join('')}
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+          <div style="display:flex;gap:5px;flex-wrap:wrap">
+            ${(p.notes||[]).map(n=>`<span style="border:1px solid rgba(201,161,94,.3);border-radius:20px;padding:3px 10px;font-size:10px;color:#2B2928">${n}</span>`).join('')}
+          </div>
+          <button class="save-pairing-btn" data-i="${i}" style="background:rgba(201,161,94,.1);border:1px solid rgba(201,161,94,.3);border-radius:20px;padding:5px 12px;font-size:11px;color:#C9A15E;cursor:pointer;flex-shrink:0">
+            🤍 Spremi kombinaciju
+          </button>
         </div>
       </div>
     `).join('')}
   `;
+
+  // Wire save buttons
+  overlay.querySelectorAll('.save-pairing-btn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const i = parseInt(btn.dataset.i);
+      const p = pairings[i];
+      const ok = await saveLayering(mainPerfume, p.name, p.mood, p.effect, p.how);
+      if (ok !== false) {
+        btn.textContent = '✓ Spremljeno';
+        btn.style.color = '#27ae60';
+        btn.style.borderColor = '#27ae60';
+      } else {
+        openAuthModal();
+      }
+    });
+  });
 }
 
 /* ─────────────── PERFUME DETAIL MODAL ─────────────── */
@@ -1916,7 +1971,7 @@ async function renderProfile() {
   loading.innerHTML = '<div class="modal-loading-ring" style="margin:20px auto"></div>';
   el.appendChild(loading);
 
-  const [analyses, wishlist] = await Promise.all([loadAnalyses(), loadWishlist()]);
+  const [analyses, wishlist, layering] = await Promise.all([loadAnalyses(), loadWishlist(), loadLayeringCombos()]);
   loading.remove();
 
   const content = document.createElement('div');
@@ -1948,6 +2003,17 @@ async function renderProfile() {
             </div>
           </div>`).join('')}
     </div>
+    <div class="profile-section" style="margin-top:8px">
+      <div class="profile-sec-title s">Layering kombinacije (${layering.length})</div>
+      ${layering.length === 0
+        ? '<div class="empty-state">Još nemaš spremljenih kombinacija.<br>Klikni 🤍 Spremi kombinaciju u Layering Labu!</div>'
+        : layering.map(l => `<div class="saved-card">
+            <div class="saved-card-date">${new Date(l.created_at).toLocaleDateString('hr')} · <span style="color:#C9A15E">${l.mood||''}</span></div>
+            <div class="saved-card-title s">🫙 ${l.perfume_a} + ✨ ${l.perfume_b}</div>
+            <div class="saved-card-sub">${l.result_desc||''}</div>
+            ${l.tip ? `<div style="font-size:11px;color:#C9A15E;margin-top:5px">→ ${l.tip}</div>` : ''}
+          </div>`).join('')}
+    </div>
     <div style="height:60px"></div>`;
   el.appendChild(content);
 
@@ -1964,7 +2030,7 @@ async function renderProfile() {
   el.querySelectorAll('.saved-card').forEach(card => {
     card.addEventListener('click', () => {
       const a = analyses.find(x => x.id === card.dataset.aid);
-      if (a) setState({ res: a.result, page: 'results' });
+      if (a) setState({ result: a.result, page: 'results' });
     });
   });
   return el;
