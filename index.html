@@ -781,10 +781,24 @@ const sb = createClient(
 
 let currentUser = null;
 
-// Listen for auth changes
+// Listen for auth changes — re-render nav on all pages
 sb.auth.onAuthStateChange((event, session) => {
+  const prev = currentUser;
   currentUser = session?.user || null;
-  render();
+  // Only re-render if auth state actually changed
+  if (!!prev !== !!currentUser) {
+    render();
+  } else if (currentUser) {
+    // Just update nav buttons without full re-render
+    document.querySelectorAll('#nav-login').forEach(btn => {
+      const newBtn = document.createElement('button');
+      newBtn.className = 'auth-btn';
+      newBtn.id = 'nav-profile';
+      newBtn.innerHTML = `<div class="auth-avatar">${currentUser.email[0].toUpperCase()}</div><span>Moj profil</span>`;
+      newBtn.addEventListener('click', () => goTo('profile'));
+      btn.replaceWith(newBtn);
+    });
+  }
 });
 
 // Init — check session (handles OAuth redirect too)
@@ -1401,6 +1415,19 @@ function renderResults() {
   n.style.top = '0';
   n.style.zIndex = '10';
   el.appendChild(n);
+
+  // Re-check auth after short delay (handles cases where session loads async)
+  setTimeout(async () => {
+    const { data } = await sb.auth.getSession();
+    if (data.session?.user && !currentUser) {
+      currentUser = data.session.user;
+      const newNav = nav(() => goTo('landing'));
+      newNav.style.position = 'sticky';
+      newNav.style.top = '0';
+      newNav.style.zIndex = '10';
+      n.replaceWith(newNav);
+    }
+  }, 300);
 
   // Save analysis banner
   const saveBanner = document.createElement('div');
