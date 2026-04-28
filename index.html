@@ -894,92 +894,7 @@ const NOTES = [
   ['🕯️','Tamjan'],['🥥','Kokos']
 ];
 
-const STEPS = [
-  {
-    id: 'family',
-    label: 'KORAK 1',
-    get question(){ return state.lang==='en' ? 'Which scents appeal to you most?' : 'Koji mirisi ti se najviše odgovaraju?' },
-    get hint(){ return state.lang==='en' ? 'Select all that you like' : 'Odaberi sve koji ti se sviđaju' },
-    multi: true,
-    get options(){ return state.lang==='en' ? [
-      ['🍯','Sweet','Vanilla, caramel, musk'],
-      ['🌿','Fresh','Citrus, aqua, green'],
-      ['🪵','Woody','Sandalwood, cedar, patchouli'],
-      ['🌶️','Spicy','Oud, black pepper, cardamom'],
-      ['🌸','Floral','Rose, jasmine, peony'],
-      ['🌊','Marine','Ocean, sea salt, aqua'],
-      ['🍋','Citrus','Bergamot, lemon, orange'],
-      ['🤎','Leather','Leather, suede, smoky'],
-      ['🍂','Oriental','Amber, incense, resin'],
-      ['🥥','Gourmand','Coconut, chocolate, almond']
-    ] : [
-      ['🍯','Slatko','Vanilija, karamel, mošus'],
-      ['🌿','Svježe','Citrus, aqua, zeleno'],
-      ['🪵','Drvenasto','Sandalovina, cedar, pačuli'],
-      ['🌶️','Začinjeno','Oud, crni papar, kardamom'],
-      ['🌸','Cvjetno','Ruža, jasmin, peony'],
-      ['🌊','Morsko','Ocean, morska sol, aqua'],
-      ['🍋','Citrus','Bergamot, limun, naranča'],
-      ['🤎','Kožnato','Koža, suede, dimljeno'],
-      ['🍂','Orijentalno','Amber, tamjan, smola'],
-      ['🥥','Gourmand','Kokos, čokolada, badem']
-    ]}
-  },
-  {
-    id: 'season',
-    label: 'KORAK 2',
-    get question(){ return state.lang==='en' ? 'Which season best describes your ideal scent?' : 'Koje godišnje doba opisuje tvoj idealni miris?' },
-    get hint(){ return state.lang==='en' ? 'You can select multiple — or all four!' : 'Možeš odabrati više — ili sva četiri!' },
-    multi: true,
-    get options(){ return state.lang==='en' ? [
-      ['🌸','Spring','Floral, fresh, delicate'],
-      ['☀️','Summer','Marine, light, citrus'],
-      ['🍂','Autumn','Warm, spicy, amber'],
-      ['❄️','Winter','Deep, leathery, smoky']
-    ] : [
-      ['🌸','Proljeće','Cvjetno, svježe, nježno'],
-      ['☀️','Ljeto','Morsko, lagano, citrus'],
-      ['🍂','Jesen','Toplo, začinjeno, amber'],
-      ['❄️','Zima','Duboko, kožno, dimno']
-    ]}
-  },
-  {
-    id: 'occasion',
-    label: 'KORAK 3',
-    get question(){ return state.lang==='en' ? 'When do you wear it?' : 'Kada ga nosiš?' },
-    get hint(){ return state.lang==='en' ? 'You can select multiple' : 'Možeš odabrati više' },
-    multi: true,
-    get options(){ return state.lang==='en' ? [
-      ['☕','Everyday','Casual, light, fresh'],
-      ['🌙','Evening','Dark, rich, intriguing'],
-      ['💼','Work','Professional, subtle'],
-      ['✨','Special occasions','Striking, unforgettable']
-    ] : [
-      ['☕','Svakodnevno','Casual, lagan, svjež'],
-      ['🌙','Večernji','Taman, bogat, intrigantan'],
-      ['💼','Posao','Profesionalan, nenametljiv'],
-      ['✨','Posebne prilike','Upečatljiv, nezaboravan']
-    ]}
-  },
-  {
-    id: 'intensity',
-    label: 'KORAK 4',
-    get question(){ return state.lang==='en' ? 'What intensity do you prefer?' : 'Koji intenzitet preferiraš?' },
-    get hint(){ return state.lang==='en' ? 'How far does your sillage trail?' : 'Koliko daleko ide tvoj sillage?' },
-    multi: false,
-    get options(){ return state.lang==='en' ? [
-      ['🪷','Delicate','Close, intimate'],
-      ['🌺','Moderate','Present, pleasant'],
-      ['💥','Strong','Striking, long-range'],
-      ['🎭','Varies','Adaptable, contextual']
-    ] : [
-      ['🪷','Nježan','Blizak, intiman'],
-      ['🌺','Umjeren','Prisutan, ugodan'],
-      ['💥','Jak','Upečatljiv, dalekosežan'],
-      ['🎭','Ovisi','Prilagodljiv, kontekstualan']
-    ]}
-  }
-];
+
 
 const HINTS = [
   'Kiša na toplom asfaltu',
@@ -1054,7 +969,7 @@ const T = {
     layering_empty: 'Još nemaš spremljenih kombinacija.\nKlikni 🤍 Spremi kombinaciju u Layering Labu!',
     find_online: '🔍 Pronađi online', remove: '✕',
     // Auth
-    auth_title: '${t('auth_title')}',
+    auth_title: 'Dobrodošla u SILLAGE ✦',
     auth_login_tab: 'Prijava', auth_register_tab: 'Registracija',
     auth_email: 'Email', auth_pass: 'Lozinka',
     auth_submit_login: 'Prijava', auth_submit_reg: 'Registracija',
@@ -1159,6 +1074,94 @@ let state = {
   result: null,
   loadingMsg: ''
 };
+
+const STEPS = [
+  {
+    id: 'family',
+    label: 'KORAK 1',
+    get question(){ return state.lang==='en' ? 'Which scents appeal to you most?' : 'Koji mirisi ti se najviše odgovaraju?' },
+    get hint(){ return state.lang==='en' ? 'Select all that you like' : 'Odaberi sve koji ti se sviđaju' },
+    multi: true,
+    get options(){ return state.lang==='en' ? [
+      ['🍯','Sweet','Vanilla, caramel, musk'],
+      ['🌿','Fresh','Citrus, aqua, green'],
+      ['🪵','Woody','Sandalwood, cedar, patchouli'],
+      ['🌶️','Spicy','Oud, black pepper, cardamom'],
+      ['🌸','Floral','Rose, jasmine, peony'],
+      ['🌊','Marine','Ocean, sea salt, aqua'],
+      ['🍋','Citrus','Bergamot, lemon, orange'],
+      ['🤎','Leather','Leather, suede, smoky'],
+      ['🍂','Oriental','Amber, incense, resin'],
+      ['🥥','Gourmand','Coconut, chocolate, almond']
+    ] : [
+      ['🍯','Slatko','Vanilija, karamel, mošus'],
+      ['🌿','Svježe','Citrus, aqua, zeleno'],
+      ['🪵','Drvenasto','Sandalovina, cedar, pačuli'],
+      ['🌶️','Začinjeno','Oud, crni papar, kardamom'],
+      ['🌸','Cvjetno','Ruža, jasmin, peony'],
+      ['🌊','Morsko','Ocean, morska sol, aqua'],
+      ['🍋','Citrus','Bergamot, limun, naranča'],
+      ['🤎','Kožnato','Koža, suede, dimljeno'],
+      ['🍂','Orijentalno','Amber, tamjan, smola'],
+      ['🥥','Gourmand','Kokos, čokolada, badem']
+    ]}
+  },
+  {
+    id: 'season',
+    label: 'KORAK 2',
+    get question(){ return state.lang==='en' ? 'Which season best describes your ideal scent?' : 'Koje godišnje doba opisuje tvoj idealni miris?' },
+    get hint(){ return state.lang==='en' ? 'You can select multiple — or all four!' : 'Možeš odabrati više — ili sva četiri!' },
+    multi: true,
+    get options(){ return state.lang==='en' ? [
+      ['🌸','Spring','Floral, fresh, delicate'],
+      ['☀️','Summer','Marine, light, citrus'],
+      ['🍂','Autumn','Warm, spicy, amber'],
+      ['❄️','Winter','Deep, leathery, smoky']
+    ] : [
+      ['🌸','Proljeće','Cvjetno, svježe, nježno'],
+      ['☀️','Ljeto','Morsko, lagano, citrus'],
+      ['🍂','Jesen','Toplo, začinjeno, amber'],
+      ['❄️','Zima','Duboko, kožno, dimno']
+    ]}
+  },
+  {
+    id: 'occasion',
+    label: 'KORAK 3',
+    get question(){ return state.lang==='en' ? 'When do you wear it?' : 'Kada ga nosiš?' },
+    get hint(){ return state.lang==='en' ? 'You can select multiple' : 'Možeš odabrati više' },
+    multi: true,
+    get options(){ return state.lang==='en' ? [
+      ['☕','Everyday','Casual, light, fresh'],
+      ['🌙','Evening','Dark, rich, intriguing'],
+      ['💼','Work','Professional, subtle'],
+      ['✨','Special occasions','Striking, unforgettable']
+    ] : [
+      ['☕','Svakodnevno','Casual, lagan, svjež'],
+      ['🌙','Večernji','Taman, bogat, intrigantan'],
+      ['💼','Posao','Profesionalan, nenametljiv'],
+      ['✨','Posebne prilike','Upečatljiv, nezaboravan']
+    ]}
+  },
+  {
+    id: 'intensity',
+    label: 'KORAK 4',
+    get question(){ return state.lang==='en' ? 'What intensity do you prefer?' : 'Koji intenzitet preferiraš?' },
+    get hint(){ return state.lang==='en' ? 'How far does your sillage trail?' : 'Koliko daleko ide tvoj sillage?' },
+    multi: false,
+    get options(){ return state.lang==='en' ? [
+      ['🪷','Delicate','Close, intimate'],
+      ['🌺','Moderate','Present, pleasant'],
+      ['💥','Strong','Striking, long-range'],
+      ['🎭','Varies','Adaptable, contextual']
+    ] : [
+      ['🪷','Nježan','Blizak, intiman'],
+      ['🌺','Umjeren','Prisutan, ugodan'],
+      ['💥','Jak','Upečatljiv, dalekosežan'],
+      ['🎭','Ovisi','Prilagodljiv, kontekstualan']
+    ]}
+  }
+];
+
 
 function setState(patch) {
   Object.assign(state, patch);
