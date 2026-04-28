@@ -1272,7 +1272,7 @@ async function analyze() {
 
   const systemPrompt = `Ti si SILLAGE — vrhunski AI parfemski stručnjak. Piši poetski i elegantno. Svi opisi moraju biti na HRVATSKOM, osim naziva brendova i parfema koji ostaju u originalu. Vrati ISKLJUČIVO validan JSON bez ikakvih markdowna ili objašnjenja:
 {
-  "match_score": 92,
+  "match_score": IZRAČUNAJ_STVARNI_BROJ_između_72_i_98_ovisno_o_podudaranju_profila,
   "ai_insight": "2-3 poetske rečenice o njihovoj mirisnoj osobnosti",
   "keywords": ["kw1","kw2","kw3","kw4"],
   "profile": {
@@ -1343,7 +1343,7 @@ async function analyze() {
     clearInterval(interval);
     setState({
       result: {
-        match_score: 92,
+        match_score: Math.floor(Math.random() * 15) + 82,
         ai_insight: 'Privlači te efemerna magija mediteranskih ljeta, gdje slani zrak sreće noćni jasmin. Tvoja mirisna duša čezne za opojem slatkoćom koja pleše između oceana i zvjezdane romanike.',
         keywords: ['mediteranske noći','ocean','jasmin','romanika'],
         profile: { intenzitet:'Umjeren 🌺', sezona:'Ljeto ☀️', prigoda:'Večernji 🌙', note:'Vanilija, Jasmin, Mošus' },
