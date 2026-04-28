@@ -1763,69 +1763,71 @@ async function openPerfumeModal(perfume) {
     const res = await fetch('/api/chat', {
       method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({model:'claude-haiku-4-5-20251001', max_tokens:600,
-        system:`Predloži 3 slična parfema za zadani parfem. SAMO JSON na HR: {"similar":[{"brand":"","name":"","price":"~XX€","why":"kratki razlog","diff":"ključna razlika"}]}`,
-        messages:[{role:'user', content:`${perfume.brand} ${perfume.name} (${perfume.family})`}]})
+        system:`Predloži 3 slična parfema za zadani parfem. Vrati SAMO validan JSON bez markdowna: {"similar":[{"brand":"","name":"","price":"~XX€","why":"kratki razlog na HR","diff":"ključna razlika na HR"}]}`,
+        messages:[{role:'user', content:`Parfem: ${perfume.brand} ${perfume.name} ${perfume.family||''}`}]})
     });
     const data = await res.json();
-    const result = JSON.parse(data.content[0].text.replace(/```json|```/g,'').trim());
-    overlay.querySelector('.modal-body').innerHTML = `
-      <div style="background:linear-gradient(135deg,rgba(201,161,94,.08),rgba(244,227,209,.4));border-radius:14px;padding:18px;margin-bottom:20px;font-family:'Playfair Display',serif;font-size:14px;font-style:italic;color:#2B2928;line-height:1.75">"${perfume.why||''}"</div>
-      <div style="margin-bottom:16px"><div style="display:flex;flex-wrap:wrap;gap:6px">${(perfume.notes||[]).map(n=>`<span style="border:1px solid rgba(201,161,94,.3);border-radius:20px;padding:5px 12px;font-size:12px;color:#2B2928">${n}</span>`).join('')}</div></div>
-      <div style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#9C8F86;margin-bottom:12px">Slični parfemi koji bi ti se svidjeli</div>
-      ${result.similar.map((s,i)=>`
-        <div style="background:rgba(255,255,255,.8);border:1px solid #E3C9A9;border-radius:12px;padding:14px;margin-bottom:10px">
-          <div style="font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:#9C8F86;margin-bottom:2px">${s.brand}</div>
-          <div style="font-family:'Playfair Display',serif;font-size:15px;color:#2B2928;margin-bottom:5px">${s.name} <span style="font-size:11px;color:#C9A15E">${s.price}</span></div>
-          <div style="font-size:12px;color:#6B5E54;font-style:italic;margin-bottom:3px">${s.why}</div>
-          <div style="font-size:11px;color:#C9A15E;margin-bottom:12px">↳ ${s.diff}</div>
-          <div style="display:flex;gap:8px">
-            <button class="sim-wishlist" data-i="${i}"
-              style="flex:1;background:rgba(201,161,94,.08);border:1px solid rgba(201,161,94,.3);border-radius:8px;padding:9px;font-size:12px;color:#C9A15E;cursor:pointer">
-              🤍 Wishlist
-            </button>
-            <button class="sim-select" data-i="${i}"
-              style="flex:1;background:#2B2928;border:none;border-radius:8px;padding:9px;font-size:12px;color:#fff;cursor:pointer">
-              ✦ Odaberi ovaj
-            </button>
-          </div>
-        </div>`).join('')}`;
-
-    // Wire buttons
-    overlay.querySelectorAll('.sim-wishlist').forEach(btn => {
-      btn.addEventListener('click', async () => {
-        const s = result.similar[parseInt(btn.dataset.i)];
-        const ok = await saveToWishlist({ brand: s.brand, name: s.name, price: s.price, why: s.why });
-        if (ok) { btn.textContent = '✓ Dodano'; btn.style.color = '#27ae60'; btn.style.borderColor = '#27ae60'; }
-        else openAuthModal();
-      });
-    });
-    overlay.querySelectorAll('.sim-select').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const s = result.similar[parseInt(btn.dataset.i)];
-        // Replace top match in state result and re-render
-        if (state.result) {
-          state.result.top = {
-            ...state.result.top,
-            brand: s.brand,
-            name: s.name,
-            price: s.price,
-            why: s.why
-          };
-        }
-        overlay.remove();
-        // Show confirmation
-        const toast = document.createElement('div');
-        toast.textContent = `✦ ${s.name} postavljen kao tvoj top match`;
-        toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#2B2928;color:#fff;padding:12px 20px;border-radius:20px;font-size:13px;z-index:200;white-space:nowrap;animation:fadeIn .3s ease';
-        document.body.appendChild(toast);
-        setTimeout(() => toast.remove(), 3000);
-        render();
-      });
-    });
-  } catch(e) {}
+    const text = data.content[0].text.replace(/```json|```/g,'').trim();
+    const result = JSON.parse(text);
+    renderSimilar(overlay, perfume, result.similar);
+  } catch(e) {
+    // Fallback s generičkim sličnim parfemima
+    const fallback = [
+      { brand: perfume.brand, name: 'Otkri sličnu liniju', price: '~'+perfume.price, why: 'Isti brend nudi slične mirise u svojoj kolekciji.', diff: 'Drugačiji intenzitet ili sezona' },
+      { brand: 'Maison Margiela', name: 'Replica — istraži kolekciju', price: '~120€', why: 'Replica linija nudi autentične mirise za svaki vibe.', diff: 'Artizanalni pristup, manje komercijalnog' },
+      { brand: 'Jo Malone', name: 'Istraži prema notama', price: '~150€', why: 'Jo Malone nudi kologne koje se savršeno layeraju.', diff: 'Laganiji, idealan za layering' }
+    ];
+    renderSimilar(overlay, perfume, fallback);
+  }
 }
 
-/* ─────────────── DIRECTION MODAL ─────────────── */
+function renderSimilar(overlay, perfume, similar) {
+  overlay.querySelector('.modal-body').innerHTML = `
+    <div style="background:linear-gradient(135deg,rgba(201,161,94,.08),rgba(244,227,209,.4));border-radius:14px;padding:18px;margin-bottom:20px;font-family:'Playfair Display',serif;font-size:14px;font-style:italic;color:#2B2928;line-height:1.75">"${perfume.why||''}"</div>
+    <div style="margin-bottom:16px"><div style="display:flex;flex-wrap:wrap;gap:6px">${(perfume.notes||[]).map(n=>`<span style="border:1px solid rgba(201,161,94,.3);border-radius:20px;padding:5px 12px;font-size:12px;color:#2B2928">${n}</span>`).join('')}</div></div>
+    <div style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#9C8F86;margin-bottom:12px">Slični parfemi koji bi ti se svidjeli</div>
+    ${similar.map((s,i)=>`
+      <div style="background:rgba(255,255,255,.8);border:1px solid #E3C9A9;border-radius:12px;padding:14px;margin-bottom:10px">
+        <div style="font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:#9C8F86;margin-bottom:2px">${s.brand}</div>
+        <div style="font-family:'Playfair Display',serif;font-size:15px;color:#2B2928;margin-bottom:5px">${s.name} <span style="font-size:11px;color:#C9A15E">${s.price}</span></div>
+        <div style="font-size:12px;color:#6B5E54;font-style:italic;margin-bottom:3px">${s.why}</div>
+        <div style="font-size:11px;color:#C9A15E;margin-bottom:12px">↳ ${s.diff}</div>
+        <div style="display:flex;gap:8px">
+          <button class="sim-wishlist" data-i="${i}"
+            style="flex:1;background:rgba(201,161,94,.08);border:1px solid rgba(201,161,94,.3);border-radius:8px;padding:9px;font-size:12px;color:#C9A15E;cursor:pointer">
+            🤍 Wishlist
+          </button>
+          <button class="sim-select" data-i="${i}"
+            style="flex:1;background:#2B2928;border:none;border-radius:8px;padding:9px;font-size:12px;color:#fff;cursor:pointer">
+            ✦ Odaberi ovaj
+          </button>
+        </div>
+      </div>`).join('')}`;
+
+  overlay.querySelectorAll('.sim-wishlist').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const s = similar[parseInt(btn.dataset.i)];
+      const ok = await saveToWishlist({ brand: s.brand, name: s.name, price: s.price, why: s.why });
+      if (ok) { btn.textContent = '✓ Dodano'; btn.style.color = '#27ae60'; btn.style.borderColor = '#27ae60'; }
+      else openAuthModal();
+    });
+  });
+  overlay.querySelectorAll('.sim-select').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const s = similar[parseInt(btn.dataset.i)];
+      if (state.result) {
+        state.result.top = { ...state.result.top, brand: s.brand, name: s.name, price: s.price, why: s.why };
+      }
+      overlay.remove();
+      const toast = document.createElement('div');
+      toast.textContent = `✦ ${s.name} postavljen kao tvoj top match`;
+      toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#2B2928;color:#fff;padding:12px 20px;border-radius:20px;font-size:13px;z-index:200;white-space:nowrap';
+      document.body.appendChild(toast);
+      setTimeout(() => toast.remove(), 3000);
+      render();
+    });
+  });
+}
 async function openDirectionModal(dir, profile) {
   const overlay = document.createElement('div');
   overlay.className = 'modal-overlay';
