@@ -809,9 +809,10 @@ sb.auth.onAuthStateChange((event, session) => {
     state.lang = route.lang;
     state.page = route.page;
     if (route.quizStep !== undefined) state.quizStep = route.quizStep;
+    // Store state so popstate always has e.state
+    window.history.replaceState({ page: state.page, lang: state.lang, quizStep: state.quizStep }, '', path);
   } else {
-    // Redirect / to /hr
-    window.history.replaceState({}, '', '/hr');
+    window.history.replaceState({ page: 'landing', lang: 'hr', quizStep: 0 }, '', '/hr');
   }
 })();
 
@@ -1116,14 +1117,14 @@ function pushRoute(page, lang, quizStep) {
 
 // Handle browser back/forward
 window.addEventListener('popstate', (e) => {
-  if (e.state) {
-    Object.assign(state, {
-      page: e.state.page,
-      lang: e.state.lang,
-      quizStep: e.state.quizStep ?? state.quizStep
-    });
-    render();
-  }
+  // Always parse URL as source of truth — don't rely solely on e.state
+  const route = (e.state?.page) ? e.state : parseRoute(window.location.pathname);
+  Object.assign(state, {
+    page: route.page || 'landing',
+    lang: route.lang || state.lang,
+    quizStep: route.quizStep ?? state.quizStep
+  });
+  render();
 });
 
 
