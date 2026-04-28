@@ -801,21 +801,6 @@ sb.auth.onAuthStateChange((event, session) => {
   }
 });
 
-// Parse URL on initial load
-(function() {
-  const path = window.location.pathname;
-  if (path !== '/' && path !== '') {
-    const route = parseRoute(path);
-    state.lang = route.lang;
-    state.page = route.page;
-    if (route.quizStep !== undefined) state.quizStep = route.quizStep;
-    // Store state so popstate always has e.state
-    window.history.replaceState({ page: state.page, lang: state.lang, quizStep: state.quizStep }, '', path);
-  } else {
-    window.history.replaceState({ page: 'landing', lang: 'hr', quizStep: 0 }, '', '/hr');
-  }
-})();
-
 // Init — check session (handles OAuth redirect too)
 sb.auth.getSession().then(({ data }) => {
   currentUser = data.session?.user || null;
@@ -827,7 +812,7 @@ if (window.location.hash.includes('access_token')) {
   sb.auth.getSession().then(({ data }) => {
     currentUser = data.session?.user || null;
     // Clean URL
-    window.history.replaceState({}, document.title, window.location.pathname);
+    try { window.history.replaceState({}, document.title, window.location.pathname); } catch(e) {}
     render();
   });
 }
@@ -942,7 +927,7 @@ const T = {
   hr: {
     tagline:'AI Perfume Expert', headline1:'Your scent,', headline2:'decoded.',
     desc:'AI-crafted fragrance profile prilagođen tvojim emocijama, uspomenama i željama.',
-    cta:'Saznaj svoj recept', lang_toggle:'HR | EN', back:'Natrag',
+    cta:'Otkrij svoj mirisni profil', lang_toggle:'HR | EN', back:'Natrag',
     my_profile:'Moj profil', login:'Prijava',
     shelf_label:'Digitalna Polica', shelf_title:'Što već imaš?',
     shelf_sub:'Dodaj parfeme koje posjeduješ — AI će maksimizirati tvoju kolekciju kroz layering.',
@@ -992,7 +977,7 @@ const T = {
   en: {
     tagline:'AI Perfume Expert', headline1:'Your scent,', headline2:'decoded.',
     desc:'AI-crafted fragrance profile tailored to your emotions, memories and desires.',
-    cta:'Discover your recipe', lang_toggle:'EN | HR', back:'Back',
+    cta:'Get your scent profile', lang_toggle:'EN | HR', back:'Back',
     my_profile:'My profile', login:'Login',
     shelf_label:'Digital Shelf', shelf_title:'What do you already own?',
     shelf_sub:'Add perfumes you own — AI will maximize your collection through layering.',
@@ -1111,7 +1096,7 @@ function parseRoute(path) {
 function pushRoute(page, lang, quizStep) {
   const url = getRouteUrl(page, lang, quizStep ?? state.quizStep);
   if (window.location.pathname !== url) {
-    window.history.pushState({ page, lang, quizStep }, '', url);
+    try { window.history.pushState({ page, lang, quizStep }, '', url); } catch(e) {}
   }
 }
 
@@ -1301,7 +1286,7 @@ function renderLanding() {
       <div class="land-divider"></div>
       <p class="land-desc">${t('desc')}</p>
       <button class="land-cta">
-        Saznaj svoj recept
+        ${t('cta')}
         <span class="land-cta-star">✦</span>
       </button>
       <div class="land-lang" id="lang-toggle" style="cursor:pointer;padding:4px 8px;border-radius:4px;transition:all .2s">${t('lang_toggle')}</div>
@@ -2392,6 +2377,23 @@ async function renderProfile() {
   });
   return el;
 }
+
+
+// Parse URL on initial load
+(function() {
+  const path = window.location.pathname;
+  if (path !== '/' && path !== '') {
+    const route = parseRoute(path);
+    state.lang = route.lang;
+    state.page = route.page;
+    if (route.quizStep !== undefined) state.quizStep = route.quizStep;
+    // Store state so popstate always has e.state
+    try { window.history.replaceState({ page: state.page, lang: state.lang, quizStep: state.quizStep }, '', path); } catch(e) {}
+  } else {
+    try { window.history.replaceState({ page: 'landing', lang: 'hr', quizStep: 0 }, '', '/hr'); } catch(e) {}
+  }
+})();
+
 
 render();
 </script>
