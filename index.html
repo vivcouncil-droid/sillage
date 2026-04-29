@@ -34,6 +34,7 @@
 <meta name="robots" content="index, follow">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
 <style>
 /* BASE */
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;-webkit-font-smoothing:antialiased}
@@ -1057,6 +1058,21 @@ const T = {
 // Helper
 const t = key => T[state.lang][key] || T.hr[key] || key;
 
+// XSS protection — sanitize all AI-generated content before rendering
+function san(str) {
+  if (!str) return '';
+  if (typeof DOMPurify !== 'undefined') {
+    return DOMPurify.sanitize(String(str), { ALLOWED_TAGS: [], ALLOWED_ATTR: [] });
+  }
+  // Fallback: manual escape
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#x27;');
+}
+
 // English hints
 const HINTS_EN = [
   'Rain on warm asphalt','Old library and leather','Morning coffee and wood',
@@ -1710,15 +1726,15 @@ function renderResults() {
     <div class="insight-card">
       <div class="insight-badge">
         <div class="insight-badge-dot"></div>
-        <div class="insight-badge-text">✦ ${r.match_score}% ${t('match_label')}</div>
+        <div class="insight-badge-text">✦ ${san(r.match_score)}% ${t('match_label')}</div>
       </div>
-      <div class="insight-quote s">"${r.ai_insight}"</div>
+      <div class="insight-quote s">"${san(r.ai_insight)}"</div>
       <div class="insight-row">
         <div class="insight-pills">
           ${(r.keywords||[]).map(k=>`<span class="pill">${k}</span>`).join('')}
         </div>
         <div class="insight-score">
-          <span class="score-num s">${r.match_score}%</span>
+          <span class="score-num s">${san(r.match_score)}%</span>
           <div class="score-label">Match</div>
         </div>
       </div>
@@ -1747,7 +1763,7 @@ function renderResults() {
             <div class="match-brand">${r.top?.brand||''}</div>
             <div class="match-name s">${r.top?.name||''}</div>
             <div class="match-family">${r.top?.family||''} · ${r.top?.conc||''}</div>
-            <div class="match-why">${r.top?.why||''}</div>
+            <div class="match-why">${san(r.top?.why||'')}</div>
             <div class="match-notes">${(r.top?.notes||[]).map(n=>`<span class="match-note">${n}</span>`).join('')}</div>
             <div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px">
               <div style="font-size:11px;color:#C9A15E;letter-spacing:.1em">${t('learn_more')}</div>
@@ -1765,7 +1781,7 @@ function renderResults() {
             <div class="match-brand">${r.alt?.brand||''}</div>
             <div class="match-name s">${r.alt?.name||''}</div>
             <div class="match-family">${r.alt?.family||''} · ${r.alt?.conc||''}</div>
-            <div class="match-why">${r.alt?.why||''}</div>
+            <div class="match-why">${san(r.alt?.why||'')}</div>
             <div class="match-notes">${(r.alt?.notes||[]).map(n=>`<span class="match-note">${n}</span>`).join('')}</div>
             <div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px">
               <div style="font-size:11px;color:#C9A15E;letter-spacing:.1em">${t('learn_more')}</div>
@@ -1804,8 +1820,8 @@ function renderResults() {
         </div>
         <div class="layer-result-box">
           <div class="layer-result-label">${state.lang==='en'?'You get':'Dobivaš'}</div>
-          <div class="layer-result-text s">"${r.layering?.result||''}"</div>
-          <div class="layer-result-tip">${r.layering?.tip||''}</div>
+          <div class="layer-result-text s">"${san(r.layering?.result||'')}"</div>
+          <div class="layer-result-tip">${san(r.layering?.tip||'')}</div>
         </div>
         <button class="btn-outline" id="layer-tips-btn" style="margin-top:14px;font-size:12px;padding:12px">
           Explore layering tips →
@@ -1820,8 +1836,8 @@ function renderResults() {
       <div class="section-label">${t('guidance_label')}</div>
       <div class="section-title s">${t('guidance_title')}</div>
       <div class="guidance-card">
-        <div class="guidance-title s">${r.guidance?.emoji||''} ${r.guidance?.title||''}</div>
-        <div class="guidance-text">${r.guidance?.text||''}</div>
+        <div class="guidance-title s">${r.guidance?.emoji||''} ${san(r.guidance?.title||'')}</div>
+        <div class="guidance-text">${san(r.guidance?.text||'')}</div>
         <div style="font-size:11px;color:#9C8F86;margin-bottom:12px;line-height:1.5">${state.lang==='en'?'Click a direction to get real perfume recommendations tailored to your profile.':'Klikni smjer koji te zanima — dobit ćeš prave parfeme prilagođene tvom profilu.'}</div>
         <div class="guidance-dirs">
           ${(r.guidance?.dirs||[]).map((d,i)=>`
@@ -1847,15 +1863,15 @@ function renderResults() {
       <div class="recipe-cols">
         <div class="recipe-col">
           <div class="recipe-col-label">${t('recipe_col1')}</div>
-          <div class="recipe-col-text">${r.recipe?.nosi||''}</div>
+          <div class="recipe-col-text">${san(r.recipe?.nosi||'')}</div>
         </div>
         <div class="recipe-col">
           <div class="recipe-col-label">${t('recipe_col2')}</div>
-          <div class="recipe-col-text">${r.recipe?.slozi||''}</div>
+          <div class="recipe-col-text">${san(r.recipe?.slozi||'')}</div>
         </div>
         <div class="recipe-col">
           <div class="recipe-col-label">${t('recipe_col3')}</div>
-          <div class="recipe-col-text">${r.recipe?.istrazi||''}</div>
+          <div class="recipe-col-text">${san(r.recipe?.istrazi||'')}</div>
         </div>
       </div>
       <div class="recipe-footer">${t('recipe_footer')}</div>
@@ -2027,8 +2043,8 @@ function renderPairings(overlay, mainPerfume, pairings) {
         </div>
         <div style="font-size:10px;color:#9C8F86;letter-spacing:.15em;text-transform:uppercase;margin-bottom:2px">${p.brand}</div>
         <div style="font-family:'Playfair Display',serif;font-size:18px;color:#2B2928;margin-bottom:8px">${p.name}</div>
-        <div style="font-size:13px;color:#6B5E54;font-style:italic;line-height:1.6;margin-bottom:10px">"${p.effect}"</div>
-        <div style="font-size:11px;color:#9C8F86;margin-bottom:10px">→ ${p.how}</div>
+        <div style="font-size:13px;color:#6B5E54;font-style:italic;line-height:1.6;margin-bottom:10px">"${san(p.effect)}"</div>
+        <div style="font-size:11px;color:#9C8F86;margin-bottom:10px">→ ${san(p.how)}</div>
         <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
           <div style="display:flex;gap:5px;flex-wrap:wrap">
             ${(p.notes||[]).map(n=>`<span style="border:1px solid rgba(201,161,94,.3);border-radius:20px;padding:3px 10px;font-size:10px;color:#2B2928">${n}</span>`).join('')}
@@ -2074,7 +2090,7 @@ async function openPerfumeModal(perfume) {
       </div>
       <div class="modal-subtitle">${perfume.family||''} · ${perfume.conc||''} · ${perfume.price||''}</div>
       <div class="modal-body">
-        <div style="background:linear-gradient(135deg,rgba(201,161,94,.08),rgba(244,227,209,.4));border-radius:14px;padding:18px;margin-bottom:20px;font-family:'Playfair Display',serif;font-size:14px;font-style:italic;color:#2B2928;line-height:1.75">"${perfume.why||''}"</div>
+        <div style="background:linear-gradient(135deg,rgba(201,161,94,.08),rgba(244,227,209,.4));border-radius:14px;padding:18px;margin-bottom:20px;font-family:'Playfair Display',serif;font-size:14px;font-style:italic;color:#2B2928;line-height:1.75">"${san(perfume.why||'')}"</div>
         <div style="margin-bottom:20px">
           <div style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#9C8F86;margin-bottom:10px">Note</div>
           <div style="display:flex;flex-wrap:wrap;gap:6px">${(perfume.notes||[]).map(n=>`<span style="border:1px solid rgba(201,161,94,.3);border-radius:20px;padding:5px 12px;font-size:12px;color:#2B2928">${n}</span>`).join('')}</div>
@@ -2113,15 +2129,15 @@ async function openPerfumeModal(perfume) {
 
 function renderSimilar(overlay, perfume, similar) {
   overlay.querySelector('.modal-body').innerHTML = `
-    <div style="background:linear-gradient(135deg,rgba(201,161,94,.08),rgba(244,227,209,.4));border-radius:14px;padding:18px;margin-bottom:20px;font-family:'Playfair Display',serif;font-size:14px;font-style:italic;color:#2B2928;line-height:1.75">"${perfume.why||''}"</div>
+    <div style="background:linear-gradient(135deg,rgba(201,161,94,.08),rgba(244,227,209,.4));border-radius:14px;padding:18px;margin-bottom:20px;font-family:'Playfair Display',serif;font-size:14px;font-style:italic;color:#2B2928;line-height:1.75">"${san(perfume.why||'')}"</div>
     <div style="margin-bottom:16px"><div style="display:flex;flex-wrap:wrap;gap:6px">${(perfume.notes||[]).map(n=>`<span style="border:1px solid rgba(201,161,94,.3);border-radius:20px;padding:5px 12px;font-size:12px;color:#2B2928">${n}</span>`).join('')}</div></div>
     <div style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#9C8F86;margin-bottom:12px">Slični parfemi koji bi ti se svidjeli</div>
     ${similar.map((s,i)=>`
       <div style="background:rgba(255,255,255,.8);border:1px solid #E3C9A9;border-radius:12px;padding:14px;margin-bottom:10px">
         <div style="font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:#9C8F86;margin-bottom:2px">${s.brand}</div>
         <div style="font-family:'Playfair Display',serif;font-size:15px;color:#2B2928;margin-bottom:5px">${s.name} <span style="font-size:11px;color:#C9A15E">${s.price}</span></div>
-        <div style="font-size:12px;color:#6B5E54;font-style:italic;margin-bottom:3px">${s.why}</div>
-        <div style="font-size:11px;color:#C9A15E;margin-bottom:12px">↳ ${s.diff}</div>
+        <div style="font-size:12px;color:#6B5E54;font-style:italic;margin-bottom:3px">${san(s.why)}</div>
+        <div style="font-size:11px;color:#C9A15E;margin-bottom:12px">↳ ${san(s.diff)}</div>
         <div style="display:flex;gap:8px">
           <button class="sim-wishlist" data-i="${i}"
             style="flex:1;background:rgba(201,161,94,.08);border:1px solid rgba(201,161,94,.3);border-radius:8px;padding:9px;font-size:12px;color:#C9A15E;cursor:pointer">
@@ -2199,7 +2215,7 @@ async function openDirectionModal(dir, profile) {
             <a href="https://www.google.com/search?q=${encodeURIComponent(p.brand+' '+p.name+' parfem kupi')}" target="_blank"
                style="background:#2B2928;color:#fff;padding:8px 12px;border-radius:6px;font-size:11px;text-decoration:none;flex-shrink:0">${t('find_online')}</a>
           </div>
-          <div style="font-size:13px;color:#6B5E54;font-style:italic;line-height:1.65;margin-bottom:10px">${p.why}</div>
+          <div style="font-size:13px;color:#6B5E54;font-style:italic;line-height:1.65;margin-bottom:10px">${san(p.why)}</div>
           <div style="display:flex;flex-wrap:wrap;gap:5px">${(p.notes||[]).map(n=>`<span style="border:1px solid rgba(201,161,94,.3);border-radius:20px;padding:3px 9px;font-size:10px;color:#2B2928">${n}</span>`).join('')}</div>
         </div>`).join('')}`;
   } catch(e) { overlay.querySelector('.modal-body').innerHTML = '<p style="padding:20px;color:#9C8F86;text-align:center">Pokušaj ponovo.</p>'; }
